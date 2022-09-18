@@ -2,18 +2,9 @@ import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth'
-import { initializeApp } from 'firebase/app';
+import firebaseConfig from '../authBase'
 
 
-const firebaseConfig = initializeApp({
-  apiKey: "AIzaSyC0ZmF5enRF7yCBq0uc1CCA4rvSXgieRSw",
-  authDomain: "mobile-auth-74b9c.firebaseapp.com",
-  projectId: "mobile-auth-74b9c",
-  storageBucket: "mobile-auth-74b9c.appspot.com",
-  messagingSenderId: "197951134418",
-  appId: "1:197951134418:web:20b0defd5cc9256564ab0b"
-
-});
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
@@ -21,6 +12,18 @@ const LoginScreen = () => {
 
   const navigation = useNavigation()
   const auth = getAuth(firebaseConfig)
+
+  useEffect(()=>{
+      const unsubscribe = onAuthStateChanged (auth, user =>{
+          if (user) {
+            navigation.replace("home")
+          }else {
+
+          }
+      })
+
+      return unsubscribe
+  },[])
 
 
 

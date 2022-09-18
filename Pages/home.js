@@ -2,16 +2,18 @@ import { useNavigation } from '@react-navigation/core'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
+import firebaseConfig from '../authBase'
+
 
 const HomeScreen = () => {
   const navigation = useNavigation()
-  const auth = getAuth(app)
+  const auth = getAuth(firebaseConfig)
   
   const handleSignOut = () => {
     auth
       .signOut()
       .then(() => {
-        navigation.replace("Login")
+        navigation.replace("login")
       })
       .catch(error => alert(error.message))
   }
