@@ -1,22 +1,20 @@
-import { useNavigation } from '@react-navigation/core'
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
-import firebaseConfig from '../authBase'
+import { useNavigation } from '@react-navigation/core';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import firebaseConfig from '../../../authBase';
+import ChatComponent from '../../components/chat';
 
-
-const HomeScreen = () => {
-  const navigation = useNavigation()
-  const auth = getAuth(firebaseConfig)
-  
+const HomeScreen = ({ navigation }) => {
+  const auth = getAuth(firebaseConfig);
   const handleSignOut = () => {
     auth
       .signOut()
       .then(() => {
-        navigation.replace("login")
+        navigation.replace('Login');
       })
-      .catch(error => alert(error.message))
-  }
+      .catch(error => alert(error.message));
+  };
 
   return (
     <View style={styles.container}>
@@ -27,11 +25,12 @@ const HomeScreen = () => {
       >
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
+      <ChatComponent/>
     </View>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-   button: {
+  button: {
     backgroundColor: '#0782F9',
     width: '60%',
     padding: 15,
@@ -52,4 +51,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
   },
-})
+});

@@ -1,51 +1,57 @@
-import { useNavigation } from '@react-navigation/core'
-import React, { useEffect, useState } from 'react'
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword} from 'firebase/auth'
-import firebaseConfig from '../authBase'
+import { useNavigation } from '@react-navigation/core';
+import React, { useEffect, useState } from 'react';
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
+import firebaseConfig from '../../../authBase';
 
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const auth = getAuth(firebaseConfig);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        navigation.replace('home');
+      } else {
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+      }
+    });
 
-  const navigation = useNavigation()
-  const auth = getAuth(firebaseConfig)
-
-  useEffect(()=>{
-      const unsubscribe = onAuthStateChanged (auth, user =>{
-          if (user) {
-            navigation.replace("home")
-          }else {
-
-          }
-      })
-
-      return unsubscribe
-  },[])
-
-
+    return unsubscribe;
+  }, []);
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Registered with:', user.email);
-        
+
       })
-      .catch(error => alert(error.message))
-  }
+      .catch(error => alert(error.message));
+  };
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(auth,email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
-        
+
       })
-      .catch(error => alert(error.message))
-  }
+      .catch(error => alert(error.message));
+  };
 
   return (
     <KeyboardAvoidingView
@@ -83,10 +89,10 @@ const LoginScreen = () => {
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
-  )
-}
+  );
+};
 
-export default LoginScreen
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -133,4 +139,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
   },
-})
+});
