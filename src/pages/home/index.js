@@ -1,11 +1,12 @@
-import { useNavigation } from '@react-navigation/core';
+import { getAuth } from 'firebase/auth';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  StyleSheet, Text, TouchableOpacity, View
+} from 'react-native';
 import firebaseConfig from '../../../authBase';
 import ChatComponent from '../../components/chat';
 
-const HomeScreen = ({ navigation }) => {
+function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const handleSignOut = () => {
     auth
@@ -13,22 +14,25 @@ const HomeScreen = ({ navigation }) => {
       .then(() => {
         navigation.replace('Login');
       })
-      .catch(error => alert(error.message));
+      .catch((error) => alert(error.message));
   };
 
   return (
     <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
+      <Text>
+        Email:
+        {auth.currentUser?.email}
+      </Text>
       <TouchableOpacity
         onPress={handleSignOut}
         style={styles.button}
       >
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
-      <ChatComponent/>
+      <ChatComponent />
     </View>
   );
-};
+}
 
 export default HomeScreen;
 
@@ -36,7 +40,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   button: {
     backgroundColor: '#0782F9',

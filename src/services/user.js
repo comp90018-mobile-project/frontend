@@ -6,7 +6,7 @@ export const userApi = baseUserApi.injectEndpoints({
       query: () => '/api/v1/demo',
     }),
   }),
-  overrideExisting: true
+  overrideExisting: true,
 });
 
 export const { useGetUserQuery } = userApi;

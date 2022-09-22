@@ -1,4 +1,7 @@
-import { useNavigation } from '@react-navigation/core';
+import {
+  createUserWithEmailAndPassword, getAuth, onAuthStateChanged,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -8,21 +11,15 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword
-} from 'firebase/auth';
 import firebaseConfig from '../../../authBase';
 
-const LoginScreen = ({ navigation }) => {
+function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         navigation.replace('home');
       } else {
@@ -35,22 +32,20 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
+      .then((userCredentials) => {
+        const { user } = userCredentials;
         console.log('Registered with:', user.email);
-
       })
-      .catch(error => alert(error.message));
+      .catch((error) => alert(error.message));
   };
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(userCredentials => {
-        const user = userCredentials.user;
+      .then((userCredentials) => {
+        const { user } = userCredentials;
         console.log('Logged in with:', user.email);
-
       })
-      .catch(error => alert(error.message));
+      .catch((error) => alert(error.message));
   };
 
   return (
@@ -62,13 +57,13 @@ const LoginScreen = ({ navigation }) => {
         <TextInput
           placeholder="Email"
           value={email}
-          onChangeText={text => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
           style={styles.input}
         />
         <TextInput
           placeholder="Password"
           value={password}
-          onChangeText={text => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
           style={styles.input}
           secureTextEntry
         />
@@ -90,7 +85,7 @@ const LoginScreen = ({ navigation }) => {
       </View>
     </KeyboardAvoidingView>
   );
-};
+}
 
 export default LoginScreen;
 
@@ -101,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputContainer: {
-    width: '80%'
+    width: '80%',
   },
   input: {
     backgroundColor: 'white',

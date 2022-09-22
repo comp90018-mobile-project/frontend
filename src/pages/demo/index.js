@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, Button, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { userApi } from '../../services/user';
 
-const RtkQueryPage = ({ navigation }) => {
+function RtkQueryPage({ navigation }) {
   const {
     data,
     error,
@@ -14,17 +14,18 @@ const RtkQueryPage = ({ navigation }) => {
   return (
     <View>
       <Button
-        title={'Go home'}
-        onPress={() => navigation.navigate('Home')}/>
+        title="Go home"
+        onPress={() => navigation.navigate('Home')}
+      />
       <Text>RTK Query Demo</Text>
-      {isSuccess && data["data"].map((s, index) => (
+      {isSuccess && data.data.map((s, index) => (
         <View key={index}>
           <Text>{s.username}</Text>
           <Text>{s._id}</Text>
         </View>
-        ))}
+      ))}
     </View>
   );
-};
+}
 
 export default RtkQueryPage;
