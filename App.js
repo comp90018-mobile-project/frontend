@@ -1,12 +1,12 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable react/react-in-jsx-scope */
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  StyleSheet
-} from 'react-native';
 import { Provider } from 'react-redux';
 import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
+import map from './src/pages/Map';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -14,7 +14,12 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Demo">
+        <Stack.Navigator initialRouteName="Map">
+          <Stack.Screen
+            name="Map"
+            component={map}
+            options={{ title: 'Map' }}
+          />
           <Stack.Screen
             name="Home"
             component={home}
@@ -35,12 +40,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
