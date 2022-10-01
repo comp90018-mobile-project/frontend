@@ -1,43 +1,54 @@
-import React , { useState, useCallback, useEffect }from 'react';
+import React , { useState, useCallback, useEffect, useLayoutEffect }from 'react';
 import { StyleSheet,  Button,Text, View, TextInput, SafeAreaView} from 'react-native';
 import { getAuth } from 'firebase/auth';
-// import {db} from 'firebase/database';
+import {getFirestore,collection,addDoc,getDocs,getDoc,doc,onSnapshot, query,orderBy} from 'firebase/firestore';
 import firebaseConfig from '../../../authBase';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { initializeApp } from 'firebase/app';
 
 function Chat({ navigation }) {
     const auth = getAuth(firebaseConfig);
+
+    const db = getFirestore(firebaseConfig);
+
     const [messages, setMessages] = useState([]);
-    useEffect(() => {
-      setMessages([
-        {
-          _id: 1,
-          text: 'Hello developer2',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-          }, 
-        }
-      ])
-    }, [])
+
   
+    useLayoutEffect(() => {
+        const dataCollection = collection(db,"chats")
+        const q = query(dataCollection,orderBy('createdAt','desc'));
+
+        const unsubscribe = onSnapshot(q,querySnapshot=>{
+            setMessages(
+                querySnapshot.docs.map(doc=>({
+                    _id: doc.id,
+                    createdAt:doc.data().createdAt.toDate(),
+                    text:doc.data().text,
+                    user:doc.data().user,
+                }))
+            )
+            return unsubscribe;
+
+        })
+
+    }, [])
+
     const onSend = useCallback((messages = []) => {
         
       setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-      console.log(messages)
       const{
         _id,
         createdAt,
         text,
         user,
       } = messages[0]
-      // db.collection('chats').add({
-      //   _id,
-      //   createdAt,
-      //   text,
-      //   user,
-      // })
+      
+        addDoc(collection(db, "chats"), {
+            _id,
+            createdAt,
+            text,
+            user,
+        });
     }, [])
   
     return (
@@ -49,14 +60,12 @@ function Chat({ navigation }) {
 
         <GiftedChat
           messages={messages}
-          showAvatarForEveryMessage={true}
           onSend={messages => onSend(messages)}
           user={{
             _id: auth.currentUser?.email,
-            name: auth.currentUser?.email,
+
           }}
       />
-      {console.log(messages)}
       </View>
     );
 
