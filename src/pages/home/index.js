@@ -16,6 +16,9 @@ function HomeScreen({ navigation }) {
       })
       .catch((error) => alert(error.message));
   };
+  const handleChat = () => {
+    navigation.navigate('Chat');
+  }
 
   return (
     <View style={styles.container}>
@@ -29,6 +32,14 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleChat}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Chat room</Text>
+      </TouchableOpacity>
+
       <ChatComponent />
     </View>
   );

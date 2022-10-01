@@ -7,6 +7,7 @@ import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
 import map from './src/pages/Map';
+import Chat from './src/pages/chat';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -14,7 +15,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Map">
+        <Stack.Navigator initialRouteName="Demo">
           <Stack.Screen
             name="Map"
             component={map}
@@ -34,6 +35,11 @@ export default function App() {
             name="Demo"
             component={demo}
             options={{ title: 'Demo' }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ title: 'Chat' }}
           />
         </Stack.Navigator>
       </NavigationContainer>
