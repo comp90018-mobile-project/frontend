@@ -20,6 +20,10 @@ function HomeScreen({ navigation }) {
     navigation.navigate('Chat');
   }
 
+  const handleMap = () => {
+    navigation.navigate('Map');
+  }
+
   return (
     <View style={styles.container}>
       <Text>
@@ -40,6 +44,13 @@ function HomeScreen({ navigation }) {
         <Text style={styles.buttonText}>Chat room</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        onPress={handleMap}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Map</Text>
+      </TouchableOpacity>
+
       <ChatComponent />
     </View>
   );
@@ -50,7 +61,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
