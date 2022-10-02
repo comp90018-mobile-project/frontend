@@ -1,6 +1,5 @@
 import {
-    createUserWithEmailAndPassword, getAuth, onAuthStateChanged,
-    signInWithEmailAndPassword
+    createUserWithEmailAndPassword, getAuth, onAuthStateChanged
   } from 'firebase/auth';
   import React, { useEffect, useState } from 'react';
   import {
@@ -21,7 +20,7 @@ import {
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
-          navigation.replace('Home');
+          navigation.navigate('Home');
         } else {
   
         }

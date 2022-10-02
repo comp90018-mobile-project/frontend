@@ -7,6 +7,7 @@ import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
 import map from './src/pages/Map';
+import register from './src/pages/register';
 import Chat from './src/pages/chat';
 import { store } from './src/store';
 
@@ -15,12 +16,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Map"
-            component={map}
-            options={{ title: 'Map' }}
-          />
+        <Stack.Navigator initialRouteName="Demo">
           <Stack.Screen
             name="Map"
             component={map}
@@ -45,11 +41,6 @@ export default function App() {
             name="Register"
             component={register}
             options={{ title: 'Register', headerBackTitleVisible: false }}
-          />
-          <Stack.Screen
-            name="Chat"
-            component={Chat}
-            options={{ title: 'Chat' }}
           />
           <Stack.Screen
             name="Chat"
