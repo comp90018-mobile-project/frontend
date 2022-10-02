@@ -15,7 +15,12 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Demo">
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Map"
+            component={map}
+            options={{ title: 'Map' }}
+          />
           <Stack.Screen
             name="Map"
             component={map}
@@ -24,17 +29,27 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={home}
-            options={{ title: 'Home' }}
+            options={{ title: 'Home', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Login"
             component={login}
-            options={{ title: 'Login' }}
+            options={{ title: 'Login', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Demo"
             component={demo}
-            options={{ title: 'Demo' }}
+            options={{ title: 'Demo', headerBackTitleVisible: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={register}
+            options={{ title: 'Register', headerBackTitleVisible: false }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ title: 'Chat' }}
           />
           <Stack.Screen
             name="Chat"
