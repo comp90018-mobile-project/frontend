@@ -24,17 +24,22 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={home}
-            options={{ title: 'Home' }}
+            options={{ title: 'Home', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Login"
             component={login}
-            options={{ title: 'Login' }}
+            options={{ title: 'Login', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Demo"
             component={demo}
-            options={{ title: 'Demo' }}
+            options={{ title: 'Demo', headerBackTitleVisible: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={register}
+            options={{ title: 'Register', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Chat"

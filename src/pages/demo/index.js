@@ -11,6 +11,8 @@ function RtkQueryPage({ navigation }) {
     isSuccess,
   } = userApi.endpoints.usersGet.useQuery();
 
+
+
   return (
     <View style = {stycles.Containter}>
 
@@ -19,15 +21,20 @@ function RtkQueryPage({ navigation }) {
       </View>
 
       <View>
-        <TouchableOpacity style={stycles.button01}>
-          <Text style = {stycles.textStycle}>Login</Text>
+        <TouchableOpacity
+         style={stycles.button01}
+         onPress = {() => {navigation.navigate('Login');}}
+         >
+          <Text style = {stycles.textStycleLogIn}>Login</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={stycles.button02}>
-        <Text >Sign Up</Text>
+        <TouchableOpacity 
+          style={stycles.button02}
+          onPress = {() => {navigation.navigate('Register');}}
+          >
+        <Text style = {stycles.textStycleSignUp}>Sign Up</Text>
         </TouchableOpacity>
       </View>
-
     </View>
   );
 }
@@ -71,15 +78,27 @@ const stycles = StyleSheet.create({
   },
 
 
-  textStycle: {
+  textStycleLogIn: {
     "position": "absolute",
-    "width": 229,
-    "height": 34,
+    "left": 125,
+    "top": 20,
+    color: '#FFFFFF',
+
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+
+  textStycleSignUp: {
+    "position": "absolute",
     "left": 115,
-    "top": 17,
+    "top": 20,
+    color: '#FFFFFF',
+
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
 
 
-  }
 });
 
 export default RtkQueryPage;
