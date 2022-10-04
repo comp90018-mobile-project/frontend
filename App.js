@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
-import map from './src/pages/Map';
+import eventPage from './src/pages/Map/components/eventPage/eventPage';
+import map from './src/pages/Map/map';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -14,7 +15,12 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Map">
+        <Stack.Navigator initialRouteName="Map" screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="EventPage"
+            component={eventPage}
+            options={{ title: 'EventPage' }}
+          />
           <Stack.Screen
             name="Map"
             component={map}
