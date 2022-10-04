@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var BASE_URL = 'http://0.0.0.0:8000';","map":{"version":3,"names":["BASE_URL"],"sources":["/Users/tangweijia/Desktop/mobile/team/frontend/src/utils/config.js"],"sourcesContent":["export const BASE_URL = 'http://0.0.0.0:8000';\n"],"mappings":"AAAA,OAAO,IAAMA,QAAQ,GAAG,qBAAjB"},"metadata":{},"sourceType":"module"}
