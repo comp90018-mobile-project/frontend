@@ -23,14 +23,14 @@ function RtkQueryPage({ navigation }) {
       <View>
         <TouchableOpacity
          style={stycles.button01}
-         onPress = {() => {navigation.navigate('Login');}}
+         onPress = {() => {navigation.replace('Login');}}
          >
           <Text style = {stycles.textStycleLogIn}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
           style={stycles.button02}
-          onPress = {() => {navigation.navigate('Register');}}
+          onPress = {() => {navigation.replace('Register');}}
           >
         <Text style = {stycles.textStycleSignUp}>Sign Up</Text>
         </TouchableOpacity>

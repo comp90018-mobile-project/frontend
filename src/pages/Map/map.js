@@ -33,6 +33,7 @@ function Map() {
           </Callout>
         </Marker>
       </MapView>
+      <View style={{position:'absolute',height:300,width:300,top:0, left:0,backgroundColor:'rgba(0,0,0,0.5)'}}></View>
     </View>
   );
 }
