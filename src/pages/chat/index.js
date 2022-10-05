@@ -10,7 +10,7 @@ function Chat({ navigation }) {
     const auth = getAuth(firebaseConfig);
 
     const db = getFirestore(firebaseConfig);
-
+    const [isTyping, setIsTyping] = useState(false)
     const [messages, setMessages] = useState([]);
 
   
