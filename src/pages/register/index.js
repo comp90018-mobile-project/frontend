@@ -1,6 +1,5 @@
 import {
-    createUserWithEmailAndPassword, getAuth, onAuthStateChanged,
-    signInWithEmailAndPassword
+    createUserWithEmailAndPassword, getAuth, onAuthStateChanged
   } from 'firebase/auth';
   import React, { useEffect, useState } from 'react';
   import {
@@ -18,26 +17,19 @@ import {
     const [password, setPassword] = useState('');
     const auth = getAuth(firebaseConfig);
   
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          navigation.replace('Home');
-        } else {
-  
-        }
-      });
-  
-      return unsubscribe;
-    }, []);
+
   
     const handleSignUp = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
           const { user } = userCredentials;
+          navigation.replace('Home');
           console.log('Registered with:', user.email);
         })
         .catch((error) => alert(error.message));
     };
+
+
   
 
   

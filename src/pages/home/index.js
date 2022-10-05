@@ -9,10 +9,11 @@ import ChatComponent from '../../components/chat';
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const handleSignOut = () => {
+    console.log('Signed out!' + auth.currentUser?.email);
     auth
       .signOut()
       .then(() => {
-        navigation.navigate('Login');
+        navigation.navigate('Demo');
       })
       .catch((error) => alert(error.message));
   };

@@ -57,7 +57,7 @@ const stycles = StyleSheet.create({
 
   button01: {
     position: 'absolute',
-    width: 300,
+    width: '70%',
     height: 65,
     left: 64,
     top: 590,
