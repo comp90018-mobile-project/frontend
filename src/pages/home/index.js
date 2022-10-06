@@ -12,9 +12,9 @@ import { fetchUser } from '../../services/api';
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(fetchUser());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   const handleSignOut = () => {
     console.log('Signed out!' + auth.currentUser?.email);
     auth
