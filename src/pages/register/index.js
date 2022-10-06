@@ -11,20 +11,26 @@ import {
     View
   } from 'react-native';
   import firebaseConfig from '../../../authBase';
+  import { useDispatch, useSelector } from 'react-redux';
+  import {setUsername, setPassword} from '../../slices/user'
   
   function SignUpScreen({ navigation }) {
+    const {u, p} = useSelector(state => state.user);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = getAuth(firebaseConfig);
-  
+    const dispatch = useDispatch()
 
   
     const handleSignUp = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
           const { user } = userCredentials;
+          dispatch(setUsername({username: email}));
+          dispatch(setPassword({password: password}));
           navigation.replace('Home');
           console.log('Registered with:', user.email);
+          
         })
         .catch((error) => alert(error.message));
     };
