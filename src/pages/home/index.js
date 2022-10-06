@@ -13,7 +13,7 @@ function HomeScreen({ navigation }) {
     auth
       .signOut()
       .then(() => {
-        navigation.navigate('Demo');
+        navigation.replace('Demo');
       })
       .catch((error) => alert(error.message));
   };

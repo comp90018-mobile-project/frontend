@@ -1,6 +1,12 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { userApi } from '../../services/user';
+import {
+  onAuthStateChanged,
+  getAuth,
+} from 'firebase/auth';
+import firebaseConfig from '../../../authBase';
+
 
 function RtkQueryPage({ navigation }) {
   const {
@@ -10,6 +16,20 @@ function RtkQueryPage({ navigation }) {
     isFetching,
     isSuccess,
   } = userApi.endpoints.usersGet.useQuery();
+
+  const auth = getAuth(firebaseConfig);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace('Home');
+      } else {
+
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
 
 

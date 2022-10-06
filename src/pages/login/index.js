@@ -18,24 +18,12 @@ function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigation.replace('Home');
-      } else {
-
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
-
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
+        navigation.replace('Home');
         console.log('Logged in with:', user.email);
       })
       .catch((error) => alert(error.message));
@@ -46,7 +34,6 @@ function LoginScreen({ navigation }) {
       style={styles.container}
       behavior="padding"
     >
-
 
       <Text style={styles.title}>Login</Text>
 
@@ -75,6 +62,12 @@ function LoginScreen({ navigation }) {
           style={styles.button}
         >
           <Text style={styles.buttonText}>Start!</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress = {() => navigation.replace('Demo')}
+          >
+          <Text style={styles.forgotPassword}>Go Back</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

@@ -65,6 +65,12 @@ import {
             >
                 <Text style={styles.buttonText}>Sign Up !</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress = {() => navigation.replace('Demo')}
+            >
+                <Text style={styles.forgotPassword}>Go Back</Text>
+             </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     );
