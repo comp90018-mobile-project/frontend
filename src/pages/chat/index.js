@@ -53,13 +53,11 @@ function Chat({ navigation }) {
   
     return (
       <View style={styles.container}>
-        <Button
-        title="Go home page"
-        onPress={() => navigation.navigate('Home')}
-        />
-
+        
         <GiftedChat
           messages={messages}
+          showAvatarForEveryMessage
+          
           onSend={messages => onSend(messages)}
           user={{
             _id: auth.currentUser?.email,
