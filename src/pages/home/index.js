@@ -5,9 +5,16 @@ import {
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
 import ChatComponent from '../../components/chat';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchUser } from '../../services/api';
 
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
+  const dispatch = useDispatch()
+  // useEffect(() => {
+  //   dispatch(fetchUser());
+  // }, []);
   const handleSignOut = () => {
     console.log('Signed out!' + auth.currentUser?.email);
     auth
@@ -19,11 +26,11 @@ function HomeScreen({ navigation }) {
   };
   const handleChat = () => {
     navigation.navigate('Chat');
-  }
+  };
 
   const handleMap = () => {
     navigation.navigate('Map');
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -52,7 +59,7 @@ function HomeScreen({ navigation }) {
         <Text style={styles.buttonText}>Map</Text>
       </TouchableOpacity>
 
-      <ChatComponent />
+      <ChatComponent/>
     </View>
   );
 }

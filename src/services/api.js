@@ -1,10 +1,8 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL } from '../utils/config';
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const baseUserApi = createApi({
-  reducerPath: 'baseUserApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
-  }),
-  endpoints: () => ({}),
-});
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {
+  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile?username=ZIAWANG1')
+  return response.json()
+})
+
+
