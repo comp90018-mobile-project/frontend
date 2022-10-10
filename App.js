@@ -15,7 +15,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Map" screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName="EventPage" screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="EventPage"
             component={eventPage}
