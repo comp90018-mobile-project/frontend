@@ -9,13 +9,7 @@ import firebaseConfig from '../../../authBase';
 import { useDispatch, useSelector } from 'react-redux';
 
 function RtkQueryPage({ navigation }) {
-  // const {
-  //   data,
-  //   error,
-  //   isLoading,
-  //   isFetching,
-  //   isSuccess,
-  // } = userApi.endpoints.usersGet.useQuery();
+
   const {u, p} = useSelector(state => state.user);
   const auth = getAuth(firebaseConfig);
   console.log(u, p);
