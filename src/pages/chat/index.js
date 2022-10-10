@@ -8,13 +8,14 @@ import { initializeApp } from 'firebase/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../services/api';
 
-function Chat({ navigation }) {
+function Chat({ navigation,route }) {
   const dispatch = useDispatch();
   
     const auth = getAuth(firebaseConfig);
     const { id } = route.params;
     const db = getFirestore(firebaseConfig);
     const [messages, setMessages] = useState([]);
+    const [userName, setUserName] = useState(auth.currentUser?.email);
     useEffect(() => {
       dispatch(fetchUser(auth.currentUser?.email));
     })
