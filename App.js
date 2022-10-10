@@ -9,6 +9,7 @@ import login from './src/pages/login';
 import map from './src/pages/Map';
 import register from './src/pages/register';
 import Chat from './src/pages/chat';
+import ChatList from './src/pages/chatList';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -46,6 +47,11 @@ export default function App() {
             name="Chat"
             component={Chat}
             options={{ title: 'Chat' }}
+          />
+          <Stack.Screen
+            name="ChatList"
+            component={ChatList}
+            options={{ title: 'ChatList' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

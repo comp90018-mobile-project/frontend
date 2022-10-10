@@ -18,7 +18,7 @@ function HomeScreen({ navigation }) {
       .catch((error) => alert(error.message));
   };
   const handleChat = () => {
-    navigation.navigate('Chat');
+    navigation.navigate('ChatList');
   }
 
   const handleMap = () => {
