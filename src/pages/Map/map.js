@@ -60,11 +60,7 @@ function Map(navigation) {
           </Callout>
         </Marker>
       </MapView>
-
-      <EventCard show={eventCard} onPress={() => navigation.replace('EventPage')} />
-
-      <Searchbar placeholder="Search" style={{ bottom: 730, width: '90%' }} />
-
+      <View style={{position:'absolute',height:300,width:300,top:0, left:0,backgroundColor:'rgba(0,0,0,0.5)'}}></View>
     </View>
   );
 }

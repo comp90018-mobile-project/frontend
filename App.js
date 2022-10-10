@@ -6,8 +6,10 @@ import { Provider } from 'react-redux';
 import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
-import eventPage from './src/pages/Map/components/eventPage/eventPage';
-import map from './src/pages/Map/map';
+import map from './src/pages/Map';
+import register from './src/pages/register';
+import Chat from './src/pages/chat';
+import ChatList from './src/pages/chatList';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -15,12 +17,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="EventPage" screenOptions={{ headerShown: false }}>
-          <Stack.Screen
-            name="EventPage"
-            component={eventPage}
-            options={{ title: 'EventPage' }}
-          />
+        <Stack.Navigator initialRouteName="Demo">
           <Stack.Screen
             name="Map"
             component={map}
@@ -29,17 +26,32 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={home}
-            options={{ title: 'Home' }}
+            options={{ title: 'Home', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Login"
             component={login}
-            options={{ title: 'Login' }}
+            options={{ title: 'Login', headerBackTitleVisible: false }}
           />
           <Stack.Screen
             name="Demo"
             component={demo}
-            options={{ title: 'Demo' }}
+            options={{ title: 'Demo', headerBackTitleVisible: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={register}
+            options={{ title: 'Register', headerBackTitleVisible: false }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ title: 'Chat' }}
+          />
+          <Stack.Screen
+            name="ChatList"
+            component={ChatList}
+            options={{ title: 'ChatList' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

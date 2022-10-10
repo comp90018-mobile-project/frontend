@@ -10,6 +10,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added eventCard, eventPage, searchBar to map
 
+# [0.6.0] - 2022-10-10
+
+### Added
+
+- add chat list page
+
+
+# [0.5.0] - 2022-10-10
+
+### Added
+
+- get data from backend
+
+
+
+# [0.4.2] - 2022-10-06
+
+### Added
+
+- fix the problem about log in navigation
+
+# [0.4.1] - 2022-10-05
+
+### Added
+
+- fix the problem about auto login in the Sign Up page
+
+# [0.4.0] - 2022-10-02
+
+### Added
+
+- delete duplicate tag in App.js
+- according to figma, change the layout of login, register and start page
+
+
 # [0.3.0] - 2022-09-29
 
 ### Added
@@ -22,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed navigation
 
-# [0.2.0] - 2022-09-22
+# [0.1.1] - 2022-09-18
 
 ### Added
 

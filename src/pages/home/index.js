@@ -5,16 +5,31 @@ import {
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
 import ChatComponent from '../../components/chat';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchUser } from '../../services/api';
 
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
   const handleSignOut = () => {
+    console.log('Signed out!' + auth.currentUser?.email);
     auth
       .signOut()
       .then(() => {
-        navigation.replace('Login');
+        navigation.replace('Demo');
       })
       .catch((error) => alert(error.message));
+  };
+  const handleChat = () => {
+    navigation.navigate('ChatList');
+  }
+
+  const handleMap = () => {
+    navigation.navigate('Map');
   };
 
   return (
@@ -29,7 +44,22 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
-      <ChatComponent />
+
+      <TouchableOpacity
+        onPress={handleChat}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Chat room</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleMap}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Map</Text>
+      </TouchableOpacity>
+
+      <ChatComponent/>
     </View>
   );
 }
@@ -39,7 +69,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
