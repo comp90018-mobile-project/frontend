@@ -1,6 +1,9 @@
 import {
-  getAuth, onAuthStateChanged,
-  signInWithEmailAndPassword
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult
 } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import {
@@ -13,6 +16,7 @@ import {
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
 
+
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,12 +26,14 @@ function LoginScreen({ navigation }) {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        const { user } = userCredentials;
+        const user = userCredentials.user;
+        
         navigation.replace('Home');
         console.log('Logged in with:', user.email);
       })
       .catch((error) => alert(error.message));
   };
+
 
   return (
     <KeyboardAvoidingView
@@ -64,12 +70,17 @@ function LoginScreen({ navigation }) {
           <Text style={styles.buttonText}>Start!</Text>
         </TouchableOpacity>
 
+
+
+
         <TouchableOpacity
           onPress = {() => navigation.replace('Demo')}
           >
           <Text style={styles.forgotPassword}>Go Back</Text>
         </TouchableOpacity>
       </View>
+
+      
     </KeyboardAvoidingView>
   );
 }

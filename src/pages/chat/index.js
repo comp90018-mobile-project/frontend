@@ -5,14 +5,21 @@ import {getFirestore,collection,addDoc,getDocs,getDoc,doc,onSnapshot, query,orde
 import firebaseConfig from '../../../authBase';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { initializeApp } from 'firebase/app';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from '../../services/api';
 
-function Chat({ navigation,route}) {
+function Chat({ navigation }) {
+  const dispatch = useDispatch();
+  
     const auth = getAuth(firebaseConfig);
     const { id } = route.params;
     const db = getFirestore(firebaseConfig);
     const [messages, setMessages] = useState([]);
-    const [userName,setUserName] = useState(auth.currentUser?.email);
-
+    useEffect(() => {
+      dispatch(fetchUser(auth.currentUser?.email));
+    })
+    const {u, p, nickname, avatar} = useSelector(state => state.user);
+    console.log("nickname and avatar:", nickname, avatar);
     useLayoutEffect(() => {
         const dataCollection = collection(db,id)
         const q = query(dataCollection,orderBy('createdAt','desc'));
