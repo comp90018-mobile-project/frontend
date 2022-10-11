@@ -23,3 +23,12 @@ export const createUser = createAsyncThunk('user/createUser', async(params) => {
   return response.json()
 })
 
+export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) => {
+  const requestOptions = {
+    method: 'GET',
+    // body: JSON.stringify({})
+  };
+  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  console.log("response", response);
+  return response.json()
+})

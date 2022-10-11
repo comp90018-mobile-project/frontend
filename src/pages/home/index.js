@@ -8,13 +8,16 @@ import ChatComponent from '../../components/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchUser } from '../../services/api';
+import {fetchEvents} from '../../services/api';
 
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch()
+  const {events} = useSelector((state) => state.event);
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
+
   const handleSignOut = () => {
     console.log('Signed out!' + auth.currentUser?.email);
     auth
@@ -57,6 +60,26 @@ function HomeScreen({ navigation }) {
         style={styles.button}
       >
         <Text style={styles.buttonText}>Map</Text>
+      </TouchableOpacity>
+      
+      <TouchableOpacity
+        onPress={()=>{
+          dispatch(fetchEvents());  
+          console.log("res", dispatch(fetchEvents()));  
+        }}
+        style={styles.button}
+      >
+        <Text>fetch events</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={()=>{
+          
+          console.log("res", events);  
+        }}
+        style={styles.button}
+      >
+        <Text>console events</Text>
       </TouchableOpacity>
 
       <ChatComponent/>

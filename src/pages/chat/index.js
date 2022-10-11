@@ -19,8 +19,10 @@ function Chat({ navigation,route }) {
     useEffect(() => {
       dispatch(fetchUser(auth.currentUser?.email));
     })
+   
     const {u, p, nickname, avatar} = useSelector(state => state.user);
     console.log("nickname and avatar:", nickname, avatar);
+
     useLayoutEffect(() => {
         const dataCollection = collection(db,id)
         const q = query(dataCollection,orderBy('createdAt','desc'));
@@ -60,7 +62,7 @@ function Chat({ navigation,route }) {
     return (
       <View style={styles.container}>
         <Text>{id}</Text>
-       
+        <Text>nickname and avatar:{nickname} {avatar}</Text>
         <GiftedChat
           messages={messages}
           showAvatarForEveryMessage={true}

@@ -6,10 +6,14 @@ import {
 import firebaseConfig from '../../../authBase';
 
 import ChatRoom from '../../components/chatRoom';
+import {fetchEvents} from '../../services/api';
+import { useDispatch, useSelector } from 'react-redux';
+
+
 function ChatList({ navigation }) {
 
   const auth = getAuth(firebaseConfig);
-
+  const {events} = useSelector((state) => state.event);
   const handleChat = (id) => {
     navigation.navigate('Chat', { id: id});
   }
@@ -22,9 +26,10 @@ function ChatList({ navigation }) {
         Email:
         {auth.currentUser?.email}
       </Text>
-      {fakeData.map((item) => (
-        <TouchableOpacity onPress={()=>handleChat(item.eventName)} style={styles.button} key={item.id}>
-            <ChatRoom id={item.id} eventName={item.eventName} num={item.num}/>
+      {events.map((item) => (
+        <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
+            <ChatRoom id={item._id} eventName={item.name} num={item.participants
+}/>
         </TouchableOpacity>
         ))}
       {/* <TouchableOpacity
