@@ -12,9 +12,11 @@ import { fetchUser } from '../../services/api';
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, []);
+  const {u, p} = useSelector(state => state.user);
+  console.log("u, p", u, p);
+  // useEffect(() => {
+  //   dispatch(fetchUser());
+  // }, []);
   const handleSignOut = () => {
     console.log('Signed out!' + auth.currentUser?.email);
     auth
@@ -37,6 +39,8 @@ function HomeScreen({ navigation }) {
       <Text>
         Email:
         {auth.currentUser?.email}
+        Logged in with: 
+        {u}
       </Text>
       <TouchableOpacity
         onPress={handleSignOut}
