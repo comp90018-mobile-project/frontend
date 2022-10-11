@@ -65,12 +65,13 @@ function Chat({ navigation,route}) {
         
         <GiftedChat
           messages={messages}
-          showAvatarForEveryMessage
-          
+          showAvatarForEveryMessage={true}
+          renderUsernameOnMessage={true}
           onSend={messages => onSend(messages)}
           user={{
             _id: auth.currentUser?.email,
-
+            name:auth.currentUser?.email,
+            avatar: "https://raw.githubusercontent.com/yyou211/image_save/main/img/IMG_5447.JPG",
           }}
       />
       </View>
