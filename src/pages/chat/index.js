@@ -8,21 +8,21 @@ import { initializeApp } from 'firebase/app';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../services/api';
 
-function Chat({ navigation,route }) {
+function Chat({ navigation }) {
   const dispatch = useDispatch();
   
     const auth = getAuth(firebaseConfig);
-    const { id } = route.params;
+
     const db = getFirestore(firebaseConfig);
+    const [isTyping, setIsTyping] = useState(false)
     const [messages, setMessages] = useState([]);
-    const [userName, setUserName] = useState(auth.currentUser?.email);
     useEffect(() => {
       dispatch(fetchUser(auth.currentUser?.email));
-    })
+    }, [])
     const {u, p, nickname, avatar} = useSelector(state => state.user);
     console.log("nickname and avatar:", nickname, avatar);
     useLayoutEffect(() => {
-        const dataCollection = collection(db,id)
+        const dataCollection = collection(db,"chats")
         const q = query(dataCollection,orderBy('createdAt','desc'));
 
         const unsubscribe = onSnapshot(q,querySnapshot=>{
@@ -35,6 +35,7 @@ function Chat({ navigation,route }) {
                 }))
             )
             return unsubscribe;
+
         })
 
     }, [])
@@ -49,7 +50,7 @@ function Chat({ navigation,route }) {
         user,
       } = messages[0]
       
-        addDoc(collection(db, id), {
+        addDoc(collection(db, "chats"), {
             _id,
             createdAt,
             text,
@@ -59,20 +60,15 @@ function Chat({ navigation,route }) {
   
     return (
       <View style={styles.container}>
-        <Text>{id}</Text>
-       
+        
         <GiftedChat
           messages={messages}
-          showAvatarForEveryMessage={true}
-          renderUsernameOnMessage={true}
+          showAvatarForEveryMessage
+          
           onSend={messages => onSend(messages)}
-          renderLoading={() =>  <Text>Wait for loading</Text>}
           user={{
             _id: auth.currentUser?.email,
-            name: userName,
-            // avatar: 'https://placeimg.com/140/140/any',
-            
-            avatar:'https://raw.githubusercontent.com/yyou211/image_save/main/img/IMG_5447.JPG'
+
           }}
       />
       </View>
