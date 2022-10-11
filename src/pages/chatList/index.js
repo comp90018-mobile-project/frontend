@@ -29,7 +29,7 @@ function ChatList({ navigation }) {
       {events.map((item) => (
         <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
             <ChatRoom id={item._id} eventName={item.name} num={item.participants
-}/>
+      }/>
         </TouchableOpacity>
         ))}
       {/* <TouchableOpacity

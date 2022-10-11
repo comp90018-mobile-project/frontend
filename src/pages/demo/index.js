@@ -1,30 +1,35 @@
 import {React, useEffect} from 'react';
 import { Image, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { userApi } from '../../services/user';
+// import { userApi } from '../../services/user';
 import {
   onAuthStateChanged,
   getAuth,
 } from 'firebase/auth';
 import firebaseConfig from '../../../authBase';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from '../../services/api';
 
 function RtkQueryPage({ navigation }) {
-
+  const dispatch = useDispatch();
   const {u, p} = useSelector(state => state.user);
   const auth = getAuth(firebaseConfig);
-  console.log(u, p);
+  // console.log(u, p);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigation.replace('Home');
-      } else {
 
-      }
-    });
+  const autoLogin = () => {
 
-    return unsubscribe;
-  }, []);
+      onAuthStateChanged(auth, (user) => {
+        // 判断用户是否已经登录
+        if (user) {
+          // 发起请求，拿profile
+          dispatch(fetchUser(user.email));
+          // 先拿再跳
+          navigation.replace('Home');
+        } else {
+          navigation.replace('Login');
+        }
+      });
+  };
 
 
 
@@ -38,7 +43,7 @@ function RtkQueryPage({ navigation }) {
       <View>
         <TouchableOpacity
          style={stycles.button01}
-         onPress = {() => {navigation.replace('Login');}}
+         onPress = {autoLogin}
          >
           <Text style = {stycles.textStycleLogIn}>Login</Text>
         </TouchableOpacity>

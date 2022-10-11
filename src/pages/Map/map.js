@@ -1,35 +1,62 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import {
-  Text, View
-} from 'react-native';
+import { useState } from 'react';
+import { Image, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
+import { Searchbar } from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
 
-function Map() {
+function Map(navigation) {
+  // useState hook to show event card
+  const [eventCard, setEventCard] = useState(false);
+
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
+        showsUserLocation
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
+          latitude: -37.7983,
+          longitude: 144.9610,
+          latitudeDelta: 0.02,
+          longitudeDelta: 0.02,
         }}
       >
+
         <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+          coordinate={{ latitude: -37.7983, longitude: 144.9610 }}
         >
-          <Callout>
-            <Text>Event A Info</Text>
+          <Image
+            style={{
+              width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
+            }}
+            source={require('../../../assets/avatar.png')}
+          />
+          <Callout tooltip="true" onPress={() => setEventCard(true)}>
+            <View style={styles.callout}>
+              <FontAwesome name="group" size={25} color="#248A59" />
+              <Text style={styles.calloutText}>1/5</Text>
+            </View>
           </Callout>
         </Marker>
+
         <Marker
-          coordinate={{ latitude: 37.76825, longitude: -122.4394 }}
+          coordinate={{ latitude: -37.8033, longitude: 144.9665 }}
         >
-          <Callout>
-            <Text>Event B Info</Text>
+          <Image
+            style={{
+              width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
+            }}
+            source={require('../../../assets/avatar.png')}
+          />
+          <Callout tooltip="true">
+            <View style={styles.callout} onPress={() => navigation.replace('EventPage')}>
+              <AntDesign name="addusergroup" size={30} color="#248A59" />
+              <Text style={styles.calloutText} />
+            </View>
           </Callout>
         </Marker>
       </MapView>

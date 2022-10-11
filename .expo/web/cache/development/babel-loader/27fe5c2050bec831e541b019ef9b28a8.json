@@ -1,0 +1,1 @@
+{"ast":null,"code":"export { default } from \"./map\";","map":{"version":3,"names":["default"],"sources":["/Users/tangweijia/Desktop/mobile/team2/frontend/src/pages/Map/index.js"],"sourcesContent":["/* eslint-disable no-restricted-exports */\nexport { default } from './map';\n"],"mappings":"AACA,SAASA,OAAT"},"metadata":{},"sourceType":"module"}

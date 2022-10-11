@@ -4,7 +4,7 @@ import {
   StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
-import ChatComponent from '../../components/chat';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchUser } from '../../services/api';
@@ -40,6 +40,8 @@ function HomeScreen({ navigation }) {
       <Text>
         Email:
         {auth.currentUser?.email}
+        Logged in with: 
+      
       </Text>
       <TouchableOpacity
         onPress={handleSignOut}
@@ -82,7 +84,6 @@ function HomeScreen({ navigation }) {
         <Text>console events</Text>
       </TouchableOpacity>
 
-      <ChatComponent/>
     </View>
   );
 }

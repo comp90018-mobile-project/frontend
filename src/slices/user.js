@@ -19,12 +19,12 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
-      // console.log("从服务器获取到的信息为：", action.payload);
+      console.log("从服务器获取到的信息为：", action.payload);
       const { data } = {...action.payload}
-      console.log(data);
-      const {avatar, nickname} = data;
+      const { username,avatar,nickname } = data;
       state.avatar = avatar;
       state.nickname = nickname;
+      state.u = username;
     });
     builder.addCase(createUser.fulfilled, (state, action) => {
       const { data } = {...action.payload}
