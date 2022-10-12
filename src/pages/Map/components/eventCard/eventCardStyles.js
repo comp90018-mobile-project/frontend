@@ -5,27 +5,26 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   root: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 150,
     width: '80%',
-    height: 150,
+    height: 120,
   },
   popupContainer: {
     backgroundColor: '#323C47',
     flex: 1,
-    borderRadius: 15,
+    borderRadius: 25,
   },
   eventName: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
     marginHorizontal: 30,
-    top: 25,
-    // place text in the center
+    top: 10,
     textAlign: 'left',
   },
   row: {
     flexDirection: 'row',
-    top: 50,
+    top: 40,
   },
   stateText: {
     color: '#F19100',
@@ -35,9 +34,9 @@ const styles = StyleSheet.create({
   },
   placementText: {
     color: '#F19100',
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: 'bold',
-    left: 130,
+    left: 160,
     bottom: 5,
   },
 
