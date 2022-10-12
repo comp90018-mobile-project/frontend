@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
   settingList: {
     backgroundColor: '#fff',
     borderRadius: 15,
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 10
   },
   settingItem: {
     width: '90%',
