@@ -3,13 +3,13 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import styles from './eventCardStyles';
 
-function EventCard({ show }) {
+function EventCard({ show, eventInfo }) {
   return (
     <View style={styles.root}>
       { show && (
       <View style={styles.popupContainer}>
         <Text style={styles.eventName}>
-          Event A
+          {eventInfo.name}
           <Image
             style={{
               width: 30, height: 30,
@@ -25,8 +25,13 @@ function EventCard({ show }) {
             }}
             source={require('../../../../../assets/wait.png')}
           />
-          <Text style={styles.stateText}>Awaiting</Text>
-          <Text style={styles.placementText}>1/5</Text>
+          {(eventInfo.participants.length < eventInfo.settings.num_of_participants)
+          && <Text style={styles.stateText}>Awaiting</Text>}
+          <Text style={styles.placementText}>
+            {eventInfo.participants.length}
+            /
+            {eventInfo.settings.num_of_participants}
+          </Text>
         </View>
 
       </View>
