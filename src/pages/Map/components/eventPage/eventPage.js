@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-filename-extension */
 import { useState, useEffect} from 'react';
-import { SafeAreaView, Image, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Modal, Image, Text, View, TextInput, TouchableOpacity, ScrollView, Alert, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent } from '../../../../services/api';
 import ModalSelector from 'react-native-modal-selector'
@@ -10,8 +10,33 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import styles from './eventPageStyles';
 
 function EventPage() {
-  const [eventCreater, setCreater] = useState('Nine1ie');
+  const dispatch = useDispatch()
+  const [modal, setModal] = useState(false)
+
+  const handleCreateEvent = () => {
+    const addEvent = {
+      name: eventName,
+      organiser: 'Nine1ie',
+      preview: '',
+      longitude: '-37.79702912632178',
+      latitude: '144.9611751200046',
+      participants: [],
+      settings: {
+        duration: eventDuration,
+        min_participant: eventMinParticipant,
+        max_participant: eventMaxParticipant,
+        type: eventType,
+        theme_color: "#FFF",
+        description: eventDescription,
+        start_time: eventStartTime
+    },
+    images: []
+    }
+    dispatch(createEvent(addEvent))
+  }
+
   const [eventName, setName] = useState('');
+  const [eventStartTime, setStartTime] = useState(new Date());
   const [eventDuration, setDuration] = useState('');
   const [eventMinParticipant, setMinParticipant] = useState('');
   const [eventMaxParticipant, setMaxParticipant] = useState('');
@@ -43,12 +68,34 @@ function EventPage() {
   
   return (
     <ScrollView style={{backgroundColor: '#323C47'}}>
+      <Modal
+      animationType='slide'
+      transparent={true}
+      visible={modal}
+      onRequestClose={()=>{
+        Alert.alert("Pop up closed")
+        setModal(!modal)
+      }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Missing Inputs</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModal(!modal)}
+            >
+              <Text style={styles.textStyle}>Retry</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
       <View style={styles.root} >
         <View style={styles.header}>
           <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
           <View style={styles.headerText}>
-            <TextInput style={styles.eventNameFont} 
-            onChange={(value) => setName(value)}
+            <TextInput style={styles.eventNameFont}
+            onChangeText={(value) => setName(value)}
             value={eventName} 
             placeholderTextColor={'#fff'} 
             placeholder='Event Name'/>
@@ -78,7 +125,8 @@ function EventPage() {
                 style={{width: 150, height: 40}} 
                 mode={'time'} 
                 display='clock' 
-                value={new Date()} 
+                value={eventStartTime}
+                onChange={(value, date)=>{setStartTime(date)}} 
                 is24Hour={true}
               />
             </View>
@@ -87,7 +135,8 @@ function EventPage() {
               <Text>Duration</Text>
               <ModalSelector 
                 data={durationOption} 
-                onChange={(option) => {setDuration(option.label)}}>
+                onChange={(option) => {setDuration(option.label)}}
+                onModalClose={(option) => {setDuration(option.label)}}>
                   <TextInput
                     style={styles.settingItemContent}
                     editable={false}
@@ -101,7 +150,8 @@ function EventPage() {
               <View style={{flexDirection: 'row'}}>
                 <ModalSelector 
                   data={participantOption} 
-                  onChange={(option) => {setMinParticipant(option.label)}}>
+                  onChange={(option) => {setMinParticipant(option.label)}}
+                  onModalClose={(option) => {setMinParticipant(option.label)}}>
                     <TextInput
                       style={styles.settingItemContent}
                       editable={false}
@@ -116,7 +166,8 @@ function EventPage() {
                 }
                 <ModalSelector 
                   data={participantOption} 
-                  onChange={(option) => {setMaxParticipant(option.label)}}>
+                  onChange={(option) => {setMaxParticipant(option.label)}}
+                  onModalClose={(option) => {setMaxParticipant(option.label)}}>
                     <TextInput
                       style={styles.settingItemContent}
                       editable={false}
@@ -130,7 +181,8 @@ function EventPage() {
               <Text>Type</Text>
               <ModalSelector 
                   data={typeOption} 
-                  onChange={(option) => {setEventType(option.label)}}>
+                  onChange={(option) => {setEventType(option.label)}}
+                  onModalClose={(option) => {setEventType(option.label)}}>
                     <TextInput
                       style={styles.settingItemContent}
                       editable={false}
@@ -160,11 +212,17 @@ function EventPage() {
             source={require('../../../../../assets/location.png')}/>
         </View>
 
-        <TouchableOpacity style={styles.createButton} onPress={async()=> {await createEvent()}}>
-          <Text style={{fontSize: 12, color: "#fff", fontWeight: "bold", alignSelf: "center", textTransform: "uppercase"}}>
-            Create
+        <TouchableOpacity style={styles.createButton} onPress={handleCreateEvent}>
+          <Text style={{
+            fontSize: 12, 
+            color: "#fff", 
+            fontWeight: "bold", 
+            alignSelf: "center", 
+            textTransform: "uppercase"}}>
+            Create Event
           </Text>
         </TouchableOpacity>
+
       </View>
     </ScrollView>
   );

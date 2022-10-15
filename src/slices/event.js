@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchEvents } from "../services/api";
+import { fetchEvents, createEvent } from "../services/api";
 
 const eventSlice = createSlice({
     name: "event",
     initialState: {
-        events: []
+        events: [],
+        newEvent: ''
         // name: "default",
         // organiser: "default",
         // preview: "default",
@@ -26,6 +27,11 @@ const eventSlice = createSlice({
             state.events = action.payload;
             console.log("test1")
         },
+        creatEvents: (state, action) => {
+            state.newEvent = action.payload
+            state.events.push(state.newEvent)
+            console.log("create event success")
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchEvents.fulfilled, (state, action) => {
@@ -33,8 +39,15 @@ const eventSlice = createSlice({
             console.log("test2",data);
             state.events = data;
         });
+        builder.addCase(createEvent.fulfilled, (state, action) => {
+            const { data } = { ...action.payload };
+            console.log('create event succuess: ', data);
+            state.newEvent = action.payload
+            state.events.push(state.newEvent)
+        })
     }
+    
 })
 
 export default eventSlice.reducer;
-export const { setEvents } = eventSlice.actions;
+export const { setEvents, creatEvents } = eventSlice.actions;
