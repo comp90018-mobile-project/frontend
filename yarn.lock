@@ -4744,6 +4744,13 @@
     "qs" "^6.9.1"
     "url-parse" "^1.5.9"
 
+"expo-location@~14.2.2":
+  "integrity" "sha512-P1v+huBWhuerV4okRhN0+Htx3Nw8LGWTUF66E5iwuZEWvLTYQEQ+Od0j2CvD4FY6rhncNpoIZcWVlIy5NmG4fg=="
+  "resolved" "https://registry.npmjs.org/expo-location/-/expo-location-14.2.2.tgz"
+  "version" "14.2.2"
+  dependencies:
+    "@expo/config-plugins" "^4.0.14"
+
 "expo-modules-autolinking@0.8.1":
   "integrity" "sha512-S8qfaXCv//7tQWV9M+JKx3CF7ypYhDdSUbkUQdaVO/r8D76/aRTArY/aRw1yEfaAOzyK8C8diDToV1itl51DfQ=="
   "resolved" "https://registry.npmjs.org/expo-modules-autolinking/-/expo-modules-autolinking-0.8.1.tgz"

@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
+import * as Location from 'expo-location';
+import { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,9 +14,26 @@ import styles from './mapStyles';
 
 function Map(navigation) {
   const { events } = useSelector((state) => state.event);
-
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [initialRegion, setInitialRegion] = useState();
+  const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setInitialRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    })();
+  }, []);
 
   const handleEventCard = (event) => {
     setSelectedEvent(event);
@@ -27,12 +45,7 @@ function Map(navigation) {
       <MapView
         style={styles.map}
         showsUserLocation
-        initialRegion={{
-          latitude: -37.8033,
-          longitude: 144.9610,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        }}
+        initialRegion={initialRegion}
       >
 
         {events.map((item) => (

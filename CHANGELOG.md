@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - add create event page
 
 
+# [0.8.0] - 2022-10-16
+
+### Added
+
+- add current location to the map
+
 # [0.7.0] - 2022-10-12
 
 ### Added
@@ -30,13 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix the problem about cannot get data from the backend
 
 
-
 # [0.5.2] - 2022-10-10
 
 ### Added
 
 - get data from backend
-
 
 
 # [0.4.2] - 2022-10-06
@@ -52,14 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix the problem about auto login in the Sign Up page
 
 
-
 # [0.4.0] - 2022-10-02
 
 ### Added
 
 - according to figma, change the layout of login, register and start page
 - delete duplicate tag in App.js
-
 
 # [0.3.0] - 2022-09-29
 
