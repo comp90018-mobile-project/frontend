@@ -18,7 +18,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="EventPage">
+        <Stack.Navigator initialRouteName="Demo">
           <Stack.Screen
             name="Map"
             component={map}
