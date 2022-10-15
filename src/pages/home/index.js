@@ -63,6 +63,13 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Map</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={()=>{navigation.navigate('EventPage')}}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Create Event</Text>
+      </TouchableOpacity>
       
       <TouchableOpacity
         onPress={()=>{
