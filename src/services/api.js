@@ -31,3 +31,12 @@ export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) 
   const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
   return response.json()
 })
+
+export const createEvent = createAsyncThunk('event/createEvent', async(params) => {
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(params)
+  };
+  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  return response.json()
+})

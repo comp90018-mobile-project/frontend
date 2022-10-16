@@ -26,4 +26,33 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     left: 5,
   },
+  searchBar: {
+    position: 'absolute',
+    bottom: 600,
+    width: '90%',
+    borderRadius: 20,
+  },
+  regionCard: {
+    position: 'absolute',
+    bottom: 660,
+    width: '100%',
+    height: 80,
+    flex: 1,
+    flexDirection: 'row',
+    left: 20,
+  },
+  regionText: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    marginLeft: 5,
+    top: 15,
+    textAlign: 'left',
+  },
+  regionFire: {
+    height: 30,
+    width: 30,
+    top: 25,
+    left: 10,
+  },
 });
