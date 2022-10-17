@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   root: {
     position: 'absolute',
-    bottom: 150,
+    bottom: 450,
     width: '80%',
     height: 120,
   },

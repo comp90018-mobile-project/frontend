@@ -10,12 +10,6 @@ function EventCard({ show, eventInfo }) {
       <View style={styles.popupContainer}>
         <Text style={styles.eventName}>
           {eventInfo.name}
-          <Image
-            style={{
-              width: 30, height: 30,
-            }}
-            source={require('../../../../../assets/fire.png')}
-          />
         </Text>
 
         <View style={styles.row}>

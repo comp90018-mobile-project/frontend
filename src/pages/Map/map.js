@@ -1,9 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from 'react';
+import * as Location from 'expo-location';
+import { useEffect, useState } from 'react';
 import { Image, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
+import { Searchbar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
@@ -13,13 +15,45 @@ import styles from './mapStyles';
 
 function Map(navigation) {
   const { events } = useSelector((state) => state.event);
-
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [initialRegion, setInitialRegion] = useState();
+  const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
+  const [region, setRegion] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      const address = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setRegion(address.shift().city);
+      setInitialRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      });
+    })();
+  }, []);
 
   const handleEventCard = (event) => {
     setSelectedEvent(event);
     setEventCard(true);
+  };
+
+  const handleEventCardClose = () => {
+    setEventCard(false);
+  };
+
+  const handleSearch = (text) => {
+    const filteredEvents = events.filter((event) => event.name.includes(text));
+    // eslint-disable-next-line no-unused-expressions
+    (text.length && filteredEvents.length) ? handleEventCard(filteredEvents.shift()) : handleEventCardClose();
   };
 
   return (
@@ -27,14 +61,8 @@ function Map(navigation) {
       <MapView
         style={styles.map}
         showsUserLocation
-        initialRegion={{
-          latitude: -37.8033,
-          longitude: 144.9610,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        }}
+        initialRegion={initialRegion}
       >
-
         {events.map((item) => (
           <Marker coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
             <Image
@@ -43,7 +71,7 @@ function Map(navigation) {
               }}
               source={require('../../../assets/avatar.png')}
             />
-            <Callout tooltip="true" onPress={() => handleEventCard(item)}>
+            <Callout tooltip="true">
               { item.participants.length ? (
                 <View style={styles.callout}>
                   <FontAwesome name="group" size={25} color="#248A59" />
@@ -64,6 +92,19 @@ function Map(navigation) {
           </Marker>
         ))}
       </MapView>
+
+      <View style={styles.regionCard}>
+        <Text style={styles.regionText}>{region}</Text>
+        <Image
+          style={styles.regionFire}
+          source={require('../../../assets/fire.png')}
+        />
+      </View>
+
+      <Searchbar
+        style={styles.searchBar}
+        onChangeText={(text) => handleSearch(text)}
+      />
 
       <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
 
