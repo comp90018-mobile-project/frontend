@@ -35,13 +35,11 @@ function LoginScreen({ navigation }) {
 
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="padding"
-    >
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
 
-      <Text style={styles.title}>Login</Text>
-
+      <View style={styles.title}>
+        <Text style={styles.title}>Login</Text>
+      </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.inputText}>Username</Text>
@@ -69,17 +67,14 @@ function LoginScreen({ navigation }) {
           <Text style={styles.buttonText}>Start!</Text>
         </TouchableOpacity>
 
-
-
-
         <TouchableOpacity
           onPress = {() => navigation.replace('Demo')}
+          style={styles.button}
           >
-          <Text style={styles.forgotPassword}>Go Back</Text>
+          <Text style={styles.buttonText}>Go Back</Text>
         </TouchableOpacity>
       </View>
 
-      
     </KeyboardAvoidingView>
   );
 }
@@ -87,74 +82,52 @@ function LoginScreen({ navigation }) {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-
-  title: {
-      position: 'absolute',
-      width: 154,
-      height: 68,
-      left: 143,
-      top: 180,
-
-      fontWeight: 'bold',
-      fontSize: 56,
-
-      color: '#E04D3D',
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#323C47',
-    
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 56,
+    color: '#E04D3D'
   },
   inputContainer: {
     width: '70%',
-      marginBottom: 50,
-  },
-  input: {
-
-      backgroundColor: 'white',
-      paddingHorizontal: 15,
-      paddingVertical: 20,
-      borderRadius: 15,
+    marginBottom: 50
   },
   inputText: {
-    color: 'white',
+    color: '#fff',
     fontWeight: '700',
-    fontSize: 26,
-    lineHeight: 31,
     fontStyle: 'normal',
-    marginTop: 50,
+    fontSize: 26,
+    lineHeight: 26,
+    marginTop: 45,
   },
-
+  input: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 10,
+    marginTop: 10
+  },
   buttonContainer: {
-      position: 'absolute',
-      height: 65,
-      width: 300,
-      left: 64,
-      top: 560,
-
+    width: '50%',
+    height: 'auto'
   },
   button: {
     backgroundColor: '#E04D3D',
-    width: '100%',
-    padding: 15,
-    borderRadius: 25,
     alignItems: 'center',
-    marginTop: 64,
-  },
-  buttonOutline: {
-    backgroundColor: 'white',
-    marginTop: 5,
-    borderColor: '#198F94',
-    borderWidth: 2,
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginVertical: 20
   },
   buttonText: {
-      height: 31,
-      left: 5,
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 26,
-  },
-
+    color: '#fff',
+    fontWeight: '700',
+    textAlign: 'center',
+    fontSize: 26
+  }
 });

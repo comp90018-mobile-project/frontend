@@ -10,6 +10,7 @@ export default StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+    position: 'relative'
   },
   callout: {
     backgroundColor: '#323C47',
@@ -26,33 +27,62 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     left: 5,
   },
-  searchBar: {
-    position: 'absolute',
-    bottom: 600,
-    width: '90%',
-    borderRadius: 20,
-  },
   regionCard: {
-    position: 'absolute',
-    bottom: 660,
     width: '100%',
-    height: 80,
-    flex: 1,
     flexDirection: 'row',
-    left: 20,
+    alignItems: 'center',
+    borderWidth: 5,
+    borderColor: '#d9d9d9',
+    backgroundColor: '#323C47',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
   regionText: {
     fontSize: 40,
     fontWeight: 'bold',
-    textDecorationLine: 'underline',
-    marginLeft: 5,
-    top: 15,
-    textAlign: 'left',
+    marginRight: 10,
+    color: '#fff'
   },
   regionFire: {
-    height: 30,
+    height: 40,
     width: 30,
-    top: 25,
-    left: 10,
+    resizeMode:'stretch'
   },
+  searchBar: {
+    marginTop: 10,
+    borderRadius: 15,
+  },
+  
+  infoDisplay: {
+    width: '95%',
+    position: 'absolute',
+    top: 10,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+  // regionCard: {
+  //   position: 'absolute',
+  //   bottom: 660,
+  //   width: '100%',
+  //   height: 80,
+  //   flex: 1,
+  //   flexDirection: 'row',
+  //   left: 20,
+  // },
+  // regionText: {
+  //   fontSize: 40,
+  //   fontWeight: 'bold',
+  //   textDecorationLine: 'underline',
+  //   marginLeft: 5,
+  //   top: 15,
+  //   textAlign: 'left',
+  // },
+  // regionFire: {
+  //   height: 30,
+  //   width: 30,
+  //   top: 25,
+  //   left: 10,
+  // },
 });
