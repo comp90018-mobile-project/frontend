@@ -3,7 +3,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, SafeAreaView } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -12,13 +12,15 @@ import { useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
+import { useNavigation } from '@react-navigation/core';
 
-function Map(navigation) {
+function Map({navigation}) {
   const { events } = useSelector((state) => state.event);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
+  const {navigate} = useNavigation()
 
   useEffect(() => {
     (async () => {
@@ -35,8 +37,8 @@ function Map(navigation) {
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
     })();
   }, []);
@@ -57,7 +59,7 @@ function Map(navigation) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <MapView
         style={styles.map}
         showsUserLocation
@@ -93,24 +95,28 @@ function Map(navigation) {
         ))}
       </MapView>
 
-      <View style={styles.regionCard}>
-        <Text style={styles.regionText}>{region}</Text>
-        <Image
-          style={styles.regionFire}
-          source={require('../../../assets/fire.png')}
-        />
-      </View>
+      <View  style={styles.infoDisplay}>
+        <View style={styles.regionCard}>
+          <Text style={styles.regionText}>{region}</Text>
+          <Image
+            style={styles.regionFire}
+            source={require('../../../assets/fire.png')}
+          />
+        </View>
 
-      <Searchbar
-        style={styles.searchBar}
-        onChangeText={(text) => handleSearch(text)}
-      />
+        <Searchbar
+          style={styles.searchBar}
+          placeholder={'Search Event'}
+          onChangeText={(text) => handleSearch(text)}
+        />
+
+      </View>
 
       <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
 
       <Navigator />
 
-    </View>
+    </SafeAreaView>
   );
 }
 

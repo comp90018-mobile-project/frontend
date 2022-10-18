@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#323C47',
+    alignItems: 'center'
+  },
+  columnCentre: {
     flexDirection: 'column',
     alignItems: 'center'
   },
@@ -75,6 +78,7 @@ const styles = StyleSheet.create({
   imgContainer: {
     width: '90%',
     marginTop: 10,
+    marginBottom: 20
   },
   createButton: {
     elevation: 8,
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     marginTop: 20,
-    width: 250,
+    width: "90%",
     height: 50,
     justifyContent: 'center'
   },
