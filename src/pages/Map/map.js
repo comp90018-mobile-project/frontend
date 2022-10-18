@@ -12,13 +12,15 @@ import { useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
+import { useNavigation } from '@react-navigation/core';
 
-function Map(navigation) {
+function Map({navigation}) {
   const { events } = useSelector((state) => state.event);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
+  const {navigate} = useNavigation()
 
   useEffect(() => {
     (async () => {
@@ -35,8 +37,8 @@ function Map(navigation) {
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
     })();
   }, []);

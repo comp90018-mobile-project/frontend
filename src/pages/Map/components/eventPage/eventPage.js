@@ -9,7 +9,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './eventPageStyles';
 
-function EventPage() {
+function EventPage(props) {
+  const {lat, lon} = props
   const dispatch = useDispatch()
   const [modal, setModal] = useState(false)
   const name = useSelector((state) => {state.nickname; console.log(state)})
