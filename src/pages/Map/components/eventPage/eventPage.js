@@ -18,8 +18,8 @@ function EventPage() {
       name: eventName,
       organiser: 'Nine1ie',
       preview: '',
-      longitude: '-37.79702912632178',
-      latitude: '144.9611751200046',
+      longitude: '144.9611',
+      latitude: '-37.797',
       participants: [],
       settings: {
         duration: eventDuration,
