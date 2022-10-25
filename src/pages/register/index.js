@@ -15,14 +15,14 @@ import {
   import {setUsername, setP} from '../../slices/user'
   import {createUser} from '../../services/api';
 
-  
+
   function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = getAuth(firebaseConfig);
     const dispatch = useDispatch()
 
-  
+
     const handleSignUp = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
@@ -33,15 +33,15 @@ import {
           const params = {username: user.email, password: password}
           dispatch(createUser(params));
           navigation.replace('Home');
-          console.log('Registered with:', user.email);
-          
+          // console.log('Registered with:', user.email);
+
         })
         .catch((error) => alert(error.message));
     };
 
 
-  
-  
+
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
 
@@ -82,13 +82,13 @@ import {
               <Text style={styles.buttonText}>Go Back</Text>
           </TouchableOpacity>
         </View>
-        
+
       </KeyboardAvoidingView>
     );
   }
-  
+
   export default SignUpScreen;
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -139,4 +139,3 @@ import {
       fontSize: 26
     }
   });
-  

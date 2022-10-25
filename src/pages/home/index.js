@@ -40,8 +40,8 @@ function HomeScreen({ navigation }) {
       <Text>
         Email:
         {auth.currentUser?.email}
-        Logged in with: 
-      
+        Logged in with:
+
       </Text>
       <TouchableOpacity
         onPress={handleSignOut}
@@ -70,11 +70,11 @@ function HomeScreen({ navigation }) {
       >
         <Text style={styles.buttonText}>Create Event</Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity
         onPress={()=>{
-          dispatch(fetchEvents());  
-          console.log("res", dispatch(fetchEvents()));  
+          dispatch(fetchEvents());
+          // console.log("res", dispatch(fetchEvents()));
         }}
         style={styles.button}
       >
@@ -83,8 +83,8 @@ function HomeScreen({ navigation }) {
 
       <TouchableOpacity
         onPress={()=>{
-          
-          console.log("res", events);  
+
+          // console.log("res", events);
         }}
         style={styles.button}
       >
