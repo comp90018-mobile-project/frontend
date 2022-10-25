@@ -1,27 +1,28 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
+<<<<<<< HEAD
 import {
   StyleSheet, Text, TouchableOpacity, View, ScrollView
 } from 'react-native';
+=======
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
+>>>>>>> main
 import firebaseConfig from '../../../authBase';
 
 import ChatRoom from '../../components/chatRoom';
-import {fetchEvents} from '../../services/api';
-import { useDispatch, useSelector } from 'react-redux';
-
 
 function ChatList({ navigation }) {
-
   const auth = getAuth(firebaseConfig);
-  const {events} = useSelector((state) => state.event);
+  const { events } = useSelector((state) => state.event);
   const handleChat = (id) => {
-    navigation.navigate('Chat', { id: id});
-  }
+    navigation.navigate('Chat', { id });
+  };
 
-  const fakeData = [{id: '123', eventName: 'chats',num:"3"}, {id: '456', eventName: 'Play',num:"2"}];
+  const fakeData = [{ id: '123', eventName: 'chats', num: '3' }, { id: '456', eventName: 'Play', num: '2' }];
 
   return (
-    <ScrollView style={{backgroundColor: '#323c47'}}>
+    <ScrollView style={{ backgroundColor: '#323c47' }}>
       <View style={styles.container}>
         <Text>
           Email:

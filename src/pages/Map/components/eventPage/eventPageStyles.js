@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   eventNameFont: {
-    color: '#fff', 
-    fontSize: 36, 
+    color: '#fff',
+    fontSize: 36,
     fontWeight: 'bold'
   },
   titleFont: {
     color: '#fff',
-    fontSize: 24, 
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10
   },

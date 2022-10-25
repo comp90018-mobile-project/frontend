@@ -19,7 +19,7 @@ function Chat({ navigation,route}) {
       dispatch(fetchUser(auth.currentUser?.email));
     }, [])
     const {u, p, nickname, avatar} = useSelector(state => state.user);
-    console.log("nickname and avatar:", nickname, avatar);
+    // console.log("nickname and avatar:", nickname, avatar);
 
     useLayoutEffect(() => {
         const dataCollection = collection(db,id)
@@ -41,7 +41,7 @@ function Chat({ navigation,route}) {
     }, [])
 
     const onSend = useCallback((messages = []) => {
-        
+
       setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
       const{
         _id,
@@ -49,7 +49,7 @@ function Chat({ navigation,route}) {
         text,
         user,
       } = messages[0]
-      
+
         addDoc(collection(db, id), {
             _id,
             createdAt,
@@ -57,12 +57,12 @@ function Chat({ navigation,route}) {
             user,
         });
     }, [])
-  
+
     return (
       <View style={styles.container}>
         <Text>{id}</Text>
         <Text>nickname and avatar:{nickname} {avatar}</Text>
-        
+
         <GiftedChat
           messages={messages}
           showAvatarForEveryMessage={true}

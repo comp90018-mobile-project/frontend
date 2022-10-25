@@ -1,4 +1,5 @@
-import { Amplify, Storage } from 'aws-amplify';
+import {Amplify, Storage} from 'aws-amplify';
+import {createAsyncThunk} from "@reduxjs/toolkit";
 
 Amplify.configure({
     Auth: {
@@ -16,15 +17,14 @@ Amplify.configure({
 /**
  * Uploads an image selected either by camera or from the gallery
  * to Amazon S3 bucket.
- * @param {*} result 
- * @returns 
+ * @param {*} result
+ * @returns
  */
-export const uploadImage = async (result) => {
-    let uri = result.uri;
+export const uploadImage = async (uri) => {
     const response = await fetch(uri);
     const tempFileName = uri.split('/').pop();
     const blob = await response.blob();
-    result = await Storage.put(tempFileName, blob, {
+    let result = await Storage.put(tempFileName, blob, {
         level: 'public',
         acl: "public-read"
     });
