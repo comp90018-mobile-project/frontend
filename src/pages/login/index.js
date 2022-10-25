@@ -1,11 +1,8 @@
 import {
   getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult
+  signInWithEmailAndPassword
 } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -16,23 +13,20 @@ import {
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
 
-
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
 
-
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        const user = userCredentials.user;
-        navigation.replace('Home');
+        const { user } = userCredentials;
+        navigation.replace('Map');
         console.log('Logged in with:', user.email);
       })
       .catch((error) => alert(error.message));
   };
-
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -68,9 +62,9 @@ function LoginScreen({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress = {() => navigation.replace('Demo')}
+          onPress={() => navigation.replace('Demo')}
           style={styles.button}
-          >
+        >
           <Text style={styles.buttonText}>Go Back</Text>
         </TouchableOpacity>
       </View>
@@ -86,16 +80,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#323C47',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   title: {
     fontWeight: 'bold',
     fontSize: 56,
-    color: '#E04D3D'
+    color: '#E04D3D',
   },
   inputContainer: {
     width: '70%',
-    marginBottom: 50
+    marginBottom: 50,
   },
   inputText: {
     color: '#fff',
@@ -110,11 +104,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 15,
     borderRadius: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   buttonContainer: {
     width: '50%',
-    height: 'auto'
+    height: 'auto',
   },
   button: {
     backgroundColor: '#E04D3D',
@@ -122,12 +116,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     borderRadius: 10,
-    marginVertical: 20
+    marginVertical: 20,
   },
   buttonText: {
     color: '#fff',
     fontWeight: '700',
     textAlign: 'center',
-    fontSize: 26
-  }
+    fontSize: 26,
+  },
 });

@@ -1,25 +1,24 @@
+/* eslint-disable react/jsx-filename-extension */
 import { getAuth } from 'firebase/auth';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import firebaseConfig from '../../../authBase';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchUser } from '../../services/api';
-import {fetchEvents} from '../../services/api';
+import { fetchEvents, fetchUser } from '../../services/api';
 
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
-  const dispatch = useDispatch()
-  const {events} = useSelector((state) => state.event);
+  const dispatch = useDispatch();
+  const { events } = useSelector((state) => state.event);
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
 
   const handleSignOut = () => {
-    console.log('Signed out!' + auth.currentUser?.email);
+    console.log(`Signed out!${auth.currentUser?.email}`);
     auth
       .signOut()
       .then(() => {
@@ -29,7 +28,7 @@ function HomeScreen({ navigation }) {
   };
   const handleChat = () => {
     navigation.navigate('ChatList');
-  }
+  };
 
   const handleMap = () => {
     navigation.navigate('Map');
@@ -65,16 +64,16 @@ function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={()=>{navigation.navigate('EventPage')}}
+        onPress={() => { navigation.navigate('EventPage'); }}
         style={styles.button}
       >
         <Text style={styles.buttonText}>Create Event</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={()=>{
+        onPress={() => {
           dispatch(fetchEvents());
-          // console.log("res", dispatch(fetchEvents()));
+          console.log('res', dispatch(fetchEvents()));
         }}
         style={styles.button}
       >
@@ -82,9 +81,8 @@ function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={()=>{
-
-          // console.log("res", events);
+        onPress={() => {
+          console.log('res', events);
         }}
         style={styles.button}
       >
