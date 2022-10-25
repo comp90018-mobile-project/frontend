@@ -11,6 +11,8 @@ import register from './src/pages/register';
 import Chat from './src/pages/chat';
 import ChatList from './src/pages/chatList';
 import EventPage from './src/pages/Map/components/eventPage/eventPage';
+import Profile from './src/pages/profile'
+import EventDisplay from './src/pages/Map/components/eventPage/eventDisplay'
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +20,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Demo">
+        <Stack.Navigator initialRouteName="EventDisplay">
           <Stack.Screen
             name="Map"
             component={map}
@@ -58,6 +60,16 @@ export default function App() {
             name="EventPage"
             component={EventPage}
             options={{ title: 'EventPage' }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ title: 'Profile' }}
+          />
+          <Stack.Screen
+            name="EventDisplay"
+            component={EventDisplay}
+            options={{ title: 'EventDisplay' }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -8,33 +8,39 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './eventPageStyles';
+import { useNavigation } from '@react-navigation/core';
 
 function EventPage(props) {
+  const nav = useNavigation()
   const {lat, lon} = props
   const dispatch = useDispatch()
   const [modal, setModal] = useState(false)
   const name = useSelector((state) => {state.nickname; console.log(state)})
-
   const handleCreateEvent = () => {
-    const addEvent = {
-      name: eventName,
-      organiser: 'Nine1ie',
-      preview: '',
-      longitude: '144.9611',
-      latitude: '-37.797',
-      participants: [],
-      settings: {
-        duration: eventDuration,
-        min_participant: eventMinParticipant,
-        max_participant: eventMaxParticipant,
-        type: eventType,
-        theme_color: "#FFF",
-        description: eventDescription,
-        start_time: eventStartTime
-    },
-    images: []
+    if (eventName != '' || eventDuration != '' || eventMaxParticipant!= '' || 
+    eventMinParticipant != '' || eventStartTime != '') {
+      setModal(true)
+    } else {
+      const addEvent = {
+        name: eventName,
+        organiser: 'Nine1ie',
+        preview: '',
+        longitude: '144.9611',
+        latitude: '-37.797',
+        participants: [],
+        settings: {
+          duration: eventDuration,
+          min_participant: eventMinParticipant,
+          max_participant: eventMaxParticipant,
+          type: eventType,
+          theme_color: "#FFF",
+          description: eventDescription,
+          start_time: eventStartTime
+      },
+      images: []
+      }
+      dispatch(createEvent(addEvent))
     }
-    dispatch(createEvent(addEvent))
   }
 
   const [eventName, setName] = useState('');

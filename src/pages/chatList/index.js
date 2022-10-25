@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
 import {
-  StyleSheet, Text, TouchableOpacity, View
+  StyleSheet, Text, TouchableOpacity, View, ScrollView
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
 
@@ -21,24 +21,26 @@ function ChatList({ navigation }) {
   const fakeData = [{id: '123', eventName: 'chats',num:"3"}, {id: '456', eventName: 'Play',num:"2"}];
 
   return (
-    <View style={styles.container}>
-      <Text>
-        Email:
-        {auth.currentUser?.email}
-      </Text>
-      {events.map((item) => (
-        <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
-            <ChatRoom id={item._id} eventName={item.name} num={item.participants
-      }/>
-        </TouchableOpacity>
-        ))}
-      {/* <TouchableOpacity
-        onPress={handleChat}
-        style={styles.button}
-      >
-      <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
-      </TouchableOpacity> */}
-    </View>
+    <ScrollView style={{backgroundColor: '#323c47'}}>
+      <View style={styles.container}>
+        <Text>
+          Email:
+          {auth.currentUser?.email}
+        </Text>
+        {events.map((item) => (
+          <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
+              <ChatRoom id={item._id} eventName={item.name} num={item.participants
+        }/>
+          </TouchableOpacity>
+          ))}
+        {/* <TouchableOpacity
+          onPress={handleChat}
+          style={styles.button}
+        >
+        <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
+        </TouchableOpacity> */}
+      </View>
+    </ScrollView>
   );
 }
 
