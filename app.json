@@ -29,7 +29,15 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "owner": "xingyue159248"
-    
+    "owner": "xingyue159248",
+    "plugins": [
+          [
+            "expo-image-picker",
+            {
+              "photosPermission": "The app accesses your photos to let you share them with your friends."
+            }
+          ]
+        ]
+
   }
 }

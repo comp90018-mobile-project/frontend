@@ -3,24 +3,30 @@
 /* eslint-disable react/react-in-jsx-scope */
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { Image, Text, View, SafeAreaView } from 'react-native';
+import {
+  Image, SafeAreaView, Text, View
+} from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Searchbar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
+import { fetchEvents } from '../../services/api';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
-import { useNavigation } from '@react-navigation/core';
 
-function Map({navigation}) {
+function Map({ navigation }) {
+  const dispatch = useDispatch();
   const { events } = useSelector((state) => state.event);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
-  const {navigate} = useNavigation()
+
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -74,7 +80,7 @@ function Map({navigation}) {
               source={require('../../../assets/avatar.png')}
             />
             <Callout tooltip="true">
-              { item.participants.length ? (
+              { item.participants ? (
                 <View style={styles.callout}>
                   <FontAwesome name="group" size={25} color="#248A59" />
                   <Text style={styles.calloutText}>
@@ -85,8 +91,8 @@ function Map({navigation}) {
                 </View>
               )
                 : (
-                  <View style={styles.callout} onPress={() => navigation.replace('EventPage')}>
-                    <AntDesign name="addusergroup" size={30} color="#248A59" />
+                  <View style={styles.callout} onPress={() => navigation.navigate('EventPage')}>
+                    <AntDesign name="addusergroup" size={30} color="#248A59" onPress={() => navigation.navigate('EventPage')} />
                     <Text style={styles.calloutText} />
                   </View>
                 )}
@@ -95,7 +101,7 @@ function Map({navigation}) {
         ))}
       </MapView>
 
-      <View  style={styles.infoDisplay}>
+      <View style={styles.infoDisplay}>
         <View style={styles.regionCard}>
           <Text style={styles.regionText}>{region}</Text>
           <Image
@@ -106,7 +112,7 @@ function Map({navigation}) {
 
         <Searchbar
           style={styles.searchBar}
-          placeholder={'Search Event'}
+          placeholder="Search Event"
           onChangeText={(text) => handleSearch(text)}
         />
 
@@ -114,7 +120,7 @@ function Map({navigation}) {
 
       <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
 
-      <Navigator />
+      <Navigator navigation={navigation} />
 
     </SafeAreaView>
   );
