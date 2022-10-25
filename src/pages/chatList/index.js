@@ -1,13 +1,7 @@
 import { getAuth } from 'firebase/auth';
 import React from 'react';
-<<<<<<< HEAD
-import {
-  StyleSheet, Text, TouchableOpacity, View, ScrollView
-} from 'react-native';
-=======
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
->>>>>>> main
 import firebaseConfig from '../../../authBase';
 
 import ChatRoom from '../../components/chatRoom';
