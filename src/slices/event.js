@@ -25,28 +25,25 @@ const eventSlice = createSlice({
     reducers: {
         setEvents: (state, action) => {
             state.events = action.payload;
-            console.log("test1")
         },
         creatEvents: (state, action) => {
             state.newEvent = action.payload
             state.events.push(state.newEvent)
-            console.log("create event success")
+            // console.log("create event success")
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchEvents.fulfilled, (state, action) => {
             const { data } = { ...action.payload };
-            console.log("test2",data);
             state.events = data;
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
             const { data } = { ...action.payload };
-            console.log('create event succuess: ', data);
             state.newEvent = action.payload
             state.events.push(state.newEvent)
         })
     }
-    
+
 })
 
 export default eventSlice.reducer;

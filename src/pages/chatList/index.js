@@ -23,20 +23,17 @@ function ChatList({ navigation }) {
           {auth.currentUser?.email}
         </Text>
         {events.map((item) => (
-          <TouchableOpacity onPress={() => handleChat(item._id)} style={styles.button} key={item._id}>
-            <ChatRoom
-              id={item._id}
-              eventName={item.name}
-              num={item.participants}
-            />
+          <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
+              <ChatRoom id={item._id} eventName={item.name} num={item.participants
+        }/>
           </TouchableOpacity>
-        ))}
+          ))}
         {/* <TouchableOpacity
-        onPress={handleChat}
-        style={styles.button}
-      >
-      <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
-      </TouchableOpacity> */}
+          onPress={handleChat}
+          style={styles.button}
+        >
+        <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );

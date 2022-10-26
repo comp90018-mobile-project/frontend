@@ -14,13 +14,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   eventNameFont: {
-    color: '#fff', 
-    fontSize: 36, 
+    color: '#fff',
+    fontSize: 36,
     fontWeight: 'bold'
   },
   titleFont: {
     color: '#fff',
-    fontSize: 24, 
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10
   },
@@ -96,7 +96,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
   modalView: {
     margin: 20,
