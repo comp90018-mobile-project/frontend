@@ -92,7 +92,7 @@ function Map({ navigation }) {
               )
                 : (
                   <View style={styles.callout} onPress={() => navigation.navigate('EventPage')}>
-                    <AntDesign name="addusergroup" size={30} color="#248A59" onPress={() => navigation.navigate('EventPage')} />
+                    <AntDesign name="addusergroup" size={30} color="#248A59" onPress={() => navigation.replace('EventPage')} />
                     <Text style={styles.calloutText} />
                   </View>
                 )}
