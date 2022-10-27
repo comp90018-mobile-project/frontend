@@ -1,3 +1,7 @@
 node_modules/
 authBase.js
 .expo
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
