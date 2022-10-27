@@ -2,7 +2,7 @@ import {
   getAuth,
   signInWithEmailAndPassword
 } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useState, useSelector } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -12,18 +12,22 @@ import {
   View
 } from 'react-native';
 import firebaseConfig from '../../../authBase';
+import { fetchUser } from '../../services/api'
+import { useDispatch } from 'react-redux';
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
+  const [email, setEmail] = useState('gkx@qq.com');
+  const [password, setPassword] = useState('123456');
   const auth = getAuth(firebaseConfig);
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        navigation.replace('Map');
+        navigation.replace('EventPage');
         console.log('Logged in with:', user.email);
+        dispatch(fetchUser(user.email))
       })
       .catch((error) => alert(error.message));
   };
@@ -36,7 +40,7 @@ function LoginScreen({ navigation }) {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.inputText}>Username</Text>
+        <Text style={styles.inputText}>Email</Text>
         <TextInput
           placeholder="Email"
           value={email}
@@ -77,7 +81,7 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     backgroundColor: '#323C47',
     alignItems: 'center',
     justifyContent: 'center',
@@ -86,18 +90,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 56,
     color: '#E04D3D',
+    marginBottom: 20
   },
   inputContainer: {
     width: '70%',
-    marginBottom: 50,
+    marginBottom: 20
   },
   inputText: {
     color: '#fff',
     fontWeight: '700',
     fontStyle: 'normal',
-    fontSize: 26,
-    lineHeight: 26,
-    marginTop: 45,
+    fontSize: 20,
   },
   input: {
     backgroundColor: '#fff',
@@ -105,23 +108,24 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
+    marginBottom: 30
   },
   buttonContainer: {
-    width: '50%',
-    height: 'auto',
+    width: '100%',
+    alignItems: 'center',
   },
   button: {
+    width: '70%',
+    height: 65,
     backgroundColor: '#E04D3D',
-    alignItems: 'center',
+    borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginVertical: 20,
+    alignItems: 'center',
+    marginBottom: 30
   },
   buttonText: {
     color: '#fff',
-    fontWeight: '700',
-    textAlign: 'center',
-    fontSize: 26,
+    fontWeight: 'bold',
+    fontSize: 20
   },
 });

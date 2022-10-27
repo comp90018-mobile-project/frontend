@@ -11,9 +11,7 @@ import { fetchUser } from '../../services/api';
 
 function RtkQueryPage({ navigation }) {
   const dispatch = useDispatch();
-  const {u, p} = useSelector(state => state.user);
   const auth = getAuth(firebaseConfig);
-  // console.log(u, p);
 
 
   const autoLogin = () => {
@@ -34,91 +32,55 @@ function RtkQueryPage({ navigation }) {
 
 
   return (
-    <View style = {stycles.Containter}>
+    <View style = {styles.containter}>
 
-      <View style = {stycles.IMGContainer}>
-        <Image source={require('../../../assets/titleIMG.png') } />
-      </View>
+      <Image style={{}} source={require('../../../assets/titleIMG.png') } />
 
-      <View>
-        <TouchableOpacity
-         style={stycles.button01}
-         onPress = {autoLogin}
-         >
-          <Text style = {stycles.textStycleLogIn}>Login</Text>
+      <View style={{marginTop: 100, width: '100%', alignItems: 'center'}}>
+        <TouchableOpacity style={styles.loginButton} onPress = {autoLogin}>
+          <Text style = {styles.buttonText}>Login</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={stycles.button02}
-          onPress = {() => {navigation.replace('Register');}}
+        <TouchableOpacity style={styles.signupButton} onPress = {() => {navigation.replace('Register');}}
           >
-        <Text style = {stycles.textStycleSignUp}>Sign Up</Text>
+        <Text style = {styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 }
 
-const stycles = StyleSheet.create({
-  Containter: {
-    position: 'relative',
-    width: 428,
-    height: 926,
+const styles = StyleSheet.create({
+  containter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#323C47',
   },
-  IMGContainer: {
-    position: 'absolute',
-    width: 152,
-    height: 201,
-    left: 138,
-    top: 224,
-
-  },
-
-  button01: {
-    position: 'absolute',
+  loginButton: {
     width: '70%',
     height: 65,
-    left: 64,
-    top: 590,
-
     backgroundColor: '#E04D3D',
     borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30
   },
-
-  button02: {
-    position: 'absolute',
-    width: 300,
+  signupButton: {
+    width: '70%',
     height: 65,
-    left: 64,
-    top: 690,
-
     backgroundColor: '#198F94',
     borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20
   },
-
-
-  textStycleLogIn: {
-    "position": "absolute",
-    "left": 125,
-    "top": 20,
-    color: '#FFFFFF',
-
+  buttonText: {
+    color: '#fff',
     fontWeight: 'bold',
-    fontSize: 20,
-  },
-
-  textStycleSignUp: {
-    "position": "absolute",
-    "left": 115,
-    "top": 20,
-    color: '#FFFFFF',
-
-    fontWeight: 'bold',
-    fontSize: 20,
-  },
-
-
+    fontSize: 20
+  }
 });
 
 export default RtkQueryPage;

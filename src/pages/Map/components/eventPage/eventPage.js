@@ -13,7 +13,7 @@ import {
     SafeAreaView
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {createEvent} from '../../../../services/api';
+import {createEvent, updateUserHost} from '../../../../services/api';
 import ModalSelector from 'react-native-modal-selector'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -26,31 +26,36 @@ function EventPage(props) {
     const {lat, lon} = props
     const dispatch = useDispatch()
     const [modal, setModal] = useState(false)
-    const name = useSelector((state) => {
-        state.nickname;
-    })
+    const {email} = useSelector((state) => state.user)
 
     const handleCreateEvent = () => {
-        const addEvent = {
-            name: eventName,
-            organiser: 'Nine1ie',
-            preview: preview,
-            longitude: '144.9611',
-            latitude: '-37.797',
-            participants: [],
-            settings: {
-                duration: eventDuration,
-                min_participant: eventMinParticipant,
-                max_participant: eventMaxParticipant,
-                type: eventType,
-                theme_color: "#FFF",
-                description: eventDescription,
-                start_time: eventStartTime
-            },
-            images: []
+        if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || eventStartTime == '') {
+            setModal(true)
+        } else {
+            const addEvent = {
+                name: eventName,
+                organiser: 'Nine1ie',
+                preview: preview,
+                longitude: '144.9611',
+                latitude: '-37.797',
+                participants: [],
+                settings: {
+                    duration: eventDuration,
+                    min_participant: eventMinParticipant,
+                    max_participant: eventMaxParticipant,
+                    type: eventType,
+                    theme_color: "#FFF",
+                    description: eventDescription,
+                    start_time: eventStartTime
+                },
+                images: []
+            }
+            dispatch(createEvent(addEvent))
+            // dispatch(updateUserHost({email: email, hostevent: addEvent}))
         }
-        dispatch(createEvent(addEvent))
     }
+
+
     const [preview, setPreview] = useState('');
     const [eventName, setName] = useState('');
     const [eventStartTime, setStartTime] = useState(new Date());
@@ -161,7 +166,8 @@ function EventPage(props) {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Missing Inputs</Text>
+                        <Text style={styles.modalText}>Invalid inputs or Missing fields</Text>
+                        <Text style={styles.modalText}>Please try again</Text>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModal(!modal)}
@@ -192,7 +198,7 @@ function EventPage(props) {
                                        value={eventName}
                                        placeholderTextColor={'#fff'}
                                        placeholder='Event Name'/>
-                            <Text style={{color: '#fff', fontSize: 16}}>{name}</Text>
+                            <Text style={{color: '#fff', fontSize: 16}}>name</Text>
                         </View>
                     </View>
 
