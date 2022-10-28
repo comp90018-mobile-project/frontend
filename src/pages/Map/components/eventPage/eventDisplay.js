@@ -34,12 +34,39 @@ const test =  {
 export default function EventDisplay({props}) {
   // const {eventToBeDisplay} = props  -- 传进来的一个event object
   // 拉取当前用户的state，判断此用户是否已经加入或者主持了一个event为后续能否加入event做判断
-  const currentUser = useSelector((state) => {state})
 
+  const currentUser = useSelector((state) => state.user);
+  const hostevent = currentUser.hostevent[0]
+  const participantevent = currentUser.participantevent
+  console.log(hostevent.preview)
   return (
     <SafeAreaView style={styles.root}>
-
       <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
+
+      {hostevent != '' ? 
+  
+      <View style={styles.columnCentre}>
+        <View style={styles.header}>
+          <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
+          <View style={styles.headerText}>
+            <Text style={styles.eventNameFont}>{hostevent.event_name}</Text>
+            <Text style={{color: '#fff', fontSize: 16}}></Text>
+          </View>
+        </View>
+
+        <View style={styles.participantContainer}>
+            <Text style={styles.titleFont}>Participants</Text>
+            <View style={styles.participantList}>
+              <Image style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}}
+                    source={hostevent.preview}/>
+            </View>
+        </View>
+      </View>
+      : 
+      <Text>hi</Text>
+      }
+      </ScrollView>
+      {/* <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
         <View style={styles.columnCentre}>
           <View style={styles.header}>
             <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
@@ -108,9 +135,8 @@ export default function EventDisplay({props}) {
         </View>            
       </ScrollView>
 
-      {/* 如果当前用户未加入任何event，显示join event, 反之 quit event*/}
       {test.participants.includes(currentUser) == true ? 
-      <TouchableOpacity style={styles.createButton}>
+      <TouchableOpacity style={styles.quitButton}>
         <Text style={{
           fontSize: 12, 
           color: "#fff", 
@@ -121,7 +147,7 @@ export default function EventDisplay({props}) {
         </Text>
       </TouchableOpacity>
       :
-      <TouchableOpacity style={styles.createButton}>
+      <TouchableOpacity style={styles.joinButton}>
         <Text style={{
           fontSize: 12, 
           color: "#fff", 
@@ -133,8 +159,7 @@ export default function EventDisplay({props}) {
       </TouchableOpacity>
       }
       
-      {/* 任何用户可点，导航到展示的event对应的chat room*/}
-      <TouchableOpacity style={styles.joinButton}>
+      <TouchableOpacity style={styles.navChatButton}>
         <Text style={{
           fontSize: 12, 
           color: "#fff", 
@@ -143,7 +168,7 @@ export default function EventDisplay({props}) {
           textTransform: "uppercase"}}>
           Navigate to chat
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       
     </SafeAreaView>
   )
@@ -227,7 +252,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20
   },
-  createButton: {
+  joinButton: {
     elevation: 8,
     backgroundColor: "#009688",
     borderRadius: 10,
@@ -238,7 +263,18 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center'
   },
-  joinButton: {
+  quitButton: {
+    elevation: 8,
+    backgroundColor: "#ff0000",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginTop: 20,
+    width: "90%",
+    height: 50,
+    justifyContent: 'center'
+  },
+  navChatButton: {
     elevation: 8,
     backgroundColor: "#e69b00",
     borderRadius: 10,
