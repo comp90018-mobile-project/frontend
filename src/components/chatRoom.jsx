@@ -1,22 +1,24 @@
-
-
 import { useState } from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View,Image
 } from 'react-native';
 import { idText } from 'typescript';
+import '../../assets/defaultChat.png'
+
+
 export default function ChatRoom(props) {
-  const {id,eventName,num} = props
+  const {id,eventName,num,image,theme} = props
+
   return (
     <View  style={styles.container}>
       <View style={{width:"20%"}}>
-        <Image style={styles.tinyLogo} 
-          source={{uri:"https://talkjs.com/images/avatar-1.jpg"}}
-        />
+        {image==''?
+        <Image style={styles.tinyLogo} source={require('../../assets/defaultChat.png')}/>
+        :<Image style={styles.tinyLogo} source={{uri:image}}/>}
       </View>
       <View style={{width:"80%"}}>
-        <Text style={styles.buttonText} >{eventName}</Text>
-        <Text>{num} participants</Text> 
+        <Text style={styles.buttonText} >{eventName} -{theme}</Text>
+        {num==0?<Text>{num+1} participant</Text> :<Text>{num+1} participants</Text> }
       </View>
 
     </View>
