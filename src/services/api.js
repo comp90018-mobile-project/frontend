@@ -14,7 +14,6 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (email) => {
 
 export const createUser = createAsyncThunk('user/createUser', async(params) => {
   const {username, password} = params;
-  // console.log("2", username, password);
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({ username: username, password: password})

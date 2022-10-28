@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import demo from './src/pages/demo';
+import s3 from './src/pages/s3'
 import home from './src/pages/home';
 import login from './src/pages/login';
 import map from './src/pages/Map';
@@ -20,7 +21,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Demo">
+        <Stack.Navigator initialRouteName="S3Demo">
           <Stack.Screen
             name="Map"
             component={map}
@@ -70,6 +71,11 @@ export default function App() {
             name="EventDisplay"
             component={EventDisplay}
             options={{ title: 'EventDisplay' }}
+          />
+          <Stack.Screen
+            name="S3Demo"
+            component={s3}
+            options={{ title: 'Push Notification' }}
           />
         </Stack.Navigator>
       </NavigationContainer>
