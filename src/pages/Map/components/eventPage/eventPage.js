@@ -13,7 +13,7 @@ import {
     SafeAreaView
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {createEvent} from '../../../../services/api';
+import {createEvent, updateUserHost} from '../../../../services/api';
 import ModalSelector from 'react-native-modal-selector'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -26,39 +26,46 @@ function EventPage(props) {
     const {lat, lon} = props
     const dispatch = useDispatch()
     const [modal, setModal] = useState(false)
-    const name = useSelector((state) => {
-        state.nickname;
-    })
+    const {email, hostevent, participantevent} = useSelector((state) => state.user)
 
     const handleCreateEvent = () => {
-        const addEvent = {
-            name: eventName,
-            organiser: 'Nine1ie',
-            preview: preview,
-            longitude: '144.9611',
-            latitude: '-37.797',
-            participants: [],
-            settings: {
-                duration: eventDuration,
-                min_participant: eventMinParticipant,
-                max_participant: eventMaxParticipant,
-                type: eventType,
-                theme_color: "#FFF",
-                description: eventDescription,
-                start_time: eventStartTime
-            },
-            images: []
+        if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || eventStartTime == '') {
+            setModal(true)
+        } else {
+            const addEvent = {
+                name: eventName,
+                organiser: 'Nine1ie',
+                preview: preview,
+                longitude: '144.9611',
+                latitude: '-37.797',
+                participants: [],
+                settings: {
+                    duration: eventDuration,
+                    min_participant: eventMinParticipant,
+                    max_participant: eventMaxParticipant,
+                    type: eventType,
+                    theme_color: "#FFF",
+                    description: eventDescription,
+                    start_time: eventStartTime
+                },
+                images: []
+            }
+            const events = [...hostevent]
+            events.push(addEvent)
+            dispatch(createEvent(addEvent))
+            dispatch(updateUserHost({email: email, hostevent: events}))
         }
-        dispatch(createEvent(addEvent))
     }
+
+
     const [preview, setPreview] = useState('');
-    const [eventName, setName] = useState('');
+    const [eventName, setName] = useState('Test Name');
     const [eventStartTime, setStartTime] = useState(new Date());
-    const [eventDuration, setDuration] = useState('');
-    const [eventMinParticipant, setMinParticipant] = useState('');
-    const [eventMaxParticipant, setMaxParticipant] = useState('');
-    const [eventType, setEventType] = useState('');
-    const [eventDescription, setEventDescription] = useState('');
+    const [eventDuration, setDuration] = useState('30 mins');
+    const [eventMinParticipant, setMinParticipant] = useState('2');
+    const [eventMaxParticipant, setMaxParticipant] = useState('5');
+    const [eventType, setEventType] = useState('Study');
+    const [eventDescription, setEventDescription] = useState('This is a description');
     const [imageSource, setImageSource] = useState('');
 
     const durationOption = [
@@ -161,7 +168,8 @@ function EventPage(props) {
             >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Missing Inputs</Text>
+                        <Text style={styles.modalText}>Invalid inputs or Missing fields</Text>
+                        <Text style={styles.modalText}>Please try again</Text>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModal(!modal)}
@@ -192,7 +200,7 @@ function EventPage(props) {
                                        value={eventName}
                                        placeholderTextColor={'#fff'}
                                        placeholder='Event Name'/>
-                            <Text style={{color: '#fff', fontSize: 16}}>{name}</Text>
+                            <Text style={{color: '#fff', fontSize: 16}}>name</Text>
                         </View>
                     </View>
 

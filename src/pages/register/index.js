@@ -13,22 +13,21 @@ import {
 import { useDispatch } from 'react-redux';
 import firebaseConfig from '../../../authBase';
 import { createUser } from '../../services/api';
-import { setP, setUsername } from '../../slices/user';
+import { setUsername, setEmail } from '../../slices/user';
 
 function SignUpScreen({ navigation }) {
+  const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch();
 
   const handleSignUp = () => {
+    
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        console.log('1', user.email, password);
-        dispatch(setUsername(email));
-        dispatch(setP(password));
-        const params = { username: user.email, password };
+        const params = { username: username, email: user.email, password: password };
         dispatch(createUser(params));
         navigation.replace('Map');
         console.log('Registered with:', user.email);
@@ -44,6 +43,15 @@ function SignUpScreen({ navigation }) {
       </View>
 
       <View style={styles.inputContainer}>
+        <Text style={styles.inputText}>User Name</Text>
+        <TextInput
+          placeholder="Username"
+          value={username}
+          onChangeText={(text) => setUserName(text)}
+          style={styles.input}
+          maxLength={15}
+        />
+
         <Text style={styles.inputText}>Email</Text>
         <TextInput
           placeholder="Email"
@@ -85,7 +93,7 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     backgroundColor: '#323C47',
     alignItems: 'center',
     justifyContent: 'center',
@@ -94,18 +102,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 56,
     color: '#198F94',
+    marginBottom: 20
   },
   inputContainer: {
     width: '70%',
-    marginBottom: 50,
+    marginBottom: 20
   },
   inputText: {
     color: '#fff',
     fontWeight: '700',
     fontStyle: 'normal',
-    fontSize: 26,
-    lineHeight: 26,
-    marginTop: 45,
+    fontSize: 20,
   },
   input: {
     backgroundColor: '#fff',
@@ -113,23 +120,24 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
+    marginBottom: 30
   },
   buttonContainer: {
-    width: '50%',
-    height: 'auto',
+    width: '100%',
+    alignItems: 'center',
   },
   button: {
+    width: '70%',
+    height: 65,
     backgroundColor: '#198F94',
-    alignItems: 'center',
+    borderRadius: 20,
     justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 10,
-    marginVertical: 20,
+    alignItems: 'center',
+    marginBottom: 30
   },
   buttonText: {
     color: '#fff',
-    fontWeight: '700',
-    textAlign: 'center',
-    fontSize: 26,
+    fontWeight: 'bold',
+    fontSize: 20
   },
 });
