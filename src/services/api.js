@@ -24,6 +24,7 @@ export const createUser = createAsyncThunk('user/createUser', async(params) => {
 })
 
 export const updateUserHost = createAsyncThunk('user/updateUser', async(params) => {
+  // hostevent: new events hosted by user
   const {email, hostevent} = params
   const requestOptions = {
     method: 'POST',
@@ -35,8 +36,8 @@ export const updateUserHost = createAsyncThunk('user/updateUser', async(params) 
     })
   }
   const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
-  console.log(response);
-  return response.json()
+  return hostevent
+  // return response.json()
 })
 
 
