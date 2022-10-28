@@ -51,7 +51,7 @@ function EventPage(props) {
                 images: []
             }
             dispatch(createEvent(addEvent))
-            // dispatch(updateUserHost({email: email, hostevent: addEvent}))
+            dispatch(updateUserHost({email: email, hostevent: addEvent}))
         }
     }
 

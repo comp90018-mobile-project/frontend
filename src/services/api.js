@@ -29,11 +29,13 @@ export const updateUserHost = createAsyncThunk('user/updateUser', async(params) 
     method: 'POST',
     body: JSON.stringify({
       email: email,
-      event_hosted: hostevent
+      query: {
+        event_hosted: hostevent
+      }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile?email=' +
-  email, requestOptions);
+  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  console.log(response);
   return response.json()
 })
 
