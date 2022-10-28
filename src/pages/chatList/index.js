@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import firebaseConfig from '../../../authBase';
@@ -13,19 +13,19 @@ function ChatList({ navigation }) {
     navigation.navigate('Chat', { id });
   };
 
-  const fakeData = [{ id: '123', eventName: 'chats', num: '3' }, { id: '456', eventName: 'Play', num: '2' }];
 
   return (
     <ScrollView style={{ backgroundColor: '#323c47' }}>
       <View style={styles.container}>
-        <Text>
-          Email:
-          {auth.currentUser?.email}
-        </Text>
+        {console.log(events)}
         {events.map((item) => (
+          
+          item.preview!=''? 
           <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
-              <ChatRoom id={item._id} eventName={item.name} num={item.participants
-        }/>
+            <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type}/>
+          </TouchableOpacity>:
+          <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
+            <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={''} theme={item.settings.type}/>
           </TouchableOpacity>
           ))}
         {/* <TouchableOpacity

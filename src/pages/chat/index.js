@@ -18,7 +18,7 @@ function Chat({ navigation,route}) {
     useEffect(() => {
       dispatch(fetchUser(auth.currentUser?.email));
     }, [])
-    const {u, p, nickname, avatar} = useSelector(state => state.user);
+    const {u, p, username, avatar} = useSelector(state => state.user);
     // console.log("nickname and avatar:", nickname, avatar);
 
     useLayoutEffect(() => {
@@ -60,8 +60,8 @@ function Chat({ navigation,route}) {
 
     return (
       <View style={styles.container}>
-        <Text>{id}</Text>
-        <Text>nickname and avatar:{nickname} {avatar}</Text>
+        {/* <Text>{id}</Text>
+        <Text>nickname and avatar:{nickname} {avatar}</Text> */}
 
         <GiftedChat
           messages={messages}
@@ -70,8 +70,8 @@ function Chat({ navigation,route}) {
           onSend={messages => onSend(messages)}
           user={{
             _id: auth.currentUser?.email,
-            name:auth.currentUser?.email,
-            avatar: "https://raw.githubusercontent.com/yyou211/image_save/main/img/IMG_5447.JPG",
+            name:username,
+            avatar: avatar,
           }}
       />
       </View>
