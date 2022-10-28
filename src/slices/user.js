@@ -8,9 +8,9 @@ const userSlice = createSlice({
     username: '',
     email: '',
     avatar: '',
-    hostevent: '',
-    participantevent: '',
-    eventhistory: '',
+    hostevent: [],
+    participantevent: [],
+    eventhistory: [],
     covid: ''
   },
   reducers: {

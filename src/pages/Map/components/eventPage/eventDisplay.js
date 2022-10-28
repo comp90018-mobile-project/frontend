@@ -5,122 +5,89 @@ import ModalSelector from 'react-native-modal-selector'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/core';
+import * as ImagePicker from 'expo-image-picker';
+import EventPage from './eventPage'
 
-// props 传进来一个event object
-// 在对应test.位置调用传进来object的属性
-const test =  {
-  _id: "63577c74db2b04b13f7d38e8",
-  active: true,
-  created_at: "2022-10-20 15:11:51",
-  images: [],
-  latitude: "-37.797",
-  longitude: "144.9611",
-  name: "Play Badminton",
-  organiser: "Nine1ie",
-  participants: [],
-  preview: "https://elasticbeanstalk-ap-southeast-2-065755014425.s3.ap-southeast-2.amazonaws.com/public/F913B075-C10D-4B81-9EC2-8AA057D26BBE.jpg",
-  settings: {
-    description: "Hello Hello How are you",
-    duration: "3 hours +",
-    max_participant: "6",
-    min_participant: "2",
-    start_time: "2022-10-25T05:59:21.634Z",
-    theme_color: "#FFF",
-    type: "Sport",
-  },
-}
-
-export default function EventDisplay({props}) {
-  // const {eventToBeDisplay} = props  -- 传进来的一个event object
-  // 拉取当前用户的state，判断此用户是否已经加入或者主持了一个event为后续能否加入event做判断
-
+export default function EventDisplay({route, navigation}) {
+  const {event} = route.params
   const currentUser = useSelector((state) => state.user);
   const hostevent = currentUser.hostevent[0]
-  const participantevent = currentUser.participantevent
-  console.log(hostevent.preview)
+  const participantevent = currentUser.participantevent[0]
+  console.log('event', event)
+
+  const checkUser = () => {
+    if (event.organiser == currentUser.username) {
+      return 'host'
+    } else if (event.participants.find(e => e.username === currentUser.username)) {
+      return 'participant'
+    } else {
+      return 'joinable'
+    }
+  }
+
+  
+
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
-
-      {hostevent != '' ? 
-  
-      <View style={styles.columnCentre}>
-        <View style={styles.header}>
-          <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
-          <View style={styles.headerText}>
-            <Text style={styles.eventNameFont}>{hostevent.event_name}</Text>
-            <Text style={{color: '#fff', fontSize: 16}}></Text>
-          </View>
-        </View>
-
-        <View style={styles.participantContainer}>
-            <Text style={styles.titleFont}>Participants</Text>
-            <View style={styles.participantList}>
-              <Image style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}}
-                    source={hostevent.preview}/>
-            </View>
-        </View>
-      </View>
-      : 
-      <Text>hi</Text>
-      }
-      </ScrollView>
-      {/* <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
         <View style={styles.columnCentre}>
+
           <View style={styles.header}>
+            {event.preview != '' ? 
+            <Image styles={styles.previewImg} size={130} source={{uri: event.preview}}></Image>
+            :
             <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
+            }
             <View style={styles.headerText}>
-              <Text style={styles.eventNameFont}>{test.name}</Text>
-              <Text style={{color: '#fff', fontSize: 16}}></Text>
+              <Text style={styles.eventNameFont}>{event.name}</Text>
+              <Text style={{color: '#fff', fontSize: 16}}>{event.organiser}</Text>
             </View>
           </View>
 
           <View style={styles.participantContainer}>
-            <Text style={styles.titleFont}>Participants</Text>
-            <View style={styles.participantList}>
-              <Image style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}}
-                    source={test.preview}/>
-            </View>
+              <Text style={styles.titleFont}>Participants</Text>
+              <View style={styles.participantList}>
+                {event.participants.map((participant, index) => {
+                  return <Image key={index} source={{uri: participant.avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
+                })}
+              </View>
           </View>
 
           <View style={styles.settingContainer}>
-      
             <Text style={styles.titleFont}>Event Information</Text>
-
             <View style={styles.settingList}>
 
               <View style={styles.settingItem}>
                 <Text>Start Time</Text>
                 <Text style={styles.settingItemContent}>
-                  {test.settings.start_time.split('T')[0].slice(5,10) + ' / ' +
-                  test.settings.start_time.split('T')[1].slice(0,5)}
+                  {event.settings.start_time.split('T')[0].slice(5,10) + ' / ' +
+                  event.settings.start_time.split('T')[1].slice(0,5)}
                 </Text>
               </View>
 
               <View style={styles.settingItem}>
                 <Text>Duration</Text>
-                <Text style={styles.settingItemContent}> {test.settings.duration} </Text>
+                <Text style={styles.settingItemContent}> {event.settings.duration} </Text>
               </View>
 
               <View style={styles.settingItem}>
                 <Text>Min & Max Participants</Text>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.settingItemContent}> {test.settings.min_participant} </Text>
+                  <Text style={styles.settingItemContent}> {event.settings.min_participant} </Text>
                   <Text style={{fontSize: 24, fontWeight: 'bold'}}> - </Text>
-                  <Text style={styles.settingItemContent}> {test.settings.max_participant} </Text>
+                  <Text style={styles.settingItemContent}> {event.settings.max_participant} </Text>
                 </View>
               </View>
 
               <View style={styles.settingItem}>
                 <Text>Type</Text>
-                <Text style={styles.settingItemContent}>{test.settings.type}</Text>
+                <Text style={styles.settingItemContent}>{event.settings.type}</Text>
               </View>
 
               <View style={styles.settingItem}>
                 <Text>Description</Text>
                 <View style={{width: '50%'}}>
-                  <Text>{test.settings.description}</Text>
+                  <Text>{event.settings.description}</Text>
                 </View>
               </View>
 
@@ -129,47 +96,102 @@ export default function EventDisplay({props}) {
 
           <View style={styles.imgContainer}>
             <Text style={styles.titleFont}>Images</Text>
-            <Image style={{width: '100%', height: 200, borderRadius: 15,}}
+            {hostevent.images.length != 0 ?
+              <Image style={{width: '100%', height: 200, borderRadius: 15,}}
+              source={{uri: hostevent.images[0]}}/>
+              :
+              <Image style={{width: '100%', height: 200, borderRadius: 15,}}
               source={require('../../../../../assets/location.png')}/>
+            }
           </View>
-        </View>            
+        </View>
       </ScrollView>
 
-      {test.participants.includes(currentUser) == true ? 
+      {checkUser() === 'participant' ? 
+      <>
       <TouchableOpacity style={styles.quitButton}>
         <Text style={{
-          fontSize: 12, 
-          color: "#fff", 
-          fontWeight: "bold", 
-          alignSelf: "center", 
-          textTransform: "uppercase"}}>
-          Quit this event
+        fontSize: 12, 
+        color: "#fff", 
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        textTransform: "uppercase"}}>
+        Quit this event
         </Text>
       </TouchableOpacity>
-      :
-      <TouchableOpacity style={styles.joinButton}>
-        <Text style={{
-          fontSize: 12, 
-          color: "#fff", 
-          fontWeight: "bold", 
-          alignSelf: "center", 
-          textTransform: "uppercase"}}>
-          Join this event
-        </Text>
-      </TouchableOpacity>
-      }
-      
+
       <TouchableOpacity style={styles.navChatButton}>
         <Text style={{
+        fontSize: 12, 
+        color: "#fff", 
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        textTransform: "uppercase"}}>
+        Navigate to chat
+        </Text>
+      </TouchableOpacity>
+      </>
+        : 
+      checkUser() === 'host' ?
+      <>
+        <TouchableOpacity style={styles.joinButton}>
+          <Text style={{
+          fontSize: 12, 
+          color: "#fff", 
+          fontWeight: "bold", 
+          alignSelf: "center", 
+          textTransform: "uppercase"}}>
+          Start the event
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.navChatButton}>
+          <Text style={{
           fontSize: 12, 
           color: "#fff", 
           fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
           Navigate to chat
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.quitButton}>
+          <Text style={{
+          fontSize: 12, 
+          color: "#fff", 
+          fontWeight: "bold", 
+          alignSelf: "center", 
+          textTransform: "uppercase"}}>
+          Cancel the event
+          </Text>
+        </TouchableOpacity>
+      </>
+      :
+      <>
+      <TouchableOpacity style={styles.joinButton}>
+        <Text style={{
+        fontSize: 12, 
+        color: "#fff", 
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        textTransform: "uppercase"}}>
+        Join this event
         </Text>
-      </TouchableOpacity> */}
-      
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.navChatButton}>
+        <Text style={{
+        fontSize: 12, 
+        color: "#fff", 
+        fontWeight: "bold", 
+        alignSelf: "center", 
+        textTransform: "uppercase"}}>
+        Navigate to chat
+        </Text>
+      </TouchableOpacity>
+      </>
+      }
     </SafeAreaView>
   )
 }
@@ -285,6 +307,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center'
   },
+
 
   centeredView: {
     flex: 1,

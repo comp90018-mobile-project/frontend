@@ -25,39 +25,15 @@ import {uploadImage} from "../../../../utils/upload";
 function EventPage(props) {
     const {lat, lon} = props
     const dispatch = useDispatch()
+
+    // modal states
     const [modal, setModal] = useState(false)
-    const {email, hostevent, participantevent} = useSelector((state) => state.user)
+    const [modalEvent, setEventModal] = useState(false)
 
-    const handleCreateEvent = () => {
-        if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || eventStartTime == '') {
-            setModal(true)
-        } else {
-            const addEvent = {
-                name: eventName,
-                organiser: 'Nine1ie',
-                preview: preview,
-                longitude: '144.9611',
-                latitude: '-37.797',
-                participants: [],
-                settings: {
-                    duration: eventDuration,
-                    min_participant: eventMinParticipant,
-                    max_participant: eventMaxParticipant,
-                    type: eventType,
-                    theme_color: "#FFF",
-                    description: eventDescription,
-                    start_time: eventStartTime
-                },
-                images: []
-            }
-            const events = [...hostevent]
-            events.push(addEvent)
-            dispatch(createEvent(addEvent))
-            dispatch(updateUserHost({email: email, hostevent: events}))
-        }
-    }
+    // current user states
+    const {username, email, hostevent, participantevent, avatar} = useSelector((state) => state.user)
 
-
+    // user inputs states
     const [preview, setPreview] = useState('');
     const [eventName, setName] = useState('Test Name');
     const [eventStartTime, setStartTime] = useState(new Date());
@@ -66,8 +42,8 @@ function EventPage(props) {
     const [eventMaxParticipant, setMaxParticipant] = useState('5');
     const [eventType, setEventType] = useState('Study');
     const [eventDescription, setEventDescription] = useState('This is a description');
-    const [imageSource, setImageSource] = useState('');
 
+    // picker options
     const durationOption = [
         {key: 1, label: '30 mins', value: 30},
         {key: 2, label: '1 hour', value: 60},
@@ -76,7 +52,6 @@ function EventPage(props) {
         {key: 5, label: '2 hours 30mins', value: 150},
         {key: 6, label: '3 hours +', value: 180}
     ]
-
     const participantOption = [
         {key: 1, label: "2", value: 2},
         {key: 2, label: "3", value: 3},
@@ -84,7 +59,6 @@ function EventPage(props) {
         {key: 4, label: "5", value: 5},
         {key: 5, label: "6", value: 6}
     ]
-
     const typeOption = [
         {key: 1, label: 'Study', value: 'study'},
         {key: 2, label: 'Entertainment', value: 'entertainment'},
@@ -94,7 +68,6 @@ function EventPage(props) {
         {key: 1, label: 'Take a photo', value: 'camera'},
         {key: 2, label: 'From gallery', value: 'gallery'}
     ]
-
     const imagePickerOptions = {
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -102,6 +75,7 @@ function EventPage(props) {
         quality: 1,
     }
 
+    // Image picker method
     const selectImage = (label) => {
         // setImageSource(label)
         if (label === 'Take a photo') {
@@ -157,15 +131,46 @@ function EventPage(props) {
         }
     }
 
+    // handle create event method
+    const handleCreateEvent = () => {
+      if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || eventStartTime == '') {
+          setModal(true)
+      } else {
+          if (hostevent.length == 0 && participantevent.length == 0) {
+              const addEvent = {
+                  name: eventName,
+                  organiser: 'Nine1ie',
+                  preview: preview,
+                  longitude: '144.9611',
+                  latitude: '-37.797',
+                  participants: [],
+                  settings: {
+                      duration: eventDuration,
+                      min_participant: eventMinParticipant,
+                      max_participant: eventMaxParticipant,
+                      type: eventType,
+                      theme_color: "#FFF",
+                      description: eventDescription,
+                      start_time: eventStartTime
+                  },
+                  images: []
+              }
+              const events = [...hostevent]
+              events.push(addEvent)
+              dispatch(createEvent(addEvent))
+              dispatch(updateUserHost({email: email, hostevent: events}))
+          } else {
+              setEventModal(true)
+          }
+      }
+    }
+
     return (
         <SafeAreaView style={styles.root}>
-
+            
+            {/* Invalid input or missing input modal */}
             <Modal animationType='slide' transparent={true} visible={modal}
-                   onRequestClose={() => {
-                       Alert.alert("Pop up closed")
-                       setModal(!modal)
-                   }}
-            >
+                   onRequestClose={() => {setModal(!modal)}}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalText}>Invalid inputs or Missing fields</Text>
@@ -180,6 +185,24 @@ function EventPage(props) {
                 </View>
             </Modal>
 
+            {/* Already join or host an event modal */}
+            <Modal animationType='slide' transparent={true} visible={modalEvent}
+                   onRequestClose={() => {setEventModal(!modalEvent)}}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have already joined or hosted an event</Text>
+                        <Text style={styles.modalText}>Check My Event section in your profile</Text>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setEventModal(!modalEvent)}
+                        >
+                            <Text style={styles.textStyle}>Retry</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
+            
+            {/* Inputs */}
             <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
                 <View style={styles.columnCentre}>
                     <View style={styles.header}>
@@ -200,7 +223,7 @@ function EventPage(props) {
                                        value={eventName}
                                        placeholderTextColor={'#fff'}
                                        placeholder='Event Name'/>
-                            <Text style={{color: '#fff', fontSize: 16}}>name</Text>
+                            <Text style={{color: '#fff', fontSize: 16}}>{username}</Text>
                         </View>
                     </View>
 
@@ -208,9 +231,7 @@ function EventPage(props) {
                         <Text style={styles.titleFont}>Participants</Text>
                         <View style={styles.participantList}>
                             <Image style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}}
-                                   source={require('../../../../../assets/avatar.png')}/>
-                            <Image style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}}
-                                   source={require('../../../../../assets/avatar.png')}/>
+                                   source={{uri: avatar}}/>
                         </View>
                     </View>
 
@@ -335,6 +356,7 @@ function EventPage(props) {
                 </View>
             </ScrollView>
 
+            {/* Submit button */}
             <TouchableOpacity style={styles.createButton} onPress={handleCreateEvent}>
                 <Text style={{
                     fontSize: 12,
