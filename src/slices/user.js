@@ -65,12 +65,9 @@ const userSlice = createSlice({
       console.log(data)
     });
     builder.addCase(updateUserHost.fulfilled, (state, action) => {
-      const { data } = {...action.payload}
+      // const { data } = {...action.payload}
       console.log('success', data)
-
-      // const {username, avatar, email, event_hosted, event_history, event_participated, health_status} = data;
-      // state.hostevent = event_hosted;
-      // console.log('update user host event', state)
+      state.hostevent = action.payload
     });
     builder.addCase(updateUserHost.rejected, (state, action) => {
       const { data } = {...action.payload}

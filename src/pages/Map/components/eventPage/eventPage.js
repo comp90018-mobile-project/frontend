@@ -26,7 +26,7 @@ function EventPage(props) {
     const {lat, lon} = props
     const dispatch = useDispatch()
     const [modal, setModal] = useState(false)
-    const {email} = useSelector((state) => state.user)
+    const {email, hostevent, participantevent} = useSelector((state) => state.user)
 
     const handleCreateEvent = () => {
         if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || eventStartTime == '') {
@@ -50,20 +50,22 @@ function EventPage(props) {
                 },
                 images: []
             }
+            const events = [...hostevent]
+            events.push(addEvent)
             dispatch(createEvent(addEvent))
-            // dispatch(updateUserHost({email: email, hostevent: addEvent}))
+            dispatch(updateUserHost({email: email, hostevent: events}))
         }
     }
 
 
     const [preview, setPreview] = useState('');
-    const [eventName, setName] = useState('');
+    const [eventName, setName] = useState('Test Name');
     const [eventStartTime, setStartTime] = useState(new Date());
-    const [eventDuration, setDuration] = useState('');
-    const [eventMinParticipant, setMinParticipant] = useState('');
-    const [eventMaxParticipant, setMaxParticipant] = useState('');
-    const [eventType, setEventType] = useState('');
-    const [eventDescription, setEventDescription] = useState('');
+    const [eventDuration, setDuration] = useState('30 mins');
+    const [eventMinParticipant, setMinParticipant] = useState('2');
+    const [eventMaxParticipant, setMaxParticipant] = useState('5');
+    const [eventType, setEventType] = useState('Study');
+    const [eventDescription, setEventDescription] = useState('This is a description');
     const [imageSource, setImageSource] = useState('');
 
     const durationOption = [
