@@ -1,29 +1,21 @@
 /* eslint-disable react/jsx-filename-extension */
-import {useState, useEffect} from 'react';
-import {
-    Modal,
-    Image,
-    Text,
-    View,
-    TextInput,
-    TouchableOpacity,
-    ScrollView,
-    Alert,
-    Pressable,
-    SafeAreaView
-} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {createEvent, updateUserHost} from '../../../../services/api';
-import ModalSelector from 'react-native-modal-selector'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import styles from './eventPageStyles';
 import * as ImagePicker from 'expo-image-picker';
-import {uploadImage} from "../../../../utils/upload";
+import { useState } from 'react';
+import {
+    Image, Modal, Pressable,
+    SafeAreaView, ScrollView, Text, TextInput,
+    TouchableOpacity, View
+} from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { createEvent, updateUserHost } from '../../../../services/api';
+import { uploadImage } from "../../../../utils/upload";
+import styles from './eventPageStyles';
 
 function EventPage(props) {
-    const {lat, lon} = props
+    const {lat, lon} = props.route.params;
     const dispatch = useDispatch()
 
     // modal states

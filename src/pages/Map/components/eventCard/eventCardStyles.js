@@ -5,8 +5,8 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   root: {
     position: 'absolute',
-    bottom: 450,
-    width: '80%',
+    bottom: 550,
+    width: '90%',
     height: 120,
   },
   popupContainer: {
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     marginHorizontal: 30,
-    top: 10,
+    top: 20,
     textAlign: 'left',
   },
   row: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     color: '#F19100',
     fontSize: 25,
     fontWeight: 'bold',
-    left: 160,
+    left: 300,
     bottom: 5,
   },
 

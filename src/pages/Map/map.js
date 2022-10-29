@@ -7,7 +7,7 @@ import {
   Image, SafeAreaView, Text, View
 } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
-import { Searchbar } from 'react-native-paper';
+import { Button, Dialog, Searchbar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +23,8 @@ function Map({ navigation }) {
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
+  const [dialog, setDialog] = useState(false);
+  const [pressCoordinate, setPressCoordinate] = useState();
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -58,10 +60,27 @@ function Map({ navigation }) {
     setEventCard(false);
   };
 
+  const handleDialogOpen = () => {
+    setDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialog(false);
+  };
+
   const handleSearch = (text) => {
     const filteredEvents = events.filter((event) => event.name.includes(text));
     // eslint-disable-next-line no-unused-expressions
     (text.length && filteredEvents.length) ? handleEventCard(filteredEvents.shift()) : handleEventCardClose();
+  };
+
+  const handleCreateEventDialog = () => {
+    handleDialogOpen();
+  };
+
+  const handleCreateEvent = () => {
+    handleDialogClose();
+    navigation.navigate('EventPage', { lat: pressCoordinate.latitude, lon: pressCoordinate.longitude });
   };
 
   return (
@@ -70,6 +89,11 @@ function Map({ navigation }) {
         style={styles.map}
         showsUserLocation
         initialRegion={initialRegion}
+        onDoublePress={(e) => {
+          const location = e.nativeEvent.coordinate;
+          setPressCoordinate(location);
+          handleCreateEventDialog();
+        }}
       >
         {events.map((item) => (
           <Marker key={item} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
@@ -86,7 +110,7 @@ function Map({ navigation }) {
                   <Text style={styles.calloutText}>
                     {item.participants.length}
                     /
-                    {item.settings.num_of_participants}
+                    {item.settings.max_participant} 
                   </Text>
                 </View>
               )
@@ -103,7 +127,8 @@ function Map({ navigation }) {
 
       <View style={styles.infoDisplay}>
         <View style={styles.regionCard}>
-          <Text style={styles.regionText}>{region}</Text>
+          
+          <Text style={styles.regionText}>{region ? region : 'Welcome'}</Text>
           <Image
             style={styles.regionFire}
             source={require('../../../assets/fire.png')}
@@ -121,6 +146,14 @@ function Map({ navigation }) {
       <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
 
       <Navigator navigation={navigation} />
+
+      <Dialog visible={dialog} onDismiss={handleDialogClose}>
+        <Dialog.Title>Do you want to create an event?</Dialog.Title>
+        <Dialog.Actions>
+          <Button onPress={handleCreateEvent}>Create</Button>
+          <Button onPress={handleDialogClose}>Cancel</Button>
+        </Dialog.Actions>
+      </Dialog>
 
     </SafeAreaView>
   );

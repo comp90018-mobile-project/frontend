@@ -19,12 +19,12 @@ function EventCard({ show, eventInfo }) {
             }}
             source={require('../../../../../assets/wait.png')}
           />
-          {(eventInfo.participants.length < eventInfo.settings.num_of_participants)
+          {(eventInfo.participants.length < eventInfo.settings.max_participant)
           && <Text style={styles.stateText}>Awaiting</Text>}
           <Text style={styles.placementText}>
             {eventInfo.participants.length}
             /
-            {eventInfo.settings.num_of_participants}
+            {eventInfo.settings.max_participant}
           </Text>
         </View>
 
