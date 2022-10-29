@@ -21,7 +21,8 @@ Notifications.setNotificationHandler({
   }),
 });
 
-function Profile() {
+
+function Profile({navigation}) {
   const user = useSelector((state) => state.user)
   const { email, covid, token } = user
   const [userName, setName] = useState('Nine1ie')
@@ -84,10 +85,9 @@ function Profile() {
 
       <View style={styles.userInfo}>
         <ModalSelector data={[{key:1, label: 'Upload from gallery'}]}>
-          <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}}
-          source={require('../../../assets/avatar.png')}/>
+          <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}} source={{uri: user.avatar !=="" ? user.avatar : undefined }}/>
         </ModalSelector>
-        <Text style={{fontSize: 36, fontWeight: 'bold', marginLeft: 20}}>{userName}</Text>
+        <Text style={{fontSize: 36, fontWeight: 'bold', marginLeft: 20}}>{user.username}</Text>
       </View>
       
       <View style={styles.myevent}>
@@ -98,7 +98,23 @@ function Profile() {
 
         <View style={{width: '100%', height: 100, marginVertical: 10, 
         backgroundColor: '#cdcdcd', borderRadius: 20, padding: 10}}>
-          <Text>Your haven't hosted or joined any event yet</Text>
+          {user.hostevent.length == 0 && user.participantevent.length == 0 ?
+          <Text style={{justifyContent: 'center', alignItems: 'center'}}>
+            Your haven't hosted or joined any event yet
+            <TouchableOpacity onPress={()=>{navigation.navigate("Map")}}>
+              <Text style={{marginVertical: 20}}>Join or Host an event now</Text>
+            </TouchableOpacity>
+          </Text>
+            :
+            user.hostevent.length != 0 ?
+            <TouchableOpacity onPress={()=>{navigation.navigate("EventDisplay", {event: user.hostevent[0]})}}>
+              <Text style={{marginVertical: 20}}>See the event hosting</Text>
+            </TouchableOpacity>
+              :
+            <TouchableOpacity>
+              <Text style={{marginVertical: 20}}>See the event you participanting</Text>
+            </TouchableOpacity>
+          }
         </View>
       </View>
 
@@ -134,9 +150,13 @@ function Profile() {
 
         <ScrollView style={{width: '100%', height: 350, marginVertical: 10}}>
           <View style={styles.historyCards}>
-            <EventHistoryCard props={{eventName: 'abc', eventDuration: '60'}}/>
-            <EventHistoryCard props={{eventName: 'Hello', eventDuration: '80'}}/>
-            <EventHistoryCard props={{eventName: 'Nihao', eventDuration: '80'}}/>
+            {user.eventhistory.length != 0 ?
+              user.eventhistory.map((key, event) => {
+                return <EventHistoryCard props={{eventName: event.name, eventDuration: event.duration}}/>
+              })
+              :
+              <EventHistoryCard props={{eventName: "No history events yet", eventDuration: '--'}}/>
+            }
           </View>
         </ScrollView>
       </View>

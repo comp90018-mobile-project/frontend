@@ -72,7 +72,7 @@ function Map({ navigation }) {
         initialRegion={initialRegion}
       >
         {events.map((item) => (
-          <Marker coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
+          <Marker key={item} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
             <Image
               style={{
                 width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',

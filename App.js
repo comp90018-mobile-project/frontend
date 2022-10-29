@@ -21,7 +21,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="S3Demo">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Map"
             component={map}
