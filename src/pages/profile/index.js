@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useCallback, useMemo, useState, useEffect, useRef} from 'react';
 import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalSelector from 'react-native-modal-selector'
@@ -7,76 +7,65 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EventHistoryCard from './components/eventHitstoryCard';
 import * as ImagePicker from 'expo-image-picker';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import {registerForPushNotificationsAsync}  from '../../utils/notification'
+import {updateUserPushToken, updateCovidStatus} from '../../services/api'
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 function Profile() {
   const user = useSelector((state) => state.user)
-  
+  const { email, covid, token } = user
   const [userName, setName] = useState('Nine1ie')
   const [userAvatar, setAvatar] = useState('')
   const [modal, setModal] = useState(false)
   
-  const imageSourceOptions = [
-    {key: 1, label: 'Take a photo', value: 'camera'},
-    {key: 2, label: 'From gallery', value: 'gallery'}
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const dispatch = useDispatch()
+
+
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(
+      (token) => {
+        // setExpoPushToken(token)
+        if (email) {
+          dispatch(updateUserPushToken({email: email, token: token}))
+        }
+      }
+    );
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, [dispatch, user]);
+
+  const covidOptions = [
+    {key: 1, label: "positive", value: 1},
+    {key: 2, label: "pending", value: 2},
+    {key: 3, label: "negative", value: 3},
   ]
-
-  const selectImage = (label) => {
-    if (label === 'Take a photo') {
-        ImagePicker.getCameraPermissionsAsync().then(
-            (result) => {
-                if (result.granted === false) {
-                    ImagePicker.requestCameraPermissionsAsync().then(
-                        (result) => {
-                            if (result.granted === false) {
-                                alert('Permission to access camera is required!');
-                                return;
-                            }
-                        }
-                    )
-                }
-                ImagePicker.launchCameraAsync(imagePickerOptions).then(
-                    (result) => {
-                        if (!result.cancelled) {
-                            uploadImage(result.uri).then((url) => {
-                                setPreview(url)
-                            })
-                        }
-                    }
-                )
-            }
-        )
-    } else if (label === 'From gallery') {
-        ImagePicker.getMediaLibraryPermissionsAsync().then(
-            (result) => {
-                if (result.granted === false) {
-                    ImagePicker.requestMediaLibraryPermissionsAsync().then(
-                        (result) => {
-                            if (result.granted === false) {
-                                alert('Permission to access gallery is required!');
-                                return;
-                            }
-                        }
-                    )
-                }
-                ImagePicker.launchImageLibraryAsync(imagePickerOptions).then(
-                    (result) => {
-                        if (!result.cancelled) {
-                            uploadImage(result.uri).then((url) => {
-                                console.log(url)
-                                setPreview(url)
-                            })
-                        }
-                    }
-                )
-            }
-        )
-    }
-}
-
-  const handleCovidReport  = () => {
-    setModal(true)
-  }
-
   return (
     <View style={styles.container}>
       <Modal animationType='slide' transparent={true} visible={modal}
@@ -122,10 +111,17 @@ function Profile() {
         
         <View style={{width: '100%', height: 100, marginVertical: 10, 
         backgroundColor: 'green', borderRadius: 20, padding: 15}}>
-          <Text style={{color: '#fff', fontSize: 24}}>Keep Safe & Stay Health</Text>
-          <TouchableOpacity style={{marginVertical: 5}} onPress={()=>{setModal(true)}}>
-            <Text style={{color: '#fff', marginVertical: 10}}>Update positive RAT </Text>
-          </TouchableOpacity>
+          <Text style={{color: '#fff', fontSize: 24}}>{covid}</Text>
+          <ModalSelector
+              data={covidOptions}
+              onChange={(option) => {
+                  const label = option.label
+                  dispatch(updateCovidStatus({email: email, status: label}))
+              }}>
+              <TouchableOpacity style={{marginVertical: 5}}>
+                <Text style={{color: '#fff', marginVertical: 10}}>Update your RAT result </Text>
+              </TouchableOpacity>
+          </ModalSelector>
         </View>
       </View>
 

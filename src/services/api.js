@@ -40,6 +40,55 @@ export const updateUserHost = createAsyncThunk('user/updateUser', async(params) 
   // return response.json()
 })
 
+/**
+ * Update user's Expo Push Notification token
+ */
+export const updateUserPushToken = createAsyncThunk('user/updateToken', async(params) => {
+  const { email, token } = params
+  console.log("email: ", email, "token:", token)
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify({
+      email: email,
+      query: {
+        push_token: token
+      }
+    })
+  }
+  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  return token
+})
+
+export const updateCovidStatus = createAsyncThunk('user/push', async(params) => {
+  const { email, status } = params
+  console.log("? e, s", email, status)
+  let requestOptions
+  let response;
+  let url;
+  if (status == "positive") {
+    requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+      })
+    }
+    url = 'http://52.62.135.159:8000/api/v1/users/push'
+  } else {
+    requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email,
+        query: {
+          health_status: status
+        }
+      })
+    }
+    url = 'http://52.62.135.159:8000/api/v1/users/profile'
+  }
+  
+  response = await fetch(url, requestOptions);
+  return status
+})
 
 // Events
 export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) => {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUser, createUser, updateUserHost } from '../services/api';
+import { fetchUser, createUser, updateUserHost, updateUserPushToken, updateCovidStatus } from '../services/api';
 import { uploadImage } from '../utils/upload';
 // Slice
 const userSlice = createSlice({
@@ -11,7 +11,8 @@ const userSlice = createSlice({
     hostevent: '',
     participantevent: '',
     eventhistory: '',
-    covid: ''
+    covid: '',
+    token: ''
   },
   reducers: {
     setLogin: (state, action) => {
@@ -73,7 +74,12 @@ const userSlice = createSlice({
       const { data } = {...action.payload}
       console.log('fail update user host event', data)
     });
-
+    builder.addCase(updateUserPushToken.fulfilled, (state, action) => {
+      state.token = action.payload
+    })
+    builder.addCase(updateCovidStatus.fulfilled, (state, action) => {
+      state.covid = action.payload
+    })
 
   }
 });
