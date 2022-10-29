@@ -24,9 +24,9 @@ Notifications.setNotificationHandler({
 
 function Profile({navigation}) {
   const user = useSelector((state) => state.user)
-  const { email, covid, token } = user
-  const [userName, setName] = useState('Nine1ie')
-  const [userAvatar, setAvatar] = useState('')
+  const { email, covid, token, eventhistory } = user
+  // const [userName, setName] = useState('Nine1ie')
+  // const [userAvatar, setAvatar] = useState('')
   const [modal, setModal] = useState(false)
   
   const [notification, setNotification] = useState(false);
@@ -34,33 +34,29 @@ function Profile({navigation}) {
   const responseListener = useRef();
   const dispatch = useDispatch()
 
-
-
   useEffect(() => {
-    registerForPushNotificationsAsync().then(
-      (token) => {
-        // setExpoPushToken(token)
-        if (email) {
-          dispatch(updateUserPushToken({email: email, token: token}))
+      registerForPushNotificationsAsync().then(
+        (token) => {
+          // setExpoPushTken(token)
+          if (email) {
+            dispatch(updateUserPushToken({email: email, token: token}))
+          }
         }
-      }
-    );
-
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
-
+      );
+      // This listener is fired whenever a notification is received while the app is foregrounded
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+  
+      // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log(response);
+      });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, [dispatch, user]);
+  }, [user]);
 
   const covidOptions = [
     {key: 1, label: "positive", value: 1},

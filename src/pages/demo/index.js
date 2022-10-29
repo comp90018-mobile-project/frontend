@@ -22,7 +22,7 @@ function RtkQueryPage({ navigation }) {
           // 发起请求，拿profile
           dispatch(fetchUser(user.email));
           // 先拿再跳
-          navigation.replace('Home');
+          navigation.replace('Map');
         } else {
           navigation.replace('Login');
         }

@@ -35,7 +35,7 @@ function Navigator({ navigation }) {
       <View style={styles.mapIconContainer}>
         <FontAwesome5 name="map-marker-alt" size={50} style={styles.mapIcon} onPress={() => navigation.navigate('Map')}/>
       </View>
-      <FontAwesome5 name="user-alt" size={40} style={styles.profileIcon} onPress={() => navigation.navigate('Profile')}/>
+      <FontAwesome5 name="user-alt" size={40} style={styles.profileIcon} onPress={() => navigation.navigate('Profile')} />
     </View>
   );
 }
