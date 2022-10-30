@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Image, SafeAreaView, ScrollView, Text, TextInput,
     TouchableOpacity, View
@@ -12,6 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useDispatch, useSelector } from 'react-redux';
 import { createEvent, updateUserHost } from '../../../../services/api';
 import { uploadImage } from "../../../../utils/upload";
+import MapView, { Marker } from 'react-native-maps';
 import styles from './eventPageStyles';
 
 function EventPage({route, navigation }) {
@@ -125,15 +126,15 @@ function EventPage({route, navigation }) {
     // handle create event method
     const handleCreateEvent = () => {
       if (currentUser.hostevent.length == 0 && currentUser.participantevent.length == 0) {
-        if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || 
-        eventDescription == '' || eventStartTime == '' || eventStartTime > new Date()) {
+        if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || 
+        eventStartTime == '' || eventStartTime > new Date() || parseInt(eventMinParticipant, 10) < parseInt(eventMaxParticipant, 10)) {
           const addEvent = {
             name: eventName,
-            organiser: currentUser.username,
+            organiser: currentUser.email,
             preview: preview,
             longitude: lon,
             latitude: lat,
-            participants: [currentUser],
+            participants: [currentUser.email],
             settings: {
                 duration: eventDuration,
                 min_participant: eventMinParticipant,
@@ -153,9 +154,17 @@ function EventPage({route, navigation }) {
         } else {
           setInputDialog(true)
         }
-      } else {
+      } 
+      else {
         setRepeatCreateDialog(true)
       }
+    }
+
+    initialRegion = {
+      latitude: lat,
+      longitude: lon,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
     }
 
     return (
@@ -304,9 +313,14 @@ function EventPage({route, navigation }) {
                   </View>
 
                   <View style={styles.imgContainer}>
-                      <Text style={styles.titleFont}>Images</Text>
-                      <Image style={{width: '100%', height: 200, borderRadius: 15,}}
-                              source={require('../../../../../assets/location.png')}/>
+                      <Text style={styles.titleFont}>Location</Text>
+                      <MapView initialRegion={initialRegion} showsUserLocation
+                      style={{width: '100%', height: 200, borderRadius: 15,}}>
+                      <Marker coordinate={{ latitude: lat, longitude: lon }}>
+                          <Image style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',}}
+                          source={{uri: currentUser.avatar !=="" ? currentUser.avatar : undefined }}/>
+                        </Marker>
+                      </MapView>
                   </View>
               </View>
           </ScrollView>
@@ -327,7 +341,14 @@ function EventPage({route, navigation }) {
           {/* Invalid input dialog */}
           <Dialog visible={inputDialog} onDismiss={()=>setInputDialog(!inputDialog)} dismissable={false}>
             <Dialog.Title>Invalid inputs or Missing fields :(</Dialog.Title>
-            <Dialog.Content><Text>Please check your inputs and try again</Text></Dialog.Content>
+            <Dialog.Content>
+              <Text style={{fontWeight: 'bold'}}>All fields are required</Text>
+              <Text> </Text>
+              <Text>*Start time must greater than current time</Text>
+              <Text>*Max participant must greater than Min participant</Text>
+              <Text> </Text>
+              <Text style={{fontWeight: 'bold'}}>Please check your inputs and try again</Text>
+            </Dialog.Content>
             <Dialog.Actions><Button onPress={()=>setInputDialog(!inputDialog)}>Try again</Button></Dialog.Actions>
           </Dialog>
           {/* Repeat create event dialog */}
