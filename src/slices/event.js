@@ -41,6 +41,8 @@ const eventSlice = createSlice({
             const { data } = { ...action.payload };
             state.newEvent = action.payload
             state.events.push(state.newEvent)
+            console.log('newEvent', newEvent)
+            console.log('events', state.events)
         })
     }
 

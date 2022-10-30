@@ -1,7 +1,8 @@
 import { getAuth } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
+import { fetchEvents } from '../../services/api';
 import firebaseConfig from '../../../authBase';
 
 import ChatRoom from '../../components/chatRoom';
@@ -9,23 +10,29 @@ import ChatRoom from '../../components/chatRoom';
 function ChatList({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const { events } = useSelector((state) => state.event);
-  const handleChat = (id) => {
-    navigation.navigate('Chat', { id });
+  const handleChat = (event) => {
+    navigation.navigate('Chat', { event });
   };
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(fetchEvents());
+    console.log('events:',events)
+  },[])
 
+  
 
   return (
     <ScrollView style={{ backgroundColor: '#323c47' }}>
       <View style={styles.container}>
-        {console.log(events)}
+        
         {events.map((item) => (
           
-          item.preview!=''? 
-          <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
+          item.preview !=''? 
+          <TouchableOpacity onPress={()=>handleChat(item)} style={styles.button} key={item._id}>
             <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type}/>
           </TouchableOpacity>:
-          <TouchableOpacity onPress={()=>handleChat(item._id)} style={styles.button} key={item._id}>
-            <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={''} theme={item.settings.type}/>
+          <TouchableOpacity onPress={()=>handleChat(item)} style={styles.button} key={item._id}>
+            <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type}/>
           </TouchableOpacity>
           ))}
         {/* <TouchableOpacity

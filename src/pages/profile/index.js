@@ -24,6 +24,7 @@ Notifications.setNotificationHandler({
 
 function Profile({navigation}) {
   const user = useSelector((state) => state.user)
+  console.log('用户:',user)
   const { email, covid, token, eventhistory } = user
   // const [userName, setName] = useState('Nine1ie')
   // const [userAvatar, setAvatar] = useState('')

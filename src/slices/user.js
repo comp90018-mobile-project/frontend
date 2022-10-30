@@ -8,9 +8,9 @@ const userSlice = createSlice({
     username: '',
     email: '',
     avatar: '',
-    hostevent: '',
-    participantevent: '',
-    eventhistory: '',
+    hostevent: [],
+    participantevent: [],
+    eventhistory: [],
     covid: '',
     token: ''
   },
@@ -69,10 +69,6 @@ const userSlice = createSlice({
       // const { data } = {...action.payload}
       console.log('success', data)
       state.hostevent = action.payload
-    });
-    builder.addCase(updateUserHost.rejected, (state, action) => {
-      const { data } = {...action.payload}
-      console.log('fail update user host event', data)
     });
     builder.addCase(updateUserPushToken.fulfilled, (state, action) => {
       state.token = action.payload

@@ -18,7 +18,7 @@ export default function ChatRoom(props) {
       </View>
       <View style={{width:"80%"}}>
         <Text style={styles.buttonText} >{eventName} -{theme}</Text>
-        {num==0?<Text>{num+1} participant</Text> :<Text>{num+1} participants</Text> }
+        {num.length==1?<Text>{num.length} participant</Text> :<Text>{num.length} participants</Text> }
       </View>
 
     </View>

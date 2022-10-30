@@ -120,7 +120,7 @@ export default function EventDisplay({route, navigation}) {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navChatButton}>
+      <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
         <Text style={{
         fontSize: 12, 
         color: "#fff", 
@@ -145,7 +145,7 @@ export default function EventDisplay({route, navigation}) {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navChatButton}>
+        <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
@@ -180,7 +180,7 @@ export default function EventDisplay({route, navigation}) {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navChatButton}>
+      <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
         <Text style={{
         fontSize: 12, 
         color: "#fff", 

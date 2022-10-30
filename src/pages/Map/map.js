@@ -28,6 +28,7 @@ function Map({ navigation }) {
 
   useEffect(() => {
     dispatch(fetchEvents());
+    console.log("加载")
   }, []);
 
   useEffect(() => {
