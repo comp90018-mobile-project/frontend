@@ -11,6 +11,7 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync}  from '../../utils/notification'
 import {updateUserPushToken, updateCovidStatus} from '../../services/api'
+import { fetchEvent } from '../../services/api';
 
 
 Notifications.setNotificationHandler({
@@ -24,16 +25,27 @@ Notifications.setNotificationHandler({
 
 function Profile({navigation}) {
   const user = useSelector((state) => state.user)
-  console.log('用户:',user)
+  // console.log('用户host:',user.hostevent[0])
+  // console.log('用户participant:',user.participantevent[0])
   const { email, covid, token, eventhistory } = user
-  // const [userName, setName] = useState('Nine1ie')
-  // const [userAvatar, setAvatar] = useState('')
   const [modal, setModal] = useState(false)
   
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
   const dispatch = useDispatch()
+
+
+  const handleSeeHost = async() => {
+    await dispatch(fetchEvent(user.hostevent[0]))
+    navigation.navigate('EventDisplay', eventDisplay)
+  }
+  const handleSeeParticipate = async() => {
+    await dispatch(fetchEvent(user.participantevent[0]))
+    navigation.navigate('EventDisplay', eventDisplay)
+  }
+
+  const {eventDisplay} = useSelector((state)=>state.event)
 
   useEffect(() => {
       registerForPushNotificationsAsync().then(
@@ -104,11 +116,11 @@ function Profile({navigation}) {
           </Text>
             :
             user.hostevent.length != 0 ?
-            <TouchableOpacity onPress={()=>{navigation.navigate("EventDisplay", {event: user.hostevent[0]})}}>
+            <TouchableOpacity onPress={handleSeeHost}> 
               <Text style={{marginVertical: 20}}>See the event hosting</Text>
             </TouchableOpacity>
               :
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSeeParticipate}>
               <Text style={{marginVertical: 20}}>See the event you participanting</Text>
             </TouchableOpacity>
           }
@@ -140,16 +152,15 @@ function Profile({navigation}) {
 
 
       <View style={styles.historys}>
-        <Text style={{alignSelf: 'flex-start', fontSize: 20, marginLeft: 10,
-        textDecorationLine: 'underline'}}>
+        <Text style={{alignSelf: 'flex-start', fontSize: 20, marginLeft: 10, textDecorationLine: 'underline'}}>
           Event History
         </Text>
 
         <ScrollView style={{width: '100%', height: 350, marginVertical: 10}}>
           <View style={styles.historyCards}>
             {user.eventhistory.length != 0 ?
-              user.eventhistory.map((key, event) => {
-                return <EventHistoryCard props={{eventName: event.name, eventDuration: event.duration}}/>
+              user.eventhistory.map((event, index) => {
+                return <EventHistoryCard key={index} props={{eventName: event.name, eventDuration: event.duration}}/>
               })
               :
               <EventHistoryCard props={{eventName: "No history events yet", eventDuration: '--'}}/>

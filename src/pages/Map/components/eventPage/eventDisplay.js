@@ -5,27 +5,104 @@ import ModalSelector from 'react-native-modal-selector'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import * as ImagePicker from 'expo-image-picker';
-import EventPage from './eventPage'
+import MapView, { Marker } from 'react-native-maps';
+import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive } from '../../../../services/api';
+import { useFocusEffect } from '@react-navigation/core';
+import { Dialog, Button } from 'react-native-paper';
 
 export default function EventDisplay({route, navigation}) {
-  const {event} = route.params
+  const dispatch = useDispatch()
+  // get current user info
   const currentUser = useSelector((state) => state.user);
-  const hostevent = currentUser.hostevent[0]
-  const participantevent = currentUser.participantevent[0]
-  console.log('event', event)
+  // get the event to display
+  const {eventDisplay} = useSelector((state) => state.event);
+  const [event, setEvent] = useState(eventDisplay)
+  // alter dialogs
+  const [quitDialog, setQuitDialog] = useState(false)
+  const [joinDialog, setJoinDialog] = useState(false)
+  const [statDialog, setStartDialog] = useState(false)
+  const [endDialog, setEndDialog] = useState(false)
+  // location initial region
+  const [initialRegion, setInitialRegion] = useState(
+    {
+    latitude: event.latitude,
+    longitude: event.longitude,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  })
 
   const checkUser = () => {
-    if (event.organiser == currentUser.username) {
+    if (event.organiser === currentUser.email) {
       return 'host'
-    } else if (event.participants.find(e => e.username === currentUser.username)) {
+    } else if (event.participants.find(e => e === currentUser.email)) {
       return 'participant'
     } else {
       return 'joinable'
     }
   }
 
-  
+  const handleNavigateChat = () => {
+    navigation.navigate('Chat',{event})
+  }
+
+  const handleJoinEvent = () => {
+    // 如果当前参与人数量 小于 max_participant & 状态是pending 可以join
+    if (event.participants.length < event.settings.max_participant && event.active == 'false') {
+    // update event participants[]
+    dispatch(updateEventParticipants(
+      { event_id: event._id, 
+        participants: [...event.participants].concat(currentUser.email)
+      }))
+    // update user participate
+    dispatch(updateUserParticipate(
+      { email: currentUser.email, 
+        participantevent: [event._id]
+      }))
+    // show success join dialog
+    setJoinDialog(true)
+    }
+  }
+
+  const handleQuitEvent = () => {
+    // update event participants[]
+    let userToRemove = currentUser.email;
+    dispatch(updateEventParticipants(
+      {
+        event_id: event._id, 
+        participants: event.participants.filter((item) => {return item != userToRemove})
+      }
+    ));
+    // clear event_participant in user profile
+    dispatch(updateUserQuitEvent(currentUser.email)); 
+    // show quit dialog if success
+    setQuitDialog(true)
+  }
+
+  const handleStartEvent = () => {
+    // 如果当前参与人数量 大于等于 min_participant 可以start
+    if (event.participants.length >= event.settings.min_participant) {
+      dispatch(updateEventActive(
+        {
+          event_id: event._id,
+          active: 'started'
+        }))
+    }
+  }
+  // todo
+  const handleEndEvent = () => {
+    dispatch(updateEventActive(
+      {
+        event_id: event._id,
+        active: 'ended'
+      }))
+    
+  }
+  // todo
+  const handleCancelEvent = () => {
+    // 整个删除这个创建好的event
+    // 清除已加入用户的event host & event participate & event history
+    // 清除event object
+  }
 
   return (
     <SafeAreaView style={styles.root}>
@@ -33,7 +110,7 @@ export default function EventDisplay({route, navigation}) {
         <View style={styles.columnCentre}>
 
           <View style={styles.header}>
-            {event.preview != '' ? 
+            {event.preview !== "" ? 
             <Image styles={styles.previewImg} size={130} source={{uri: event.preview}}></Image>
             :
             <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
@@ -95,57 +172,35 @@ export default function EventDisplay({route, navigation}) {
           </View>
 
           <View style={styles.imgContainer}>
-            <Text style={styles.titleFont}>Images</Text>
-            {hostevent.images.length != 0 ?
-              <Image style={{width: '100%', height: 200, borderRadius: 15,}}
-              source={{uri: hostevent.images[0]}}/>
-              :
-              <Image style={{width: '100%', height: 200, borderRadius: 15,}}
-              source={require('../../../../../assets/location.png')}/>
-            }
+            <Text style={styles.titleFont}>Location</Text>
+            <MapView initialRegion={initialRegion} showsUserLocation
+                      style={{width: '100%', height: 200, borderRadius: 15,}}>
+              <Marker coordinate={{ latitude: event.latitude, longitude: event.longitude }}>
+                <Image style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',}}
+                source={{uri: currentUser.avatar !=="" ? currentUser.avatar : undefined }}/>
+              </Marker>
+            </MapView>
           </View>
+
         </View>
       </ScrollView>
 
-      {checkUser() === 'participant' ? 
+      {checkUser() === 'participant'? 
       <>
-      <TouchableOpacity style={styles.quitButton}>
-        <Text style={{
-        fontSize: 12, 
-        color: "#fff", 
-        fontWeight: "bold", 
-        alignSelf: "center", 
-        textTransform: "uppercase"}}>
-        Quit this event
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
-        <Text style={{
-        fontSize: 12, 
-        color: "#fff", 
-        fontWeight: "bold", 
-        alignSelf: "center", 
-        textTransform: "uppercase"}}>
-        Navigate to chat
-        </Text>
-      </TouchableOpacity>
-      </>
-        : 
-      checkUser() === 'host' ?
-      <>
-        <TouchableOpacity style={styles.joinButton}>
+        {/* participant quit event */}
+        <TouchableOpacity style={styles.quitButton} onPress={handleQuitEvent}>
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
           fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
-          Start the event
+          Quit this event
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
+        
+        {/* participant navigate to chat */}
+        <TouchableOpacity style={styles.navChatButton} onPress={handleNavigateChat}>
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
@@ -155,21 +210,63 @@ export default function EventDisplay({route, navigation}) {
           Navigate to chat
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.quitButton}>
+      </>
+        : 
+      checkUser() === 'host' ?
+      <>
+        {/* host start event and cancel event */}
+        {event.active === 'false'?
+          <>
+          {/* host start event */}
+          <TouchableOpacity style={styles.joinButton} onPress={handleStartEvent}>
+            <Text style={{
+            fontSize: 12, 
+            color: "#fff", 
+            fontWeight: "bold", 
+            alignSelf: "center", 
+            textTransform: "uppercase"}}>
+            Start the event
+            </Text>
+          </TouchableOpacity> 
+          {/* host cancel event */}
+          <TouchableOpacity style={styles.quitButton} onPress={handleCancelEvent}>
+            <Text style={{
+            fontSize: 12, 
+            color: "#fff", 
+            fontWeight: "bold", 
+            alignSelf: "center", 
+            textTransform: "uppercase"}}>
+            Cancel the event
+            </Text>
+          </TouchableOpacity>
+          </>
+          :
+          <TouchableOpacity style={styles.quitButton} onPress={handleEndEvent}>
+            <Text style={{
+            fontSize: 12, 
+            color: "#fff", 
+            fontWeight: "bold", 
+            alignSelf: "center", 
+            textTransform: "uppercase"}}>
+            End the event
+            </Text>
+          </TouchableOpacity> 
+        }
+        {/* host navigate to chat */}
+        <TouchableOpacity style={styles.navChatButton} onPress={handleNavigateChat}>
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
           fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
-          Cancel the event
+          Navigate to chat
           </Text>
         </TouchableOpacity>
       </>
       :
       <>
-      <TouchableOpacity style={styles.joinButton}>
+      <TouchableOpacity style={styles.joinButton} onPress={handleJoinEvent}>
         <Text style={{
         fontSize: 12, 
         color: "#fff", 
@@ -179,8 +276,7 @@ export default function EventDisplay({route, navigation}) {
         Join this event
         </Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event});}}>
+      <TouchableOpacity style={styles.navChatButton} onPress = {() => {navigation.navigate('Chat',{event})}}>
         <Text style={{
         fontSize: 12, 
         color: "#fff", 
@@ -192,6 +288,27 @@ export default function EventDisplay({route, navigation}) {
       </TouchableOpacity>
       </>
       }
+    
+    {/* Quit event Dialog*/}
+    <Dialog visible={quitDialog} onDismiss={()=>setQuitDialog(!quitDialog)} dismissable={false}>
+        <Dialog.Title>You have quit the event</Dialog.Title>
+        <Dialog.Content><Text>Join more on the map</Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={()=> {setQuitDialog(!quitDialog); navigation.navigate('Map')}}>Back to Map</Button>
+        </Dialog.Actions>
+    </Dialog>
+    
+    {/* Join event Dialog */}
+    <Dialog visible={joinDialog} onDismiss={()=>setJoinDialog(!joinDialog)} dismissable={false}>
+        <Dialog.Title>You have join the event now</Dialog.Title>
+        <Dialog.Content><Text>Navigate to chat room for disscussion or check this event in your profile</Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={()=>{setJoinDialog(!joinDialog); navigation.navigate('Chat',{event})}}>Chat room</Button>
+          <Button onPress={()=>{setJoinDialog(!joinDialog); navigation.navigate('Map')}}>Back to Map</Button>
+        </Dialog.Actions>
+    </Dialog>
+
+    
     </SafeAreaView>
   )
 }

@@ -10,17 +10,18 @@ import { Button, Dialog } from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEvent, updateUserHost } from '../../../../services/api';
+import { createEvent, fetchUser } from '../../../../services/api';
 import { uploadImage } from "../../../../utils/upload";
 import MapView, { Marker } from 'react-native-maps';
 import styles from './eventPageStyles';
 
 function EventPage({route, navigation }) {
-    const {lat, lon} = route.params;
     const dispatch = useDispatch()
-
+    const {lat, lon} = route.params
+    
     // current user states
     const currentUser = useSelector((state) => state.user)
+    
 
     // modal states
     const [inputDialog, setInputDialog] = useState(false)
@@ -125,7 +126,7 @@ function EventPage({route, navigation }) {
 
     // handle create event method
     const handleCreateEvent = () => {
-      if (currentUser.hostevent.length == 0 && currentUser.participantevent.length == 0) {
+      //if (currentUser.hostevent.length == 0 && currentUser.participantevent.length == 0) {
         if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == '' || 
         eventStartTime == '' || eventStartTime > new Date() || parseInt(eventMinParticipant, 10) < parseInt(eventMaxParticipant, 10)) {
           const addEvent = {
@@ -146,21 +147,19 @@ function EventPage({route, navigation }) {
             },
             images: []
           }
-          const events = [...currentUser.hostevent]
-          events.push(addEvent)
-          dispatch(createEvent(addEvent))
-          dispatch(updateUserHost({email: currentUser.email, hostevent: events}))
+          dispatch(createEvent(addEvent)) // 返回一个event id
+          dispatch(fetchUser(currentUser.email))
           setSuccessCreateDialog(true)
         } else {
           setInputDialog(true)
         }
-      } 
-      else {
-        setRepeatCreateDialog(true)
-      }
+      //} 
+      //else {
+      //  setRepeatCreateDialog(true)
+      //}
     }
 
-    initialRegion = {
+    const initialRegion = {
       latitude: lat,
       longitude: lon,
       latitudeDelta: 0.005,
@@ -258,7 +257,6 @@ function EventPage({route, navigation }) {
                                       <Text style={{fontSize: 24, fontWeight: 'bold'}}> - </Text>
                                       :
                                       <Text style={{fontSize: 24, fontWeight: 'bold', color: '#c5c5c5'}}> - </Text>
-
                                   }
                                   <ModalSelector
                                       data={participantOption}
@@ -308,7 +306,6 @@ function EventPage({route, navigation }) {
                                       placeholder={'Description of your event'}/>
                               </View>
                           </View>
-
                       </View>
                   </View>
 
