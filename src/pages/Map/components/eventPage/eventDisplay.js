@@ -42,6 +42,7 @@ export default function EventDisplay({route, navigation}) {
       return 'joinable'
     }
   }
+  console.log('user right', checkUser())
 
   const handleNavigateChat = () => {
     navigation.navigate('Chat',{event})
@@ -49,7 +50,7 @@ export default function EventDisplay({route, navigation}) {
 
   const handleJoinEvent = () => {
     // 如果当前参与人数量 小于 max_participant & 状态是pending 可以join
-    if (event.participants.length < event.settings.max_participant && event.active == 'false') {
+    if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
     // update event participants[]
     dispatch(updateEventParticipants(
       { event_id: event._id, 
@@ -219,7 +220,7 @@ export default function EventDisplay({route, navigation}) {
       checkUser() === 'host' ?
       <>
         {/* host start event and cancel event */}
-        {event.active === 'false'?
+        {event.active === 'pending'?
           <>
           {/* host start event */}
           <TouchableOpacity style={styles.joinButton} onPress={handleStartEvent}>
