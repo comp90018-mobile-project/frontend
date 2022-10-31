@@ -29,7 +29,7 @@ export const uploadImage = async (uri) => {
         acl: "public-read"
     });
     const filename = result.key
-    uri = "https://elasticbeanstalk-ap-southeast-2-065755014425.s3.ap-southeast-2.amazonaws.com/public/"
+    uri = "https://d1we7cqncdurmu.cloudfront.net/public/"
     uri = uri + filename
     return uri;
 }
