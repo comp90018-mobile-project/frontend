@@ -3,12 +3,13 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import styles from './eventCardStyles';
 
-function EventCard({ show, eventInfo }) {
+function EventCard({ show, eventInfo, navigation}) {
+  console.log('eventInfo', eventInfo);
   return (
     <View style={styles.root}>
       { show && (
       <View style={styles.popupContainer}>
-        <Text style={styles.eventName}>
+        <Text style={styles.eventName} onPress={() => navigation.navigate('EventDisplay', { event: eventInfo })} >
           {eventInfo.name}
         </Text>
 

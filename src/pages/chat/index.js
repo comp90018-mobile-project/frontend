@@ -64,7 +64,7 @@ function Chat({ navigation,route}) {
       <><>
         <Appbar.Header style={{backgroundColor: "white"}}>
           <Appbar.BackAction onPress={() => { navigation.navigate('ChatList') } } />
-          <Text style={styles.buttonText} onPress={() => navigation.navigate('EventDisplay',{event})}>{event.name}</Text>
+          <Text style={styles.buttonText} onPress={() => navigation.navigate('EventDisplay2',{event})}>{event.name}</Text>
         </Appbar.Header>
         <Divider />
       </><View style={styles.container}>

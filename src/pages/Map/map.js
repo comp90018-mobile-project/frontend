@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
+import { async } from '@firebase/util';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
@@ -11,7 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
-import { fetchEvents } from '../../services/api';
+import { fetchEvents, fetchEvent } from '../../services/api';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
 
@@ -25,6 +26,7 @@ function Map({ navigation }) {
   const [region, setRegion] = useState();
   const [dialog, setDialog] = useState(false);
   const [pressCoordinate, setPressCoordinate] = useState();
+  const {eventDisplay} = useSelector((state)=>state.event)
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -97,24 +99,32 @@ function Map({ navigation }) {
         }}
       >
         {events.map((item) => (
-
           <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
-            <Image
-              style={{
-                width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
-              }}
-              source={require('../../../assets/avatar.png')}
-            />
+            {
+              item.preview != '' ? (
+              <Image
+                style={{
+                  width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
+                }}
+                source={{uri: item.preview}}
+              />
+              ) : (
+              <FontAwesome name='group' size={30} color='#248A59' />
+              )
+            }
             <Callout tooltip="true">
               <View style={styles.callout}>
-                <FontAwesome name="group" size={25} color="#248A59" />
+                <FontAwesome name="group" size={25} color="#248A59" onPress={async() => {
+                  await dispatch(fetchEvent(item._id));
+                  navigation.navigate('EventDisplay', eventDisplay);
+                }}/>
                 <Text style={styles.calloutText}>
                   {item.participants.length}
                   /
                   {item.settings.max_participant} 
                 </Text>
                 <Entypo name="direction" size={25} color="#248A59" style={styles.directionIcon} onPress={() => { 
-                  // concatinate latitude and longitude with comma as a string
+                  // concatenate latitude and longitude with comma as a string
                   const latlon = item.latitude + ',' + item.longitude;
                   openMap({provider: 'google', query: latlon})}}/>
               </View>
@@ -141,7 +151,7 @@ function Map({ navigation }) {
 
       </View>
 
-      <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventDisplay')} />
+      <EventCard show={eventCard} eventInfo={selectedEvent} navigation={navigation} />
 
       <Navigator navigation={navigation} />
 

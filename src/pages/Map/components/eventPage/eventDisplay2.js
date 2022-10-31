@@ -10,13 +10,13 @@ import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, up
 import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
 
-export default function EventDisplay({route, navigation}) {
+export default function EventDisplay2({route, navigation}) {
   const dispatch = useDispatch()
   // get current user info
   const currentUser = useSelector((state) => state.user);
   // get the event to display
-  const {eventDisplay} = useSelector((state) => state.event);
-  const [event, setEvent] = useState(eventDisplay)
+
+  const {event} = route.params
 
   console.log("event is: ", event)
   // alter dialogs
@@ -24,7 +24,6 @@ export default function EventDisplay({route, navigation}) {
   const [joinDialog, setJoinDialog] = useState(false)
   const [startDialog, setStartDialog] = useState(false)
   const [endDialog, setEndDialog] = useState(false)
-  const [peopleDialog, setPeopleDialog] = useState(false)
   // location initial region
   const [initialRegion, setInitialRegion] = useState(
     {
@@ -43,7 +42,6 @@ export default function EventDisplay({route, navigation}) {
       return 'joinable'
     }
   }
-  console.log('user right', checkUser())
 
   const handleNavigateChat = () => {
     navigation.navigate('Chat',{event})
@@ -51,7 +49,7 @@ export default function EventDisplay({route, navigation}) {
 
   const handleJoinEvent = () => {
     // 如果当前参与人数量 小于 max_participant & 状态是pending 可以join
-    if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
+    // if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
     // update event participants[]
     dispatch(updateEventParticipants(
       { event_id: event._id, 
@@ -65,7 +63,7 @@ export default function EventDisplay({route, navigation}) {
     // show success join dialog
     setJoinDialog(true)
     }
-  }
+//   }
 
   const handleQuitEvent = () => {
     // update event participants[]
@@ -84,20 +82,16 @@ export default function EventDisplay({route, navigation}) {
 
   const handleStartEvent = () => {
     // 如果当前参与人数量 大于等于 min_participant 可以start
-    // if (event.participants.length >= event.settings.min_participant) {
+    if (event.participants.length >= event.settings.min_participant) {
       dispatch(updateEventActive(
         {
           event_id: event._id,
           active: 'started'
         }))
       setStartDialog(true)
-    } 
-  //   else {
-  //     setPeopleDialog(true)
-  //   }
-  // }
+    }
+  }
   // todo
-
   const handleEndEvent = () => {
     dispatch(updateEventActive(
       {
@@ -105,8 +99,7 @@ export default function EventDisplay({route, navigation}) {
         active: 'ended'
       }))
     setEndDialog(true)
-    dispatch(fetchUser(currentUser.email))
-
+    
   }
   // todo
   const handleCancelEvent = () => {
@@ -226,7 +219,7 @@ export default function EventDisplay({route, navigation}) {
       checkUser() === 'host' ?
       <>
         {/* host start event and cancel event */}
-        {event.active === 'pending'?
+        {event.active === 'false'?
           <>
           {/* host start event */}
           <TouchableOpacity style={styles.joinButton} onPress={handleStartEvent}>
@@ -337,17 +330,7 @@ export default function EventDisplay({route, navigation}) {
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Chat',{event})}}>Chat room</Button>
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Map')}}>Back to Map</Button>
         </Dialog.Actions>
-    </Dialog> 
-
-    {/* People not enough event Dialog */}
-    <Dialog visible={peopleDialog} onDismiss={()=>setPeopleDialog(!peopleDialog)} dismissable={false}>
-        <Dialog.Title>Current participants less than minmium participants seted</Dialog.Title>
-        <Dialog.Content><Text>Wait for others to join or invite your friend</Text></Dialog.Content>
-        <Dialog.Actions>
-          <Button onPress={()=>{setPeopleDialog(!peopleDialog)}}>Try Again</Button>
-        </Dialog.Actions>
     </Dialog>    
-       
     </SafeAreaView>
   )
 }

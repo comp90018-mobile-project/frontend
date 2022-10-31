@@ -10,6 +10,7 @@ import home from './src/pages/home';
 import login from './src/pages/login';
 import map from './src/pages/Map';
 import EventDisplay from './src/pages/Map/components/eventPage/eventDisplay';
+import EventDisplay2 from './src/pages/Map/components/eventPage/eventDisplay2';
 import EventPage from './src/pages/Map/components/eventPage/eventPage';
 import Profile from './src/pages/profile';
 import register from './src/pages/register';
@@ -74,6 +75,13 @@ export default function App() {
             component={EventDisplay}
             options={{ title: 'EventDisplay' }}
           />
+
+          <Stack.Screen
+            name="EventDisplay2"
+            component={EventDisplay2}
+            options={{ title: 'EventDisplay' }}
+          />
+
           <Stack.Screen
             name="S3Demo"
             component={s3}
