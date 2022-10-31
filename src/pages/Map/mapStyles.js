@@ -57,7 +57,7 @@ export default StyleSheet.create({
   infoDisplay: {
     width: '95%',
     position: 'absolute',
-    top: 10,
+    top: 60,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'

@@ -1,11 +1,12 @@
 import { getAuth } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSelector,useDispatch } from 'react-redux';
-import { fetchEvents } from '../../services/api';
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Divider, Searchbar } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 import firebaseConfig from '../../../authBase';
-
 import ChatRoom from '../../components/chatRoom';
+import Navigator from '../../components/navigator/navigator';
+import { fetchEvents } from '../../services/api';
 
 function ChatList({ navigation }) {
   const auth = getAuth(firebaseConfig);
@@ -19,30 +20,48 @@ function ChatList({ navigation }) {
     console.log('events:',events)
   },[])
 
+  const [event, setEvent] = React.useState(events);
+  const handleSearch = (text) => {
+    const filteredEvents = events.filter((event) => event.name.includes(text));
+    // eslint-disable-next-line no-unused-expressions
+    (text.length && filteredEvents.length) ? setEvent(filteredEvents) : setEvent(events);
+  }
+
   
 
   return (
-    <ScrollView style={{ backgroundColor: '#323c47' }}>
-      <View style={styles.container}>
-        
-        {events.map((item) => (
-          
-          item.preview !=''? 
-          <TouchableOpacity onPress={()=>handleChat(item)} style={styles.button} key={item._id}>
-            <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type}/>
-          </TouchableOpacity>:
-          <TouchableOpacity onPress={()=>handleChat(item)} style={styles.button} key={item._id}>
-            <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type}/>
-          </TouchableOpacity>
+    <>
+    <Searchbar
+          style={{ top: 50 }}
+          placeholder="Search"
+          onChangeText={(text) => handleSearch(text)}
+    />
+    <Divider />
+      <ScrollView style={{ backgroundColor: 'white', top: 50}}>
+        <View style={styles.container}>
+
+          {event.map((item) => (
+
+            item.preview != '' ?
+              <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
+                <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type} />
+              </TouchableOpacity> :
+              <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
+                <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type} />
+              </TouchableOpacity>
+              
           ))}
-        {/* <TouchableOpacity
-          onPress={handleChat}
-          style={styles.button}
-        >
-        <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
-        </TouchableOpacity> */}
-      </View>
-    </ScrollView>
+          {/* <TouchableOpacity
+        onPress={handleChat}
+        style={styles.button}
+      >
+      <ChatRoom id={"123"} eventName={"chats"} num={"11"}/>
+      </TouchableOpacity> */}
+        </View>
+        
+      </ScrollView>
+    <Navigator navigation={navigation} />
+    </>
   );
 }
 
@@ -51,16 +70,16 @@ export default ChatList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#323C47',
+    backgroundColor: 'white',
     alignItems: 'center',
   },
   button: {
-    backgroundColor: '#248A59',
-    width: '85%',
+    backgroundColor: 'white',
+    width: '98%',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 2,
   },
   buttonText: {
     color: 'white',

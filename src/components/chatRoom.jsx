@@ -1,9 +1,5 @@
-import { useState } from 'react';
-import {
-  StyleSheet, Text, TouchableOpacity, View,Image
-} from 'react-native';
-import { idText } from 'typescript';
-import '../../assets/defaultChat.png'
+import { Image, StyleSheet, Text, View } from 'react-native';
+import '../../assets/defaultChat.png';
 
 
 export default function ChatRoom(props) {
@@ -20,7 +16,6 @@ export default function ChatRoom(props) {
         <Text style={styles.buttonText} >{eventName} -{theme}</Text>
         {num.length==1?<Text>{num.length} participant</Text> :<Text>{num.length} participants</Text> }
       </View>
-
     </View>
   );
 }
@@ -32,7 +27,7 @@ const styles = StyleSheet.create({
       flexWrap: "nowrap",
     },
     buttonText: {
-      color: 'white',
+      color: 'black',
       fontWeight: '700',
       fontSize: 16,
       marginBottom: 8,

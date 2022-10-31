@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import Chat from './src/pages/chat';
 import ChatList from './src/pages/chatList';
 import demo from './src/pages/demo';
-import s3 from './src/pages/s3'
 import home from './src/pages/home';
 import login from './src/pages/login';
 import map from './src/pages/Map';
@@ -14,6 +13,7 @@ import EventDisplay from './src/pages/Map/components/eventPage/eventDisplay';
 import EventPage from './src/pages/Map/components/eventPage/eventPage';
 import Profile from './src/pages/profile';
 import register from './src/pages/register';
+import s3 from './src/pages/s3';
 import { store } from './src/store';
 
 const Stack = createNativeStackNavigator();
@@ -21,7 +21,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Login" screenOptions={{
+    headerShown: false
+  }}>
           <Stack.Screen
             name="Map"
             component={map}

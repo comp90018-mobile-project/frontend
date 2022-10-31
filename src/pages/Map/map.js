@@ -9,7 +9,6 @@ import {
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Button, Dialog, Searchbar } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
 import { fetchEvents } from '../../services/api';
@@ -28,7 +27,6 @@ function Map({ navigation }) {
 
   useEffect(() => {
     dispatch(fetchEvents());
-    console.log("加载")
   }, []);
 
   useEffect(() => {
@@ -106,22 +104,10 @@ function Map({ navigation }) {
               source={require('../../../assets/avatar.png')}
             />
             <Callout tooltip="true">
-              { item.participants ? (
-                <View style={styles.callout}>
-                  <FontAwesome name="group" size={25} color="#248A59" />
-                  <Text style={styles.calloutText}>
-                    {item.participants.length}
-                    /
-                    {item.settings.max_participant} 
-                  </Text>
-                </View>
-              )
-                : (
-                  <View style={styles.callout} onPress={() => navigation.navigate('EventPage')}>
-                    <AntDesign name="addusergroup" size={30} color="#248A59" onPress={() => navigation.navigate('EventPage')} />
-                    <Text style={styles.calloutText} />
-                  </View>
-                )}
+              <View style={styles.callout} onPress={() => navigation.navigate('EventDisplay')}>
+                <AntDesign name="addusergroup" size={30} color="#248A59" />
+                  <Text style={styles.calloutText} />
+              </View>
             </Callout>
           </Marker>
         ))}
@@ -145,7 +131,7 @@ function Map({ navigation }) {
 
       </View>
 
-      <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
+      <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventDisplay')} />
 
       <Navigator navigation={navigation} />
 
