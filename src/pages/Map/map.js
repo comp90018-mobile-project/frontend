@@ -99,22 +99,28 @@ function Map({ navigation }) {
         {events.map((item) => (
 
           <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
-            <Image
-              style={{
-                width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
-              }}
-              source={require('../../../assets/avatar.png')}
-            />
+            {
+              item.preview != '' ? (
+              <Image
+                style={{
+                  width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
+                }}
+                source={{uri: item.preview}}
+              />
+              ) : (
+              <FontAwesome name='group' size={30} color='#248A59' />
+              )
+            }
             <Callout tooltip="true">
               <View style={styles.callout}>
-                <FontAwesome name="group" size={25} color="#248A59" />
+                <FontAwesome name="group" size={25} color="#248A59" onPress={() => navigation.navigate('EventDisplay', { event: item })}/>
                 <Text style={styles.calloutText}>
                   {item.participants.length}
                   /
                   {item.settings.max_participant} 
                 </Text>
                 <Entypo name="direction" size={25} color="#248A59" style={styles.directionIcon} onPress={() => { 
-                  // concatinate latitude and longitude with comma as a string
+                  // concatenate latitude and longitude with comma as a string
                   const latlon = item.latitude + ',' + item.longitude;
                   openMap({provider: 'google', query: latlon})}}/>
               </View>
@@ -141,7 +147,7 @@ function Map({ navigation }) {
 
       </View>
 
-      <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventDisplay')} />
+      <EventCard show={eventCard} eventInfo={selectedEvent} navigation={navigation} />
 
       <Navigator navigation={navigation} />
 

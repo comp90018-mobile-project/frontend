@@ -5,9 +5,9 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   root: {
     position: 'absolute',
-    bottom: 520,
-    width: '90%',
-    height: 120,
+    bottom: 560,
+    width: '95%',
+    height: 80,
   },
   popupContainer: {
     backgroundColor: '#323C47',
@@ -18,26 +18,26 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 25,
     fontWeight: 'bold',
-    marginHorizontal: 30,
-    top: 20,
+    marginHorizontal: 25,
+    top: 10,
     textAlign: 'left',
   },
   row: {
     flexDirection: 'row',
-    top: 40,
+    top: 15,
   },
   stateText: {
     color: '#F19100',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     left: 40,
   },
   placementText: {
     color: '#F19100',
-    fontSize: 25,
+    fontSize: 35,
     fontWeight: 'bold',
-    left: 300,
-    bottom: 5,
+    left: 210,
+    bottom: 25,
   },
 
 });
