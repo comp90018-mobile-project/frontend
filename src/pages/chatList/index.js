@@ -37,7 +37,7 @@ function ChatList({ navigation }) {
           onChangeText={(text) => handleSearch(text)}
     />
     <Divider />
-      <ScrollView style={{ backgroundColor: 'white', top: 50}}>
+      <ScrollView style={{ backgroundColor: 'white', top: 50,marginBottom:140}}>
         <View style={styles.container}>
 
           {event.map((item) => (
