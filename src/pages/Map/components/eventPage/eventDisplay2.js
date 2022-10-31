@@ -49,7 +49,7 @@ export default function EventDisplay2({route, navigation}) {
 
   const handleJoinEvent = () => {
     // 如果当前参与人数量 小于 max_participant & 状态是pending 可以join
-    if (event.participants.length < event.settings.max_participant && event.active == 'false') {
+    // if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
     // update event participants[]
     dispatch(updateEventParticipants(
       { event_id: event._id, 
@@ -63,7 +63,7 @@ export default function EventDisplay2({route, navigation}) {
     // show success join dialog
     setJoinDialog(true)
     }
-  }
+//   }
 
   const handleQuitEvent = () => {
     // update event participants[]

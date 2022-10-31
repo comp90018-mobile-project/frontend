@@ -17,6 +17,7 @@ export default function EventDisplay({route, navigation}) {
   // get the event to display
   const {eventDisplay} = useSelector((state) => state.event);
   const [event, setEvent] = useState(eventDisplay)
+
   console.log("event is: ", event)
   // alter dialogs
   const [quitDialog, setQuitDialog] = useState(false)
