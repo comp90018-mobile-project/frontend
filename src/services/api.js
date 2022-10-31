@@ -175,7 +175,8 @@ export const updateEventActive = createAsyncThunk('event/updateEventActive', asy
     })
   }
   const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
-  return response.json()
+  // return response.json()
+  return active
 })
 
 

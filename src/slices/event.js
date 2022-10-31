@@ -52,7 +52,11 @@ const eventSlice = createSlice({
         builder.addCase(updateEventActive.fulfilled, (state, action) => {
             // const data = { ...action.payload };
             // state.eventDisplay = data
-            console.log("updated active in event")
+            // console.log("updated active in event")
+            // const data = {...action.payload}
+            // if (data === "ended") {
+            //     state.eventDisplay = {}
+            // }
         });
         builder.addCase(updateEventActive.rejected, (state, action) => {
             console.log('update active fail')

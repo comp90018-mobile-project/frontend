@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUser, createUser, updateUserHost, updateUserParticipate,updateUserPushToken, updateCovidStatus, updateUserQuitEvent } from '../services/api';
+import { fetchUser, createUser, updateUserHost, updateUserParticipate,updateUserPushToken, updateCovidStatus, updateUserQuitEvent, updateEventActive } from '../services/api';
 import { uploadImage } from '../utils/upload';
 // Slice
 const userSlice = createSlice({
@@ -96,6 +96,9 @@ const userSlice = createSlice({
     })
     builder.addCase(updateUserQuitEvent.rejected, () => {
       console.log("rejected")
+    });
+    builder.addCase(updateEventActive.fulfilled, (state, action) => {
+      
     })
 
   }

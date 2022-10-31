@@ -27,6 +27,10 @@ function Profile({navigation}) {
   const user = useSelector((state) => state.user)
   // console.log('用户host:',user.hostevent[0])
   // console.log('用户participant:',user.participantevent[0])
+
+  useEffect(() => {
+    dispatch(fetchUser(user.email))
+  }, [eventDisplay])
   const { email, covid, token, eventhistory } = user
   const [modal, setModal] = useState(false)
   const event = useSelector((state) => state.event)
