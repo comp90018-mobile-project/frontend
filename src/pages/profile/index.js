@@ -12,7 +12,7 @@ import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync}  from '../../utils/notification'
 import {updateUserPushToken, updateCovidStatus} from '../../services/api'
 import { fetchEvent, fetchUser } from '../../services/api';
-
+import Navigator from '../../components/navigator/navigator';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -82,6 +82,7 @@ function Profile({navigation}) {
     {key: 3, label: "negative", value: 3},
   ]
   return (
+    <>
     <SafeAreaView style={styles.container}>
       <Modal animationType='slide' transparent={true} visible={modal}
               onRequestClose={() => {setModal(!modal)}}>
@@ -173,8 +174,10 @@ function Profile({navigation}) {
           </View>
         </ScrollView>
       </View>
-
+      
     </SafeAreaView>
+    <Navigator navigation={navigation} />
+    </>
 
   )
 }

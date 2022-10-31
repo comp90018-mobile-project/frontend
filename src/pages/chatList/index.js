@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View,Text } from 'react-native';
 import { Divider, Searchbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import firebaseConfig from '../../../authBase';
@@ -39,17 +39,27 @@ function ChatList({ navigation }) {
     <Divider />
       <ScrollView style={{ backgroundColor: 'white', top: 50,marginBottom:140}}>
         <View style={styles.container}>
-
+          <Text style={styles.headerText1}>Started events</Text>
+          
           {event.map((item) => (
-
-            item.preview != '' ?
+            item.active=='started' &&(item.preview != ''?
               <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
                 <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type} />
               </TouchableOpacity> :
               <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
                 <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type} />
-              </TouchableOpacity>
-              
+              </TouchableOpacity>)
+          ))}
+
+        <Text style={styles.headerText2}>Pending events</Text>
+        {event.map((item) => (
+            item.active=='pending' &&(item.preview != ''?
+              <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
+                <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type} />
+              </TouchableOpacity> :
+              <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
+                <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type} />
+              </TouchableOpacity>)
           ))}
           {/* <TouchableOpacity
         onPress={handleChat}
@@ -76,14 +86,29 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'white',
     width: '98%',
-    padding: 15,
+    padding: 13,
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 2,
+
   },
   buttonText: {
     color: 'white',
     fontWeight: '700',
     fontSize: 16,
   },
+  headerText1:{
+    color:'#8ff06e',
+    backgroundColor:'#b5bab5',
+    width:'100%',
+    textAlign:'center',
+    fontSize:'20px',
+    marginBottom:10
+  },
+  headerText2:{
+    color:'yellow',
+    backgroundColor:'#b5bab5',
+    width:'100%',
+    textAlign:'center',
+    fontSize:'20px'
+  }
 });

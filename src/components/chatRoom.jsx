@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
       color: 'black',
       fontWeight: '700',
       fontSize: 16,
-      marginBottom: 8,
+      marginBottom: 6,
       
     },
     tinyLogo: {
