@@ -18,6 +18,7 @@ import styles from './mapStyles';
 function Map({ navigation }) {
   const dispatch = useDispatch();
   const { events } = useSelector((state) => state.event);
+  const user  = useSelector((state) => state.user);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
@@ -27,7 +28,8 @@ function Map({ navigation }) {
 
   useEffect(() => {
     dispatch(fetchEvents());
-  }, []);
+    console.log("加载")
+  }, [user]);
 
   useEffect(() => {
     (async () => {

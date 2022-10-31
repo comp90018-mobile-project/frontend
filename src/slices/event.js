@@ -1,26 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchEvents, createEvent } from "../services/api";
+import { fetchEvents, createEvent, fetchEvent, updateEventParticipants, updateEventActive } from "../services/api";
 
 const eventSlice = createSlice({
     name: "event",
     initialState: {
         events: [],
-        newEvent: ''
-        // name: "default",
-        // organiser: "default",
-        // preview: "default",
-        // longitude: "default",
-        // latitude: "default",
-        // participants: [],
-        // settings: {
-        //     duration: 90,
-        //     num_of_participants: "5",
-        //     type: "sports",
-        //     theme_color: "#FFFFFF",
-        //     description: "A short description",
-        //     start_time: "2020-09-10 14:00:23"
-        // },
-        // image: []
+        newEvent: '',
+        eventDisplay: ''
     },
     reducers: {
         setEvents: (state, action) => {
@@ -29,7 +15,9 @@ const eventSlice = createSlice({
         creatEvents: (state, action) => {
             state.newEvent = action.payload
             state.events.push(state.newEvent)
-            // console.log("create event success")
+        },
+        fetchEvent: (state, action) => {
+            state.eventDisplay = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -38,11 +26,36 @@ const eventSlice = createSlice({
             state.events = data;
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
-            const { data } = { ...action.payload };
-            state.newEvent = action.payload
-            state.events.push(state.newEvent)
-            console.log('newEvent', newEvent)
-            console.log('events', state.events)
+            const newEvent = {...action.payload}
+            state.newEvent = newEvent
+            state.events.push(newEvent);
+            console.log("finish update 1")
+        });
+        builder.addCase(fetchEvent.fulfilled, (state, action) => {
+            const data = { ...action.payload };
+            state.eventDisplay = data.data
+            console.log("finish fetch event", state.eventDisplay)
+        });
+        builder.addCase(updateEventParticipants.fulfilled, (state, action) => {
+            const { data } = {...action.payload}
+            state.eventDisplay.participants = data
+            // const {username, avatar, email, event_hosted, event_history, event_participated, health_status} = data;
+            // state.username = username;
+            // state.avatar = avatar;
+            // state.email = email;
+            // state.eventhistory = event_history;
+            // state.hostevent = event_hosted;
+            // state.participantevent = event_participated;
+            // state.covid = health_status;
+            // console.log('after quit or cancel event', data)
+        });
+        builder.addCase(updateEventActive.fulfilled, (state, action) => {
+            // const data = { ...action.payload };
+            // state.eventDisplay = data
+            console.log("updated active in event")
+        });
+        builder.addCase(updateEventActive.rejected, (state, action) => {
+            console.log('update active fail')
         })
     }
 

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUser, createUser, updateUserHost, updateUserPushToken, updateCovidStatus } from '../services/api';
+import { fetchUser, createUser, updateUserHost, updateUserParticipate,updateUserPushToken, updateCovidStatus, updateUserQuitEvent } from '../services/api';
 import { uploadImage } from '../utils/upload';
 // Slice
 const userSlice = createSlice({
@@ -67,14 +67,35 @@ const userSlice = createSlice({
     });
     builder.addCase(updateUserHost.fulfilled, (state, action) => {
       // const { data } = {...action.payload}
-      console.log('success', data)
+      console.log('success update user host', data)
       state.hostevent = action.payload
+    });
+    builder.addCase(updateUserParticipate.fulfilled, (state, action) => {
+      // const { data } = {...action.payload}
+      console.log('success update user participate', data)
+      state.participantevent = action.payload
     });
     builder.addCase(updateUserPushToken.fulfilled, (state, action) => {
       state.token = action.payload
-    })
+    });
     builder.addCase(updateCovidStatus.fulfilled, (state, action) => {
       state.covid = action.payload
+    });
+    builder.addCase(updateUserQuitEvent.fulfilled, (state, action) => {
+      const { data } = {...action.payload}
+      console.log("data fetch from update quit: ", data)
+      const {username, avatar, email, event_hosted, event_history, event_participated, health_status} = data;
+      state.username = username;
+      state.avatar = avatar;
+      state.email = email;
+      state.eventhistory = event_history;
+      state.hostevent = event_hosted;
+      state.participantevent = event_participated;
+      state.covid = health_status;
+      console.log('after quit or cancel event', data)
+    })
+    builder.addCase(updateUserQuitEvent.rejected, () => {
+      console.log("rejected")
     })
 
   }
