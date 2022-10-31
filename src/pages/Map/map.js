@@ -3,12 +3,12 @@
 /* eslint-disable react/react-in-jsx-scope */
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import {
-  Image, SafeAreaView, Text, View
-} from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
+import openMap from 'react-native-open-maps';
 import { Button, Dialog, Searchbar } from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
 import { fetchEvents } from '../../services/api';
@@ -106,9 +106,17 @@ function Map({ navigation }) {
               source={require('../../../assets/avatar.png')}
             />
             <Callout tooltip="true">
-              <View style={styles.callout} onPress={() => navigation.navigate('EventDisplay')}>
-                <AntDesign name="addusergroup" size={30} color="#248A59" />
-                  <Text style={styles.calloutText} />
+              <View style={styles.callout}>
+                <FontAwesome name="group" size={25} color="#248A59" />
+                <Text style={styles.calloutText}>
+                  {item.participants.length}
+                  /
+                  {item.settings.max_participant} 
+                </Text>
+                <Entypo name="direction" size={25} color="#248A59" style={styles.directionIcon} onPress={() => { 
+                  // concatinate latitude and longitude with comma as a string
+                  const latlon = item.latitude + ',' + item.longitude;
+                  openMap({provider: 'google', query: latlon})}}/>
               </View>
             </Callout>
           </Marker>
