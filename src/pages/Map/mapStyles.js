@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   callout: {
     backgroundColor: '#323C47',
-    width: 80,
+    width: 135,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -61,6 +61,10 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  directionIcon: {
+    color: '#94E858',
+    left: 15,
   }
   // regionCard: {
   //   position: 'absolute',
