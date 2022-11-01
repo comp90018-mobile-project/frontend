@@ -55,6 +55,21 @@ export const updateUserParticipate = createAsyncThunk('user/updateUserParticipat
   return response.json()
 })
 
+export const updateUserAvatar= createAsyncThunk('user/updateUserAvatr', async(params) => {
+  const {email, avatar} = params
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify({
+      email: email,
+      query: {
+        avatar: avatar
+      }
+    })
+  }
+  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  return response.json()
+})
+
 // when cancel or quit event
 export const updateUserQuitEvent = createAsyncThunk('user/updateUserEvent', async(email) => {
   const requestOptions = {
