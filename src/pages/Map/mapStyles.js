@@ -27,6 +27,12 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     left: 5,
   },
+  calloutTextPending: {
+    color: '#e6b400',
+    fontSize: 20,
+    fontWeight: 'bold',
+    left: 5,
+  },
   regionCard: {
     width: '100%',
     flexDirection: 'row',
@@ -50,6 +56,7 @@ export default StyleSheet.create({
     resizeMode:'stretch'
   },
   searchBar: {
+    width: '98%',
     marginTop: 10,
     borderRadius: 15,
   },
@@ -65,6 +72,10 @@ export default StyleSheet.create({
   directionIcon: {
     color: '#94E858',
     left: 15,
+  },
+  directionIcon1: {
+    color: '#e6b400',
+    left: 15
   }
   // regionCard: {
   //   position: 'absolute',

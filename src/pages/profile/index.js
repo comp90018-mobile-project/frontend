@@ -25,10 +25,8 @@ Notifications.setNotificationHandler({
 
 function Profile({navigation}) {
   const user = useSelector((state) => state.user)
+  const {events} = useSelector((state) => state.event)
   const func = useCallback(() => {dispatch(fetchUser(user.email))}, [user])
-  // useEffect(() => {
-  //   dispatch(fetchUser(user.email))
-  // }, [eventDisplay])
   useEffect(func, [])
   const { email, covid, token, eventhistory } = user
   const [modal, setModal] = useState(false)
@@ -38,6 +36,14 @@ function Profile({navigation}) {
   const responseListener = useRef();
   const dispatch = useDispatch()
 
+  const eventHistory = []
+  if (user.eventhistory.length != 0 ) {
+    events.forEach((i) => {
+      if (user.eventhistory.includes(i._id)) {
+        eventHistory.push(i)
+      }
+    })
+  }
 
   const handleSeeHost = async() => {
     await dispatch(fetchEvent(user.hostevent[0]))
@@ -146,9 +152,8 @@ function Profile({navigation}) {
             Covid Exposure
         </Text>
         
-        <View style={{width: '100%', height: 100, marginVertical: 10, 
-        backgroundColor: 'green', borderRadius: 20, padding: 15}}>
-          <Text style={{color: '#fff', fontSize: 24}}>{covid}</Text>
+        <View style={covid == 'positive' ? (styles.covidInfoPos): covid == 'pending'? (styles.covidInfoPen):(styles.covidInfoNeg)}>
+          <Text style={{color: '#fff', fontSize: 24, textTransform: 'capitalize'}}>{covid}</Text>
           <ModalSelector
               data={covidOptions}
               onChange={(option) => {
@@ -170,9 +175,10 @@ function Profile({navigation}) {
 
         <ScrollView style={{width: '100%', height: 350, marginVertical: 10}}>
           <View style={styles.historyCards}>
+            {console.log(eventHistory)}
             {user.eventhistory.length != 0 ?
-              user.eventhistory.map((event, index) => {
-                return <EventHistoryCard key={index} props={{eventName: event.name, eventDuration: event.duration}}/>
+              eventHistory.map((event, index) => {
+                return <EventHistoryCard key={index} props={{eventName: event.name, eventDuration: event.settings.duration, eventPreview: event.preview}}/>
               })
               :
               <EventHistoryCard props={{eventName: "No history events yet", eventDuration: '--'}}/>
@@ -195,8 +201,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
-    
+    alignItems: 'center',
   },
   userInfo: {
     width: '90%',
@@ -215,6 +220,7 @@ const styles = StyleSheet.create({
   historys: {
     width: '90%',
     alignItems: 'center',
+    height: 310
   },
   historyCards: {
     width: '100%',
@@ -261,5 +267,30 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  covidInfoNeg: {
+    width: '100%', 
+    height: 100, 
+    marginVertical: 10, 
+    backgroundColor: 'green', 
+    borderRadius: 20, 
+    padding: 15
+  },
+  covidInfoPos: {
+    width: '100%', 
+    height: 100, 
+    marginVertical: 10, 
+    backgroundColor: 'red', 
+    borderRadius: 20, 
+    padding: 15
+  },
+  covidInfoPen: {
+    width: '100%', 
+    height: 100, 
+    marginVertical: 10, 
+    backgroundColor: 'yellow', 
+    borderRadius: 20, 
+    padding: 15
+  },
+
 })

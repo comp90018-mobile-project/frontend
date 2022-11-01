@@ -75,7 +75,7 @@ function Map({ navigation }) {
   };
 
   const handleSearch = (text) => {
-    const filteredEvents = events.filter((event) => event.name.includes(text));
+    const filteredEvents = events.filter((event) => event.name.includes(text) && (event.active == 'started' || event.active == 'pending'));
     // eslint-disable-next-line no-unused-expressions
     (text.length && filteredEvents.length) ? handleEventCard(filteredEvents.shift()) : handleEventCardClose();
   };
@@ -101,7 +101,6 @@ function Map({ navigation }) {
           handleCreateEventDialog();
         }}
       >
-        {console.log('theabc', events)}
         {events.map((item) => (
           item.active != 'ended' &&
           <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
@@ -125,18 +124,18 @@ function Map({ navigation }) {
               )
             }
             <Callout tooltip="true">
+              {console.log('item', item)}
               <View style={styles.callout}>
-                <FontAwesome name="group" size={25} color="#248A59" onPress={async() => {
+                <FontAwesome name="group" size={25} color={item.active == 'pending'? '#e6b400':"#248A59"} onPress={async() => {
                   await dispatch(fetchEvent(item._id));
                   navigation.navigate('EventDisplay', eventDisplay);
                 }}/>
-                <Text style={styles.calloutText}>
-                  {console.log("item.participants", item.participants)}
+                <Text style={item.active == 'pending'? styles.calloutTextPending : styles.calloutText}>
                   {item.participants.length}
                   /
                   {item.settings.max_participant} 
                 </Text>
-                <Entypo name="direction" size={25} color="#248A59" style={styles.directionIcon} onPress={() => { 
+                <Entypo name="direction" size={25} style={item.active == 'pending'? styles.directionIcon1 : styles.directionIcon} onPress={() => { 
                   // concatenate latitude and longitude with comma as a string
                   const latlon = item.latitude + ',' + item.longitude;
                   openMap({provider: 'google', query: latlon})}}/>

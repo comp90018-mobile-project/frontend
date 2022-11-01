@@ -9,6 +9,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent} from '../../../../services/api';
 import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function EventDisplay({route, navigation}) {
   const dispatch = useDispatch()
@@ -92,6 +93,8 @@ export default function EventDisplay({route, navigation}) {
           active: 'started'
         }))
       setStartDialog(true)
+    } else {
+      setPeopleDialog(true)
     }
   }
   // todo
@@ -115,6 +118,9 @@ export default function EventDisplay({route, navigation}) {
 
   return (
     <SafeAreaView style={styles.root}>
+      <TouchableOpacity style={{alignSelf: 'flex-start', left: 10}} onPress={()=>navigation.goBack()}>
+        <FontAwesome name='chevron-left' size={25} color='#fff' />
+      </TouchableOpacity>
       <ScrollView style={{width: '100%', paddingTop: 20, height: '95%'}}>
         <View style={styles.columnCentre}>
 
@@ -134,6 +140,7 @@ export default function EventDisplay({route, navigation}) {
               <Text style={styles.titleFont}>Participants</Text>
               <View style={styles.participantList}>
                 {event.participants.map((participant, index) => {
+                  
                   return <Image key={index} source={{uri: participant.avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
                 })}
               </View>
@@ -335,14 +342,26 @@ export default function EventDisplay({route, navigation}) {
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Chat',{event})}}>Chat room</Button>
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Map')}}>Back to Map</Button>
         </Dialog.Actions>
-    </Dialog>    
+    </Dialog> 
+
+    {/* Cancel event Dialog */}
     <Dialog visible={cancelDialog} onDismiss={()=>setEndDialog(!cancelDialog)} dismissable={false}>
         <Dialog.Title>The event has been canceled!</Dialog.Title>
         <Dialog.Content><Text>Back to map</Text></Dialog.Content>
         <Dialog.Actions>
           <Button onPress={()=>{setEndDialog(!cancelDialog); navigation.navigate('Map')}}>Back to Map</Button>
         </Dialog.Actions>
+    </Dialog>
+    
+    {/* People not enough Dialog */}
+    <Dialog visible={peopleDialog} onDismiss={()=>setPeopleDialog(!peopleDialog)} dismissable={false}>
+        <Dialog.Title>Sorry current participants less than the minmum you have set</Dialog.Title>
+        <Dialog.Content><Text>Invite others or cancel the reset the event </Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={()=>{setPeopleDialog(!peopleDialog)}}>OK</Button>
+        </Dialog.Actions>
     </Dialog>    
+
     </SafeAreaView>
   )
 }
