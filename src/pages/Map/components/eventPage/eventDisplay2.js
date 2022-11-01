@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { Marker } from 'react-native-maps';
-import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent} from '../../../../services/api';
+import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent, getUsersAvatar} from '../../../../services/api';
 import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -35,7 +35,16 @@ export default function EventDisplay2({route, navigation}) {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   })
+  const [avatars, setAvatars] = useState([])
 
+  useEffect(() => {
+    const fetch = async() => {
+      const participants = event.participants
+      const {data} = await getUsersAvatar(participants.join(","))
+      setAvatars(data)
+    }
+    fetch()    
+  }, [event])
   const checkUser = () => {
     if (event.organiser === currentUser.email) {
       return 'host'
@@ -139,8 +148,8 @@ export default function EventDisplay2({route, navigation}) {
           <View style={styles.participantContainer}>
               <Text style={styles.titleFont}>Participants</Text>
               <View style={styles.participantList}>
-                {event.participants.map((participant, index) => {
-                  return <Image key={index} source={{uri: participant.avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
+                {avatars.map((avatar, index) => {
+                  return <Image key={index} source={{uri: avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
                 })}
               </View>
           </View>

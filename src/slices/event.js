@@ -38,8 +38,9 @@ const eventSlice = createSlice({
             console.log("finish fetch event", state.eventDisplay)
         });
         builder.addCase(updateEventParticipants.fulfilled, (state, action) => {
-            const { data } = {...action.payload}
-            state.eventDisplay.participants = data
+            const {event_id, participants} = {...action.payload}
+            const index = state.events.findIndex((e) => e._id === event_id)
+            state.events[index].participants = participants
         });
         builder.addCase(updateEventActive.fulfilled, (state, action) => {
             const {event_id, active} = {...action.payload}

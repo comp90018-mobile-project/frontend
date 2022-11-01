@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#b5bab5',
     width:'100%',
     textAlign:'center',
-    fontSize:'20px',
+    fontSize:20,
     marginBottom:10
   },
   headerText2:{
@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
     backgroundColor:'#b5bab5',
     width:'100%',
     textAlign:'center',
-    fontSize:'20px'
+    fontSize:20
   }
 });

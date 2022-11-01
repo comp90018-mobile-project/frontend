@@ -31,11 +31,14 @@ function Map({ navigation }) {
 
   const eventFunc = useCallback(() => {dispatch(fetchEvents());}, [event])
   useEffect(eventFunc, [])
-  
+
   // useEffect(() => {
-  //   dispatch(fetchEvents());
-  //   console.log("加载")
-  // }, [user]);
+  //   const intervalId = setInterval(() => {
+  //     console.log("Requesting backend events")
+  //     dispatch(fetchEvents());
+  //   }, 5000)
+  //   return () => {clearInterval(intervalId)}
+  // }, [])
 
   useEffect(() => {
     (async () => {

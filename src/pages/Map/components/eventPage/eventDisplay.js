@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { Marker } from 'react-native-maps';
-import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent} from '../../../../services/api';
+import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent, getUsersAvatar} from '../../../../services/api';
 import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -18,8 +18,16 @@ export default function EventDisplay({route, navigation}) {
   // get the event to display
   const {eventDisplay} = useSelector((state) => state.event);
   const [event, setEvent] = useState(eventDisplay)
+  const [avatars, setAvatars] = useState([])
 
-  console.log("event is: ", event)
+  useEffect(() => {
+    const fetch = async() => {
+      const participants = event.participants
+      const {data} = await getUsersAvatar(participants.join(","))
+      setAvatars(data)
+    }
+    fetch()    
+  }, [event])
   // alter dialogs
   const [quitDialog, setQuitDialog] = useState(false)
   const [joinDialog, setJoinDialog] = useState(false)
@@ -139,9 +147,8 @@ export default function EventDisplay({route, navigation}) {
           <View style={styles.participantContainer}>
               <Text style={styles.titleFont}>Participants</Text>
               <View style={styles.participantList}>
-                {event.participants.map((participant, index) => {
-                  
-                  return <Image key={index} source={{uri: participant.avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
+                {avatars.map((avatar, index) => {
+                  return <Image key={index} source={{uri: avatar}} style={{width: 40, height: 40, borderWidth: 1, borderRadius: 20, margin: 5}} />
                 })}
               </View>
           </View>

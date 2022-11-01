@@ -159,7 +159,7 @@ export const updateEventParticipants = createAsyncThunk('event/updateEventPartic
     })
   }
   const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
-  return participants
+  return params
 })
 
 // update event active status
@@ -190,3 +190,8 @@ export const cancelEvent = createAsyncThunk('event/cancelEvent', async(eventId) 
   return eventId
 })
 
+export const getUsersAvatar = async(emailString) => {
+  const response = await fetch('http://52.62.135.159:8000/api/v1/users/avatars?email=' +
+  emailString);
+  return response.json()
+}
