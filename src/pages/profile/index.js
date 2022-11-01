@@ -10,7 +10,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import {registerForPushNotificationsAsync}  from '../../utils/notification'
-import {updateUserPushToken, updateCovidStatus} from '../../services/api'
+import {updateUserPushToken, updateCovidStatus, updateUserAvatar} from '../../services/api'
+import { uploadImage } from "../../utils/upload";
 import { fetchEvent, fetchUser } from '../../services/api';
 import Navigator from '../../components/navigator/navigator';
 
@@ -30,7 +31,7 @@ function Profile({navigation}) {
   useEffect(func, [])
   const { email, covid, token, eventhistory } = user
   const [modal, setModal] = useState(false)
-  
+  const [avatar, setAvatar] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
@@ -84,15 +85,79 @@ function Profile({navigation}) {
     };
   }, [user]);
 
-  // useEffect(() => {
-  //   dispatch(fetchUser(email))
-  // }, [event])
-
   const covidOptions = [
     {key: 1, label: "positive", value: 1},
     {key: 2, label: "pending", value: 2},
     {key: 3, label: "negative", value: 3},
   ]
+
+  const imageSourceOptions = [
+    {key: 1, label: 'Take a photo', value: 'camera'},
+    {key: 2, label: 'From gallery', value: 'gallery'}
+  ]
+  const imagePickerOptions = {
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    allowsEditing: true,
+    aspect: [4, 3],
+    quality: 1,
+  }
+
+  const selectImage = (label) => {
+    if (label === 'Take a photo') {
+      ImagePicker.getCameraPermissionsAsync().then(
+        (result) => {
+          if (result.granted === false) {
+            ImagePicker.requestCameraPermissionsAsync().then(
+              (result) => {
+                  if (result.granted === false) {
+                      alert('Permission to access camera is required!');
+                      return;
+                  }
+              }
+            )
+          }
+          ImagePicker.launchCameraAsync(imagePickerOptions).then(
+            (result) => {
+                if (!result.cancelled) {
+                    uploadImage(result.uri).then((url) => {
+                        setAvatar(url)
+                        dispatch(updateUserAvatar(user.email, url))
+                        // setPreview(url)
+                    })
+                }
+            }
+          )
+        }
+      )
+    } else if (label === 'From gallery') {
+        ImagePicker.getMediaLibraryPermissionsAsync().then(
+            (result) => {
+                if (result.granted === false) {
+                    ImagePicker.requestMediaLibraryPermissionsAsync().then(
+                        (result) => {
+                            if (result.granted === false) {
+                                alert('Permission to access gallery is required!');
+                                return;
+                            }
+                        }
+                    )
+                }
+                ImagePicker.launchImageLibraryAsync(imagePickerOptions).then(
+                    (result) => {
+                        if (!result.cancelled) {
+                            uploadImage(result.uri).then((url) => {
+                                // setPreview(url)
+                                setAvatar(url)
+                                dispatch(updateUserAvatar(user.email, url))
+                            })
+                        }
+                    }
+                )
+            }
+        )
+    }
+  }
+
   return (
     <>
     <SafeAreaView style={styles.container}>
@@ -111,8 +176,17 @@ function Profile({navigation}) {
       </Modal>
 
       <View style={styles.userInfo}>
-        <ModalSelector data={[{key:1, label: 'Upload from gallery'}]}>
-          <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}} source={{uri: user.avatar !=="" ? user.avatar : undefined }}/>
+        {console.log('abc', avatar, 'bdc', user.avatar)}
+        <ModalSelector
+            data={imageSourceOptions}
+            onChange={(option) => {
+                selectImage(option.label)
+            }}>
+              {avatar?(
+                <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}} source={{uri: avatar}}/>
+              ):(
+                <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}} source={{uri: user.avatar !=="" ? user.avatar : undefined }}/>
+              )}
         </ModalSelector>
         <Text style={{fontSize: 36, fontWeight: 'bold', marginLeft: 20}}>{user.username}</Text>
       </View>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUser, createUser, updateUserHost, updateUserParticipate,updateUserPushToken, updateCovidStatus, updateUserQuitEvent, updateEventActive } from '../services/api';
+import { fetchUser, createUser, updateUserHost, updateUserParticipate,updateUserPushToken, updateCovidStatus, updateUserQuitEvent, updateEventActive, updateUserAvatar } from '../services/api';
 import { uploadImage } from '../utils/upload';
 // Slice
 const userSlice = createSlice({
@@ -75,6 +75,10 @@ const userSlice = createSlice({
       console.log('success update user participate', data)
       state.participantevent = action.payload
     });
+    builder.addCase(updateUserAvatar, (state, action) => {
+      console.log('success update user avatar', data)
+      state.avatar= action.payload
+    })
     builder.addCase(updateUserPushToken.fulfilled, (state, action) => {
       state.token = action.payload
     });
