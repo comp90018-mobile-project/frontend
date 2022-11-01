@@ -5,3 +5,4 @@ authBase.js
 firebase.json
 firestore.indexes.json
 firestore.rules
+.DS_Store

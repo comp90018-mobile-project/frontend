@@ -1,32 +1,44 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
+import { async } from '@firebase/util';
 import * as Location from 'expo-location';
-import { useEffect, useState } from 'react';
-import {
-  Image, SafeAreaView, Text, View
-} from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
-import { Searchbar } from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import openMap from 'react-native-open-maps';
+import { Button, Dialog, Searchbar } from 'react-native-paper';
+import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
-import { fetchEvents } from '../../services/api';
+import { fetchEvents, fetchEvent } from '../../services/api';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
 
 function Map({ navigation }) {
   const dispatch = useDispatch();
+  const event = useSelector((state) => state.event)
   const { events } = useSelector((state) => state.event);
+  const user  = useSelector((state) => state.user);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
+  const [dialog, setDialog] = useState(false);
+  const [pressCoordinate, setPressCoordinate] = useState();
+  const {eventDisplay} = useSelector((state)=>state.event)
 
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, []);
+  const eventFunc = useCallback(() => {dispatch(fetchEvents());}, [event])
+  useEffect(eventFunc, [])
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     console.log("Requesting backend events")
+  //     dispatch(fetchEvents());
+  //   }, 5000)
+  //   return () => {clearInterval(intervalId)}
+  // }, [])
 
   useEffect(() => {
     (async () => {
@@ -48,7 +60,6 @@ function Map({ navigation }) {
       });
     })();
   }, []);
-
   const handleEventCard = (event) => {
     setSelectedEvent(event);
     setEventCard(true);
@@ -58,10 +69,27 @@ function Map({ navigation }) {
     setEventCard(false);
   };
 
+  const handleDialogOpen = () => {
+    setDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialog(false);
+  };
+
   const handleSearch = (text) => {
-    const filteredEvents = events.filter((event) => event.name.includes(text));
+    const filteredEvents = events.filter((event) => event.name.includes(text) && (event.active == 'started' || event.active == 'pending'));
     // eslint-disable-next-line no-unused-expressions
     (text.length && filteredEvents.length) ? handleEventCard(filteredEvents.shift()) : handleEventCardClose();
+  };
+
+  const handleCreateEventDialog = () => {
+    handleDialogOpen();
+  };
+
+  const handleCreateEvent = () => {
+    handleDialogClose();
+    navigation.navigate('EventPage', { lat: pressCoordinate.latitude, lon: pressCoordinate.longitude });
   };
 
   return (
@@ -70,32 +98,52 @@ function Map({ navigation }) {
         style={styles.map}
         showsUserLocation
         initialRegion={initialRegion}
+        onDoublePress={(e) => {
+          const location = e.nativeEvent.coordinate;
+          setPressCoordinate(location);
+          handleCreateEventDialog();
+        }}
       >
         {events.map((item) => (
-          <Marker coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
-            <Image
-              style={{
-                width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
-              }}
-              source={require('../../../assets/avatar.png')}
-            />
-            <Callout tooltip="true">
-              { item.participants ? (
-                <View style={styles.callout}>
-                  <FontAwesome name="group" size={25} color="#248A59" />
-                  <Text style={styles.calloutText}>
-                    {item.participants.length}
-                    /
-                    {item.settings.num_of_participants}
-                  </Text>
-                </View>
+          item.active != 'ended' &&
+          <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
+            {
+              item.preview != '' ? (
+                item.active === 'started' ? (
+                  <Image
+                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#248A59'}}
+                  source={{uri: item.preview}}/>
+                ):(
+                  <Image
+                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#e6b400'}}
+                  source={{uri: item.preview}}/>
+                )
+              ) : (
+                item.active === 'started' ? (
+                  <FontAwesome name='group' size={30} color='#248A59' />
+                ):(
+                  <FontAwesome name='group' size={30} color='#e6b400' />
+                )
               )
-                : (
-                  <View style={styles.callout} onPress={() => navigation.navigate('EventPage')}>
-                    <AntDesign name="addusergroup" size={30} color="#248A59" onPress={() => navigation.replace('EventPage')} />
-                    <Text style={styles.calloutText} />
-                  </View>
-                )}
+
+            }
+            <Callout tooltip="true">
+              {console.log('item', item)}
+              <View style={styles.callout}>
+                <FontAwesome name="group" size={25} color={item.active == 'pending'? '#e6b400':"#248A59"} onPress={async() => {
+                  await dispatch(fetchEvent(item._id));
+                  navigation.navigate('EventDisplay', eventDisplay);
+                }}/>
+                <Text style={item.active == 'pending'? styles.calloutTextPending : styles.calloutText}>
+                  {item.participants.length}
+                  /
+                  {item.settings.max_participant} 
+                </Text>
+                <Entypo name="direction" size={25} style={item.active == 'pending'? styles.directionIcon1 : styles.directionIcon} onPress={() => { 
+                  // concatenate latitude and longitude with comma as a string
+                  const latlon = item.latitude + ',' + item.longitude;
+                  openMap({provider: 'google', query: latlon})}}/>
+              </View>
             </Callout>
           </Marker>
         ))}
@@ -103,7 +151,8 @@ function Map({ navigation }) {
 
       <View style={styles.infoDisplay}>
         <View style={styles.regionCard}>
-          <Text style={styles.regionText}>{region}</Text>
+          
+          <Text style={styles.regionText}>{region ? region : 'Welcome'}</Text>
           <Image
             style={styles.regionFire}
             source={require('../../../assets/fire.png')}
@@ -118,9 +167,17 @@ function Map({ navigation }) {
 
       </View>
 
-      <EventCard show={eventCard} eventInfo={selectedEvent} onPress={() => navigation.replace('EventPage')} />
+      <EventCard show={eventCard} eventInfo={selectedEvent} navigation={navigation} />
 
       <Navigator navigation={navigation} />
+
+      <Dialog visible={dialog} onDismiss={handleDialogClose}>
+        <Dialog.Title>Do you want to create an event?</Dialog.Title>
+        <Dialog.Actions>
+          <Button onPress={handleCreateEvent}>Create</Button>
+          <Button onPress={handleDialogClose}>Cancel</Button>
+        </Dialog.Actions>
+      </Dialog>
 
     </SafeAreaView>
   );

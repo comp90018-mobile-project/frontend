@@ -3,6 +3,58 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+# [1.5] - 2022-11-1
+## Added
+- Time interval for Map. Simulate real-time application.
+- Finalise APP
+
+# [1.4.1] - 2022-11-1
+## Added
+- Cancel events
+## Fixed
+- Immediate re-render for profile and map when state changes
+
+
+# [1.4.0] - 2022-10-31
+- configure and connect map, event display, event create, profile, chat
+- modify chat style, profile style
+
+# [1.3.1] - 2022-10-31
+## Added
+- add event preview image
+- add navigation to event page
+
+# [1.3.0] - 2022-10-31
+## Added
+- add navigation feature to map
+
+# [1.2.0] - 2022-10-31
+## Added
+- add seachbar and navigation for ChatList
+
+# [1.1.4] - 2022-10-30
+## Added
+- fix chat bugs and navifation
+
+# [1.1.4] - 2022-10-29
+## Added
+- Push notification. Get token and save to backend
+
+# [1.1.3] - 2022-10-29
+## Added
+- added navigation function to navigation bar
+- added create event dialog
+
+# [1.1.2] - 2022-10-29
+## Added
+- show different event display for different roles(host, participant), can navigate to event hosted or participanted through profile
+
+# [1.1.1] - 2022-10-28
+## Added
+- improve chat list, chat room 
+
+
 # [1.0.1] - 2022-10-25
 ## Added
 - event display page, profile page

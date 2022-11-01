@@ -1,16 +1,18 @@
-import React , { useState, useCallback, useEffect, useLayoutEffect }from 'react';
-import { StyleSheet,  Button,Text, View, TextInput, SafeAreaView} from 'react-native';
 import { getAuth } from 'firebase/auth';
-import {getFirestore,collection,addDoc,getDocs,getDoc,doc,onSnapshot, query,orderBy} from 'firebase/firestore';
-import firebaseConfig from '../../../authBase';
+import { addDoc, collection, getFirestore, onSnapshot, orderBy, query } from 'firebase/firestore';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
-import { initializeApp } from 'firebase/app';
+import { Appbar, Divider } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import firebaseConfig from '../../../authBase';
 import { fetchUser } from '../../services/api';
 
 function Chat({ navigation,route}) {
   const dispatch = useDispatch();
-    const { id } = route.params;
+    const { event } = route.params;
+    console.log('event:',event)
+    const id = event._id
     const auth = getAuth(firebaseConfig);
 
     const db = getFirestore(firebaseConfig);
@@ -18,7 +20,7 @@ function Chat({ navigation,route}) {
     useEffect(() => {
       dispatch(fetchUser(auth.currentUser?.email));
     }, [])
-    const {u, p, nickname, avatar} = useSelector(state => state.user);
+    const {u, p, username, avatar} = useSelector(state => state.user);
     // console.log("nickname and avatar:", nickname, avatar);
 
     useLayoutEffect(() => {
@@ -59,22 +61,24 @@ function Chat({ navigation,route}) {
     }, [])
 
     return (
-      <View style={styles.container}>
-        <Text>{id}</Text>
-        <Text>nickname and avatar:{nickname} {avatar}</Text>
-
-        <GiftedChat
-          messages={messages}
-          showAvatarForEveryMessage={true}
-          renderUsernameOnMessage={true}
-          onSend={messages => onSend(messages)}
-          user={{
-            _id: auth.currentUser?.email,
-            name:auth.currentUser?.email,
-            avatar: "https://raw.githubusercontent.com/yyou211/image_save/main/img/IMG_5447.JPG",
-          }}
-      />
-      </View>
+      <><>
+        <Appbar.Header style={{backgroundColor: "white"}}>
+          <Appbar.BackAction onPress={() => { navigation.navigate('ChatList') } } />
+          <Text style={styles.buttonText} onPress={() => navigation.navigate('EventDisplay2',{event})}>{event.name}</Text>
+        </Appbar.Header>
+        <Divider />
+      </><View style={styles.container}>
+          <GiftedChat
+            messages={messages}
+            showAvatarForEveryMessage={true}
+            renderUsernameOnMessage={true}
+            onSend={messages => onSend(messages)}
+            user={{
+              _id: auth.currentUser?.email,
+              name: username,
+              avatar: avatar,
+            }} />
+        </View></>
     );
 
 }
@@ -83,6 +87,20 @@ const styles = StyleSheet.create({
       flex: 1,
       width: '100%',
       backgroundColor: '#fff',
+    },
+    button: {
+      backgroundColor: '#0782F9',
+      width: '60%',
+      padding: 15,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 20,
+      marginLeft:'20%'
+    },
+    buttonText: {
+      color: 'black',
+      fontWeight: '700',
+      fontSize: 16,
     },
   });
 export default Chat;

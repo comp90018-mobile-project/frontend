@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 50,
-    left: 110,
+    left: 100,
     bottom: 25,
   },
   mapIcon: {
@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
   },
   profileIcon: {
     color: '#94E858',
-    left: 170,
+    left: 160,
   },
   chatIcon: {
     color: '#94E858',
-    left: 60,
+    left: 50,
   },
 });
 

@@ -11,23 +11,15 @@ import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export default function EventDisplay({route, navigation}) {
+export default function EventDisplay2({route, navigation}) {
   const dispatch = useDispatch()
   // get current user info
   const currentUser = useSelector((state) => state.user);
   // get the event to display
-  const {eventDisplay} = useSelector((state) => state.event);
-  const [event, setEvent] = useState(eventDisplay)
-  const [avatars, setAvatars] = useState([])
 
-  useEffect(() => {
-    const fetch = async() => {
-      const participants = event.participants
-      const {data} = await getUsersAvatar(participants.join(","))
-      setAvatars(data)
-    }
-    fetch()    
-  }, [event])
+  const {event} = route.params
+
+  console.log("event is: ", event)
   // alter dialogs
   const [quitDialog, setQuitDialog] = useState(false)
   const [joinDialog, setJoinDialog] = useState(false)
@@ -43,7 +35,16 @@ export default function EventDisplay({route, navigation}) {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   })
+  const [avatars, setAvatars] = useState([])
 
+  useEffect(() => {
+    const fetch = async() => {
+      const participants = event.participants
+      const {data} = await getUsersAvatar(participants.join(","))
+      setAvatars(data)
+    }
+    fetch()    
+  }, [event])
   const checkUser = () => {
     if (event.organiser === currentUser.email) {
       return 'host'

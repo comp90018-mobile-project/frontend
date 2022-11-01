@@ -2,7 +2,7 @@ import {
   getAuth,
   signInWithEmailAndPassword
 } from 'firebase/auth';
-import React, { useState, useSelector } from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -11,13 +11,13 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import firebaseConfig from '../../../authBase';
-import { fetchUser } from '../../services/api'
 import { useDispatch } from 'react-redux';
+import firebaseConfig from '../../../authBase';
+import { fetchUser } from '../../services/api';
 
 function LoginScreen({ navigation }) {
   const dispatch = useDispatch()
-  const [email, setEmail] = useState('gkx@qq.com');
+  const [email, setEmail] = useState('ziawang1@qq.com');
   const [password, setPassword] = useState('123456');
   const auth = getAuth(firebaseConfig);
 
@@ -25,7 +25,7 @@ function LoginScreen({ navigation }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        navigation.replace('EventPage');
+        navigation.replace('Map');
         console.log('Logged in with:', user.email);
         dispatch(fetchUser(user.email))
       })

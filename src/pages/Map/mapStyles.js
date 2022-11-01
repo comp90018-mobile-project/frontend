@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   callout: {
     backgroundColor: '#323C47',
-    width: 80,
+    width: 135,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -23,6 +23,12 @@ export default StyleSheet.create({
   },
   calloutText: {
     color: '#248A59',
+    fontSize: 20,
+    fontWeight: 'bold',
+    left: 5,
+  },
+  calloutTextPending: {
+    color: '#e6b400',
     fontSize: 20,
     fontWeight: 'bold',
     left: 5,
@@ -50,6 +56,7 @@ export default StyleSheet.create({
     resizeMode:'stretch'
   },
   searchBar: {
+    width: '98%',
     marginTop: 10,
     borderRadius: 15,
   },
@@ -57,10 +64,18 @@ export default StyleSheet.create({
   infoDisplay: {
     width: '95%',
     position: 'absolute',
-    top: 10,
+    top: 60,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  directionIcon: {
+    color: '#94E858',
+    left: 15,
+  },
+  directionIcon1: {
+    color: '#e6b400',
+    left: 15
   }
   // regionCard: {
   //   position: 'absolute',
