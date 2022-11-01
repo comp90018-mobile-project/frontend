@@ -98,18 +98,27 @@ function Map({ navigation }) {
           handleCreateEventDialog();
         }}
       >
+        {console.log('theabc', events)}
         {events.map((item) => (
+          item.active != 'ended' &&
           <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
             {
               item.preview != '' ? (
-              <Image
-                style={{
-                  width: 35, height: 35, borderRadius: 20, resizeMode: 'contain',
-                }}
-                source={{uri: item.preview}}
-              />
+                item.active === 'started' ? (
+                  <Image
+                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#248A59'}}
+                  source={{uri: item.preview}}/>
+                ):(
+                  <Image
+                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#e6b400'}}
+                  source={{uri: item.preview}}/>
+                )
               ) : (
-              <FontAwesome name='group' size={30} color='#248A59' />
+                item.active === 'started' ? (
+                  <FontAwesome name='group' size={30} color='#248A59' />
+                ):(
+                  <FontAwesome name='group' size={30} color='#e6b400' />
+                )
               )
             }
             <Callout tooltip="true">
@@ -119,6 +128,7 @@ function Map({ navigation }) {
                   navigation.navigate('EventDisplay', eventDisplay);
                 }}/>
                 <Text style={styles.calloutText}>
+                  {console.log("item.participants", item.participants)}
                   {item.participants.length}
                   /
                   {item.settings.max_participant} 
