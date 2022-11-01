@@ -148,7 +148,7 @@ function EventPage({route, navigation }) {
             images: []
           }
           dispatch(createEvent(addEvent)) // 返回一个event id
-          dispatch(fetchUser(currentUser.email))
+        //   dispatch(fetchUser(currentUser.email))
           setSuccessCreateDialog(true)
         } else {
           setInputDialog(true)

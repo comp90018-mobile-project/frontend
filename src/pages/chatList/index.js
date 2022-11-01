@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View,Text } from 'react-native';
 import { Divider, Searchbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,15 +10,18 @@ import { fetchEvents } from '../../services/api';
 
 function ChatList({ navigation }) {
   const auth = getAuth(firebaseConfig);
+  const event_ = useSelector((state) => state.event)
   const { events } = useSelector((state) => state.event);
   const handleChat = (event) => {
     navigation.navigate('Chat', { event });
   };
   const dispatch = useDispatch();
-  useEffect(()=>{
-    dispatch(fetchEvents());
-    console.log('events:',events)
-  },[])
+  const func = useCallback(() => {dispatch(fetchEvents());}, [event_])
+  useEffect(func, [])
+  // useEffect(()=>{
+  //   dispatch(fetchEvents());
+  //   console.log('events:',events)
+  // },[event])
 
   const [event, setEvent] = React.useState(events);
   const handleSearch = (text) => {

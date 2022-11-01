@@ -25,15 +25,13 @@ Notifications.setNotificationHandler({
 
 function Profile({navigation}) {
   const user = useSelector((state) => state.user)
-  // console.log('用户host:',user.hostevent[0])
-  // console.log('用户participant:',user.participantevent[0])
-
-  useEffect(() => {
-    dispatch(fetchUser(user.email))
-  }, [eventDisplay])
+  const func = useCallback(() => {dispatch(fetchUser(user.email))}, [user])
+  // useEffect(() => {
+  //   dispatch(fetchUser(user.email))
+  // }, [eventDisplay])
+  useEffect(func, [])
   const { email, covid, token, eventhistory } = user
   const [modal, setModal] = useState(false)
-  const event = useSelector((state) => state.event)
   
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -53,14 +51,16 @@ function Profile({navigation}) {
   const {eventDisplay} = useSelector((state)=>state.event)
 
   useEffect(() => {
-      registerForPushNotificationsAsync().then(
-        (token) => {
-          // setExpoPushTken(token)
-          if (email) {
-            dispatch(updateUserPushToken({email: email, token: token}))
+      if (Device.isDevice) {
+        registerForPushNotificationsAsync().then(
+          (token) => {
+            // setExpoPushTken(token)
+            if (email) {
+              dispatch(updateUserPushToken({email: email, token: token}))
+            }
           }
-        }
-      );
+        );
+      }      
       // This listener is fired whenever a notification is received while the app is foregrounded
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         setNotification(notification);
@@ -70,6 +70,8 @@ function Profile({navigation}) {
       responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
         console.log(response);
       });
+    // }
+      
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);

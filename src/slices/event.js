@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchEvents, createEvent, fetchEvent, updateEventParticipants, updateEventActive } from "../services/api";
+import { cancelEvent } from "../services/api";
 
 const eventSlice = createSlice({
     name: "event",
@@ -26,10 +27,10 @@ const eventSlice = createSlice({
             state.events = data;
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
-            const newEvent = {...action.payload}
-            state.newEvent = newEvent
-            state.events.push(newEvent);
-            console.log("finish update 1")
+            const {data} = {...action.payload}
+            state.newEvent = data
+            state.events.push(data);
+            
         });
         builder.addCase(fetchEvent.fulfilled, (state, action) => {
             const data = { ...action.payload };
@@ -39,27 +40,21 @@ const eventSlice = createSlice({
         builder.addCase(updateEventParticipants.fulfilled, (state, action) => {
             const { data } = {...action.payload}
             state.eventDisplay.participants = data
-            // const {username, avatar, email, event_hosted, event_history, event_participated, health_status} = data;
-            // state.username = username;
-            // state.avatar = avatar;
-            // state.email = email;
-            // state.eventhistory = event_history;
-            // state.hostevent = event_hosted;
-            // state.participantevent = event_participated;
-            // state.covid = health_status;
-            // console.log('after quit or cancel event', data)
         });
         builder.addCase(updateEventActive.fulfilled, (state, action) => {
-            // const data = { ...action.payload };
-            // state.eventDisplay = data
-            // console.log("updated active in event")
-            // const data = {...action.payload}
-            // if (data === "ended") {
-            //     state.eventDisplay = {}
-            // }
+            const {event_id, active} = {...action.payload}
+            const index = state.events.findIndex((e) => e._id == event_id)
+            state.events[index].active = active
         });
         builder.addCase(updateEventActive.rejected, (state, action) => {
             console.log('update active fail')
+        })
+        builder.addCase(cancelEvent.fulfilled, (state, action) => {
+            const eventId = action.payload
+            state.eventDisplay = {}
+            let events = [...state.events]
+            events = events.filter((e) => e._id != eventId)
+            state.events = events
         })
     }
 

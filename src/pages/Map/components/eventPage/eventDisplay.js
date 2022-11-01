@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MapView, { Marker } from 'react-native-maps';
-import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive } from '../../../../services/api';
+import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent} from '../../../../services/api';
 import { useFocusEffect } from '@react-navigation/core';
 import { Dialog, Button } from 'react-native-paper';
 
@@ -24,6 +24,8 @@ export default function EventDisplay({route, navigation}) {
   const [joinDialog, setJoinDialog] = useState(false)
   const [startDialog, setStartDialog] = useState(false)
   const [endDialog, setEndDialog] = useState(false)
+  const [peopleDialog, setPeopleDialog] = useState(false)
+  const [cancelDialog, setCancelDialog] = useState(false)
   // location initial region
   const [initialRegion, setInitialRegion] = useState(
     {
@@ -107,6 +109,8 @@ export default function EventDisplay({route, navigation}) {
     // 整个删除这个创建好的event
     // 清除已加入用户的event host & event participate & event history
     // 清除event object
+    dispatch(cancelEvent(event._id))
+    setCancelDialog(true)
   }
 
   return (
@@ -330,6 +334,13 @@ export default function EventDisplay({route, navigation}) {
         <Dialog.Actions>
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Chat',{event})}}>Chat room</Button>
           <Button onPress={()=>{setEndDialog(!endDialog); navigation.navigate('Map')}}>Back to Map</Button>
+        </Dialog.Actions>
+    </Dialog>    
+    <Dialog visible={cancelDialog} onDismiss={()=>setEndDialog(!cancelDialog)} dismissable={false}>
+        <Dialog.Title>The event has been canceled!</Dialog.Title>
+        <Dialog.Content><Text>Back to map</Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={()=>{setEndDialog(!cancelDialog); navigation.navigate('Map')}}>Back to Map</Button>
         </Dialog.Actions>
     </Dialog>    
     </SafeAreaView>

@@ -3,7 +3,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { async } from '@firebase/util';
 import * as Location from 'expo-location';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
@@ -18,6 +18,7 @@ import styles from './mapStyles';
 
 function Map({ navigation }) {
   const dispatch = useDispatch();
+  const event = useSelector((state) => state.event)
   const { events } = useSelector((state) => state.event);
   const user  = useSelector((state) => state.user);
   const [initialRegion, setInitialRegion] = useState();
@@ -28,10 +29,13 @@ function Map({ navigation }) {
   const [pressCoordinate, setPressCoordinate] = useState();
   const {eventDisplay} = useSelector((state)=>state.event)
 
-  useEffect(() => {
-    dispatch(fetchEvents());
-    console.log("加载")
-  }, [user]);
+  const eventFunc = useCallback(() => {dispatch(fetchEvents());}, [event])
+  useEffect(eventFunc, [])
+  
+  // useEffect(() => {
+  //   dispatch(fetchEvents());
+  //   console.log("加载")
+  // }, [user]);
 
   useEffect(() => {
     (async () => {
@@ -53,7 +57,6 @@ function Map({ navigation }) {
       });
     })();
   }, []);
-
   const handleEventCard = (event) => {
     setSelectedEvent(event);
     setEventCard(true);

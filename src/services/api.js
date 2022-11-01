@@ -176,7 +176,17 @@ export const updateEventActive = createAsyncThunk('event/updateEventActive', asy
   }
   const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
   // return response.json()
-  return active
+  return params
 })
 
+export const cancelEvent = createAsyncThunk('event/cancelEvent', async(eventId) => {
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify({
+      event_id: eventId
+    })
+  }
+  await fetch('http://52.62.135.159:8000/api/v1/events/delete', requestOptions)
+  return eventId
+})
 
