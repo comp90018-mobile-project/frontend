@@ -7,11 +7,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#323C47',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   columnCentre: {
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   eventNameFont: {
     color: '#fff',
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     marginBottom: 10,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   header: {
     width: '90%',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 36,
     marginLeft: 15,
-    flexShrink: 1
+    flexShrink: 1,
   },
   participantContainer: {
     width: '90%',
@@ -52,25 +52,25 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   settingContainer: {
     width: '90%',
     marginTop: 10,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   settingList: {
     backgroundColor: '#fff',
     borderRadius: 15,
     alignItems: 'center',
-    padding: 10
+    padding: 10,
   },
   settingItem: {
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 10
+    margin: 10,
   },
   settingItemContent: {
     fontSize: 15,
@@ -78,64 +78,64 @@ const styles = StyleSheet.create({
   imgContainer: {
     width: '90%',
     marginTop: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   createButton: {
     elevation: 8,
-    backgroundColor: "#009688",
+    backgroundColor: '#009688',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
     marginTop: 20,
-    width: "90%",
+    width: '90%',
     height: 50,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 22,
-    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    textAlign: "center"
+    color: 'white',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: 'center',
   },
   settingText: {
     fontSize: 15,
-    color: 'black'
+    color: 'black',
   },
 });
 

@@ -8,10 +8,10 @@ import ChatList from './src/pages/chatList';
 import demo from './src/pages/demo';
 import home from './src/pages/home';
 import login from './src/pages/login';
-import map from './src/pages/Map';
-import EventDisplay from './src/pages/Map/components/eventPage/eventDisplay';
-import EventDisplay2 from './src/pages/Map/components/eventPage/eventDisplay2';
-import EventPage from './src/pages/Map/components/eventPage/eventPage';
+import map from './src/pages/map';
+import EventDisplay from './src/pages/map/components/eventPage/eventDisplay';
+import EventDisplay2 from './src/pages/map/components/eventPage/eventDisplayFromChat';
+import EventPage from './src/pages/map/components/eventPage/eventPage';
 import Profile from './src/pages/profile';
 import register from './src/pages/register';
 import s3 from './src/pages/s3';
@@ -22,9 +22,12 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{
-    headerShown: false
-  }}>
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
           <Stack.Screen
             name="Map"
             component={map}
