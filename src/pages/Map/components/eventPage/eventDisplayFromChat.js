@@ -3,7 +3,7 @@ import {
   Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { Button, Dialog } from 'react-native-paper';
+import { Button, Dialog, Divider } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -218,7 +218,7 @@ export default function EventDisplay2({ route, navigation }) {
               />
 
               <View style={styles.settingItem}>
-                <Text style={styles.settingItem}>Description</Text>
+                <Text style={styles.settingText}>Description</Text>
               </View>
               <View>
                 <Text style={{ fontSize: 16, color: 'grey' }}>{event.settings.description}</Text>

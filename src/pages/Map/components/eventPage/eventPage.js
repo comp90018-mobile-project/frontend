@@ -3,8 +3,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import {
-    Image, SafeAreaView, ScrollView, Text, TextInput,
-    TouchableOpacity, View
+  Image, SafeAreaView, ScrollView, Text, TextInput,
+  TouchableOpacity, View
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import ModalSelector from 'react-native-modal-selector';
@@ -172,10 +172,10 @@ function EventPage({ route, navigation }) {
               }}
             >
               {
-                            preview
-                              ? <Image source={{ uri: preview }} style={styles.previewImg} />
-                              : <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
-                          }
+               preview
+                 ? <Image source={{ uri: preview }} style={styles.previewImg} />
+                 : <MaterialCommunityIcons name="file-image-plus-outline" style={styles.previewImg} size={130} />
+              }
             </ModalSelector>
             <View style={styles.headerText}>
               <TextInput
