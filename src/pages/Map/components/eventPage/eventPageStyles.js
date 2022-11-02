@@ -15,14 +15,13 @@ const styles = StyleSheet.create({
   },
   eventNameFont: {
     color: '#fff',
-    fontSize: 36,
-    fontWeight: 'bold'
+    fontSize: 24,
   },
   titleFont: {
     color: '#fff',
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
+    textDecorationLine: 'underline'
   },
   header: {
     width: '90%',
@@ -34,7 +33,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderWidth: 5,
-    borderColor: '#d9d9d9'
+    borderColor: '#d9d9d9',
+    backgroundColor: '#fff',
+    color: '#d9d9d9',
   },
   headerText: {
     fontSize: 36,
@@ -72,8 +73,7 @@ const styles = StyleSheet.create({
     margin: 10
   },
   settingItemContent: {
-    fontSize: 24,
-    fontWeight: 'bold'
+    fontSize: 15,
   },
   imgContainer: {
     width: '90%',
@@ -127,13 +127,16 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
     textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  settingText: {
+    fontSize: 15,
+    color: 'black'
+  },
 });
 
 // export styles

@@ -1,15 +1,11 @@
-import { useState, useEffect} from 'react';
-import { StyleSheet, Modal, Image, Text, View, TextInput, TouchableOpacity, ScrollView, Alert, Pressable, SafeAreaView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import ModalSelector from 'react-native-modal-selector'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useEffect, useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import { fetchEvent, fetchUser, updateUserQuitEvent, updateEventParticipants, updateUserParticipate, updateEventActive, cancelEvent, getUsersAvatar} from '../../../../services/api';
-import { useFocusEffect } from '@react-navigation/core';
-import { Dialog, Button } from 'react-native-paper';
+import { Button, Dialog } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { cancelEvent, getUsersAvatar, updateEventActive, updateEventParticipants, updateUserParticipate, updateUserQuitEvent } from '../../../../services/api';
 
 export default function EventDisplay2({route, navigation}) {
   const dispatch = useDispatch()
@@ -159,37 +155,41 @@ export default function EventDisplay2({route, navigation}) {
             <View style={styles.settingList}>
 
               <View style={styles.settingItem}>
-                <Text>Start Time</Text>
+                <Text style={styles.settingText}>Start Time</Text>
                 <Text style={styles.settingItemContent}>
                   {event.settings.start_time.split('T')[0].slice(5,10) + ' / ' +
                   event.settings.start_time.split('T')[1].slice(0,5)}
                 </Text>
               </View>
+              <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
               <View style={styles.settingItem}>
-                <Text>Duration</Text>
+                <Text style={styles.settingText}>Duration</Text>
                 <Text style={styles.settingItemContent}> {event.settings.duration} </Text>
               </View>
+              <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
               <View style={styles.settingItem}>
-                <Text>Min & Max Participants</Text>
+                <Text style={styles.settingText}>Participants</Text>
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.settingItemContent}> {event.settings.min_participant} </Text>
-                  <Text style={{fontSize: 24, fontWeight: 'bold'}}> - </Text>
+                  <Text style={{fontSize: 15}}> - </Text>
                   <Text style={styles.settingItemContent}> {event.settings.max_participant} </Text>
                 </View>
               </View>
+              <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
               <View style={styles.settingItem}>
-                <Text>Type</Text>
+                <Text style={styles.settingText}>Type</Text>
                 <Text style={styles.settingItemContent}>{event.settings.type}</Text>
               </View>
+              <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
               <View style={styles.settingItem}>
-                <Text>Description</Text>
-                <View style={{width: '50%'}}>
-                  <Text>{event.settings.description}</Text>
-                </View>
+                <Text style={styles.settingItem} >Description</Text>
+              </View>
+              <View>
+                  <Text style={{fontSize: 16, color: "grey"}}>{event.settings.description}</Text>
               </View>
 
             </View>
@@ -216,7 +216,6 @@ export default function EventDisplay2({route, navigation}) {
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
-          fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
           Quit this event
@@ -228,7 +227,6 @@ export default function EventDisplay2({route, navigation}) {
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
-          fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
           Navigate to chat
@@ -246,7 +244,6 @@ export default function EventDisplay2({route, navigation}) {
             <Text style={{
             fontSize: 12, 
             color: "#fff", 
-            fontWeight: "bold", 
             alignSelf: "center", 
             textTransform: "uppercase"}}>
             Start the event
@@ -257,7 +254,6 @@ export default function EventDisplay2({route, navigation}) {
             <Text style={{
             fontSize: 12, 
             color: "#fff", 
-            fontWeight: "bold", 
             alignSelf: "center", 
             textTransform: "uppercase"}}>
             Cancel the event
@@ -269,7 +265,6 @@ export default function EventDisplay2({route, navigation}) {
             <Text style={{
             fontSize: 12, 
             color: "#fff", 
-            fontWeight: "bold", 
             alignSelf: "center", 
             textTransform: "uppercase"}}>
             End the event
@@ -281,7 +276,6 @@ export default function EventDisplay2({route, navigation}) {
           <Text style={{
           fontSize: 12, 
           color: "#fff", 
-          fontWeight: "bold", 
           alignSelf: "center", 
           textTransform: "uppercase"}}>
           Navigate to chat
@@ -294,7 +288,6 @@ export default function EventDisplay2({route, navigation}) {
         <Text style={{
         fontSize: 12, 
         color: "#fff", 
-        fontWeight: "bold", 
         alignSelf: "center", 
         textTransform: "uppercase"}}>
         Join this event
@@ -304,7 +297,6 @@ export default function EventDisplay2({route, navigation}) {
         <Text style={{
         fontSize: 12, 
         color: "#fff", 
-        fontWeight: "bold", 
         alignSelf: "center", 
         textTransform: "uppercase"}}>
         Navigate to chat
@@ -387,14 +379,13 @@ const styles = StyleSheet.create({
   },
   eventNameFont: {
     color: '#fff', 
-    fontSize: 36, 
-    fontWeight: 'bold'
+    fontSize: 24, 
   },
   titleFont: {
     color: '#fff',
     fontSize: 24, 
-    fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
+    textDecorationLine: 'underline'
   },
   header: {
     width: '90%',
@@ -406,7 +397,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderWidth: 5,
-    borderColor: '#d9d9d9'
+    borderColor: '#d9d9d9',
+    backgroundColor: '#fff',
+    color: '#d9d9d9',
   },
   headerText: {
     fontSize: 36,
@@ -444,8 +437,7 @@ const styles = StyleSheet.create({
     margin: 10
   },
   settingItemContent: {
-    fontSize: 24,
-    fontWeight: 'bold'
+    fontSize: 15,
   },
   imgContainer: {
     width: '90%',
@@ -522,11 +514,14 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
     textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  settingText: {
+    fontSize: 15,
+    color: 'black'
+  },
 })

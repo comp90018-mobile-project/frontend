@@ -1,6 +1,6 @@
 import { getAuth } from 'firebase/auth';
-import React, { useEffect, useCallback } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View,Text } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Divider, Searchbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import firebaseConfig from '../../../authBase';
@@ -42,7 +42,10 @@ function ChatList({ navigation }) {
     <Divider />
       <ScrollView style={{ backgroundColor: 'white', top: 50,marginBottom:140}}>
         <View style={styles.container}>
-          <Text style={styles.headerText1}>Started events</Text>
+          <View>
+            <Text style={styles.headerText1}>Started Events</Text>
+            <Divider style={{width: 380}}/>
+          </View>
           
           {event.map((item) => (
             item.active=='started' &&(item.preview != ''?
@@ -53,8 +56,12 @@ function ChatList({ navigation }) {
                 <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={''} theme={item.settings.type} />
               </TouchableOpacity>)
           ))}
-
-        <Text style={styles.headerText2}>Pending events</Text>
+        
+        <View>
+          <Text style={styles.headerText2}>Pending Events</Text>
+          <Divider style={{width: 380}}/>
+        </View>
+        
         {event.map((item) => (
             item.active=='pending' &&(item.preview != ''?
               <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
@@ -100,18 +107,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   headerText1:{
-    color:'#8ff06e',
-    backgroundColor:'#b5bab5',
+    color:'grey',
     width:'100%',
     textAlign:'center',
     fontSize:20,
-    marginBottom:10
+    marginBottom:10,
+    marginTop:10,
   },
   headerText2:{
-    color:'yellow',
-    backgroundColor:'#b5bab5',
+    color:'grey',
     width:'100%',
     textAlign:'center',
-    fontSize:20
+    fontSize:20,
+    marginBottom:10,
+    marginTop:10,
   }
 });

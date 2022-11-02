@@ -1,19 +1,15 @@
-import { useCallback, useMemo, useState, useEffect, useRef} from 'react';
-import { StyleSheet, SafeAreaView, View, Image, Text, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import ModalSelector from 'react-native-modal-selector'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import EventHistoryCard from './components/eventHitstoryCard';
-import * as ImagePicker from 'expo-image-picker';
 import * as Device from 'expo-device';
+import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';
-import {registerForPushNotificationsAsync}  from '../../utils/notification'
-import {updateUserPushToken, updateCovidStatus, updateUserAvatar} from '../../services/api'
-import { uploadImage } from "../../utils/upload";
-import { fetchEvent, fetchUser } from '../../services/api';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Image, Modal, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ModalSelector from 'react-native-modal-selector';
+import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
+import { fetchEvent, fetchUser, updateCovidStatus, updateUserAvatar, updateUserPushToken } from '../../services/api';
+import { registerForPushNotificationsAsync } from '../../utils/notification';
+import { uploadImage } from "../../utils/upload";
+import EventHistoryCard from './components/eventHitstoryCard';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -179,6 +175,9 @@ function Profile({navigation}) {
         {console.log('abc', avatar, 'bdc', user.avatar)}
         <ModalSelector
             data={imageSourceOptions}
+            optionStyle={{height: 45}}
+            optionTextStyle={{fontSize: 20}}
+            cancelTextStyle={{fontSize: 20}}
             onChange={(option) => {
                 selectImage(option.label)
             }}>
@@ -188,7 +187,7 @@ function Profile({navigation}) {
                 <Image style={{width: 130, height: 130, borderWidth: 1, borderRadius: 100}} source={{uri: user.avatar !=="" ? user.avatar : undefined }}/>
               )}
         </ModalSelector>
-        <Text style={{fontSize: 36, fontWeight: 'bold', marginLeft: 20}}>{user.username}</Text>
+        <Text style={{fontSize: 24, fontWeight: 'bold', marginLeft: 20}}>{user.username}</Text>
       </View>
       
       <View style={styles.myevent}>
@@ -200,20 +199,19 @@ function Profile({navigation}) {
         <View style={{width: '100%', height: 100, marginVertical: 10, 
         backgroundColor: '#cdcdcd', borderRadius: 20, padding: 10}}>
           {user.hostevent.length == 0 && user.participantevent.length == 0 ?
-          <Text style={{justifyContent: 'center', alignItems: 'center'}}>
-            Your haven't hosted or joined any event yet
-            <TouchableOpacity onPress={()=>{navigation.navigate("Map")}}>
-              <Text style={{marginVertical: 20}}>Join or Host an event now</Text>
-            </TouchableOpacity>
-          </Text>
+          <TouchableOpacity onPress={()=>{navigation.navigate("Map")}}>
+            <Text style={{justifyContent: 'center', alignItems: 'center', marginTop: 25, fontWeight: 'bold'}}>
+              Your haven't hosted or joined any event yet, Join or Host an event now!
+            </Text>
+          </TouchableOpacity>
             :
             user.hostevent.length != 0 ?
             <TouchableOpacity onPress={handleSeeHost}> 
-              <Text style={{marginVertical: 20}}>See the event hosting</Text>
+              <Text style={{marginTop: 30, fontWeight: 'bold'}}>See the event hosting</Text>
             </TouchableOpacity>
               :
             <TouchableOpacity onPress={handleSeeParticipate}>
-              <Text style={{marginVertical: 20}}>See the event you participanting</Text>
+              <Text style={{marginTop: 30, fontWeight: 'bold'}}>See the event you participanting</Text>
             </TouchableOpacity>
           }
         </View>
@@ -230,12 +228,15 @@ function Profile({navigation}) {
           <Text style={{color: '#fff', fontSize: 24, textTransform: 'capitalize'}}>{covid}</Text>
           <ModalSelector
               data={covidOptions}
+              optionStyle={{height: 45}}
+              optionTextStyle={{fontSize: 20}}
+              cancelTextStyle={{fontSize: 20}}
               onChange={(option) => {
                   const label = option.label
                   dispatch(updateCovidStatus({email: email, status: label}))
               }}>
               <TouchableOpacity style={{marginVertical: 5}}>
-                <Text style={{color: '#fff', marginVertical: 10}}>Update your RAT result </Text>
+                <Text style={{color: '#fff', marginVertical: 10, fontWeight: 'bold'}}>Update your RAT result </Text>
               </TouchableOpacity>
           </ModalSelector>
         </View>

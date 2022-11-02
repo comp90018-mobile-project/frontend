@@ -1,18 +1,18 @@
 /* eslint-disable react/jsx-filename-extension */
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     Image, SafeAreaView, ScrollView, Text, TextInput,
     TouchableOpacity, View
 } from 'react-native';
-import { Button, Dialog } from 'react-native-paper';
+import MapView, { Marker } from 'react-native-maps';
 import ModalSelector from 'react-native-modal-selector';
+import { Button, Dialog, Divider } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import { createEvent, fetchUser } from '../../../../services/api';
+import { createEvent } from '../../../../services/api';
 import { uploadImage } from "../../../../utils/upload";
-import MapView, { Marker } from 'react-native-maps';
 import styles from './eventPageStyles';
 
 function EventPage({route, navigation }) {
@@ -30,7 +30,7 @@ function EventPage({route, navigation }) {
 
     // user inputs states
     const [preview, setPreview] = useState('');
-    const [eventName, setName] = useState('Test Name');
+    const [eventName, setName] = useState('Default Event');
     const [eventStartTime, setStartTime] = useState(new Date());
     const [eventDuration, setDuration] = useState('30 mins');
     const [eventMinParticipant, setMinParticipant] = useState('2');
@@ -174,6 +174,9 @@ function EventPage({route, navigation }) {
                   <View style={styles.header}>
                       <ModalSelector
                           data={imageSourceOptions}
+                          optionStyle={{height: 45}}
+                          optionTextStyle={{fontSize: 20}}
+                          cancelTextStyle={{fontSize: 20}}
                           onChange={(option) => {
                               selectImage(option.label)
                           }}>
@@ -205,7 +208,7 @@ function EventPage({route, navigation }) {
                       <Text style={styles.titleFont}>Settings</Text>
                       <View style={styles.settingList}>
                           <View style={styles.settingItem}>
-                              <Text>Start Time</Text>
+                              <Text style={styles.settingText}>Start Time</Text>
                               <DateTimePicker
                                   style={{width: 150, height: 40}}
                                   mode={'time'}
@@ -217,11 +220,15 @@ function EventPage({route, navigation }) {
                                   is24Hour={true}
                               />
                           </View>
+                          <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
                           <View style={styles.settingItem}>
-                              <Text>Duration</Text>
+                              <Text style={styles.settingText}>Duration</Text>
                               <ModalSelector
                                   data={durationOption}
+                                  optionStyle={{height: 45}}
+                                  optionTextStyle={{fontSize: 20}}
+                                  cancelTextStyle={{fontSize: 20}}
                                   onChange={(option) => {
                                       setDuration(option.label)
                                   }}
@@ -235,12 +242,16 @@ function EventPage({route, navigation }) {
                                       value={eventDuration}/>
                               </ModalSelector>
                           </View>
+                          <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
                           <View style={styles.settingItem}>
-                              <Text>Min & Max Participants</Text>
+                              <Text style={styles.settingText}>Participants</Text>
                               <View style={{flexDirection: 'row'}}>
                                   <ModalSelector
                                       data={participantOption}
+                                      optionStyle={{height: 45}}
+                                      optionTextStyle={{fontSize: 20}}
+                                      cancelTextStyle={{fontSize: 20}}
                                       onChange={(option) => {
                                           setMinParticipant(option.label)
                                       }}
@@ -254,12 +265,15 @@ function EventPage({route, navigation }) {
                                           value={eventMinParticipant}/>
                                   </ModalSelector>
                                   {eventMinParticipant && eventMaxParticipant != '' ?
-                                      <Text style={{fontSize: 24, fontWeight: 'bold'}}> - </Text>
+                                      <Text style={{fontSize: 15}}> - </Text>
                                       :
-                                      <Text style={{fontSize: 24, fontWeight: 'bold', color: '#c5c5c5'}}> - </Text>
+                                      <Text style={{fontSize: 15, color: '#c5c5c5'}}> - </Text>
                                   }
                                   <ModalSelector
                                       data={participantOption}
+                                      optionStyle={{height: 45}}
+                                      optionTextStyle={{fontSize: 20}}
+                                      cancelTextStyle={{fontSize: 20}}
                                       onChange={(option) => {
                                           setMaxParticipant(option.label)
                                       }}
@@ -274,11 +288,15 @@ function EventPage({route, navigation }) {
                                   </ModalSelector>
                               </View>
                           </View>
+                          <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
                           <View style={styles.settingItem}>
-                              <Text>Type</Text>
+                              <Text style={styles.settingText}>Type</Text>
                               <ModalSelector
                                   data={typeOption}
+                                  optionStyle={{height: 45}}
+                                  optionTextStyle={{fontSize: 20}}
+                                  cancelTextStyle={{fontSize: 20}}
                                   onChange={(option) => {
                                       setEventType(option.label)
                                   }}
@@ -292,20 +310,25 @@ function EventPage({route, navigation }) {
                                       value={eventType}/>
                               </ModalSelector>
                           </View>
+                          <Divider style={{backgroundColor: 'grey', width: '100%', height: 1, marginVertical: 10}}/>
 
                           <View style={styles.settingItem}>
-                              <Text>Description</Text>
-                              <View style={{alignSelf: 'flex-start', maxWidth: '50%', flexShrink: 1}}>
-                                  <TextInput
-                                      multiline={true}
-                                      numberOfLines={4}
-                                      value={eventDescription}
-                                      onChangeText={(value) => {
-                                          setEventDescription(value)
-                                      }}
-                                      placeholder={'Description of your event'}/>
-                              </View>
+                              <Text style={styles.settingText}>Description</Text>
                           </View>
+                        
+                          <View style={styles.settingItem}>
+                            <View style={{alignSelf: 'flex-start', flexShrink: 1}}>
+                                    <TextInput
+                                        style={{fontSize: 16, color: "grey"}}
+                                        multiline={true}
+                                        numberOfLines={4}
+                                        value={eventDescription}
+                                        onChangeText={(value) => {
+                                            setEventDescription(value)
+                                        }}
+                                        placeholder={'Description of your event'}/>
+                            </View>
+                           </View>
                       </View>
                   </View>
 
