@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import {
   StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import firebaseConfig from '../../../authBase';
 
 import { fetchEvents, fetchUser } from '../../services/api';
@@ -12,11 +12,10 @@ import { fetchEvents, fetchUser } from '../../services/api';
 function HomeScreen({ navigation }) {
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch();
-  const { events } = useSelector((state) => state.event);
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
-
+  // sign out
   const handleSignOut = () => {
     console.log(`Signed out!${auth.currentUser?.email}`);
     auth
@@ -26,10 +25,11 @@ function HomeScreen({ navigation }) {
       })
       .catch((error) => alert(error.message));
   };
+  // navigate to chat list page
   const handleChat = () => {
     navigation.navigate('ChatList');
   };
-
+  // navigate to map page
   const handleMap = () => {
     navigation.navigate('Map');
   };
@@ -73,7 +73,6 @@ function HomeScreen({ navigation }) {
       <TouchableOpacity
         onPress={() => {
           dispatch(fetchEvents());
-          console.log('res', dispatch(fetchEvents()));
         }}
         style={styles.button}
       >
@@ -82,7 +81,6 @@ function HomeScreen({ navigation }) {
 
       <TouchableOpacity
         onPress={() => {
-          console.log('res', events);
         }}
         style={styles.button}
       >
@@ -98,7 +96,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   button: {

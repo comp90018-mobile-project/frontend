@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
   root: {
     position: 'absolute',
     top: 210,
-    // bottom: 600,
     width: '95%',
     height: 80,
   },

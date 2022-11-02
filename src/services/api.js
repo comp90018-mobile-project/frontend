@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import firebaseConfig from '../../authBase';
 import {
-  getAuth,
+  getAuth
 } from 'firebase/auth';
-import { async } from '@firebase/util';
+import firebaseConfig from '../../authBase';
 
 const auth = getAuth(firebaseConfig);
 const domain = "http://13.238.153.25:8000/api/v1/";
@@ -14,23 +13,23 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (email) => {
   return response.json()
 })
 
-export const createUser = createAsyncThunk('user/createUser', async(params) => {
-  const {username, password, email} = params;
+export const createUser = createAsyncThunk('user/createUser', async (params) => {
+  const { username, password, email } = params;
   const requestOptions = {
     method: 'POST',
-    body: JSON.stringify({ username: username, password: password, email: email})
+    body: JSON.stringify({ username, password, email }),
   };
   const response = await fetch(domain + 'users', requestOptions)
   return response.json()
 })
 
-export const updateUserHost = createAsyncThunk('user/updateUserHost', async(params) => {
+export const updateUserHost = createAsyncThunk('user/updateUserHost', async (params) => {
   // hostevent: new events hosted by user
-  const {email, hostevent} = params
+  const { email, hostevent } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_hosted: hostevent
       }
@@ -40,13 +39,13 @@ export const updateUserHost = createAsyncThunk('user/updateUserHost', async(para
   return hostevent
 })
 
-export const updateUserParticipate = createAsyncThunk('user/updateUserParticipate', async(params) => {
-  //participant: new event participated by user
-  const {email, participantevent} = params
+export const updateUserParticipate = createAsyncThunk('user/updateUserParticipate', async (params) => {
+  // participant: new event participated by user
+  const { email, participantevent } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_participated: participantevent
       }
@@ -56,12 +55,12 @@ export const updateUserParticipate = createAsyncThunk('user/updateUserParticipat
   return response.json()
 })
 
-export const updateUserAvatar= createAsyncThunk('user/updateUserAvatr', async(params) => {
-  const {email, avatar} = params
+export const updateUserAvatar = createAsyncThunk('user/updateUserAvatr', async (params) => {
+  const { email, avatar } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         avatar: avatar
       }
@@ -72,11 +71,11 @@ export const updateUserAvatar= createAsyncThunk('user/updateUserAvatr', async(pa
 })
 
 // when cancel or quit event
-export const updateUserQuitEvent = createAsyncThunk('user/updateUserEvent', async(email) => {
+export const updateUserQuitEvent = createAsyncThunk('user/updateUserEvent', async (email) => {
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_hosted: [],
         event_participated: []
@@ -96,7 +95,7 @@ export const updateUserPushToken = createAsyncThunk('user/updateToken', async(pa
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         push_token: token
       }
@@ -106,13 +105,13 @@ export const updateUserPushToken = createAsyncThunk('user/updateToken', async(pa
   return token
 })
 
-export const updateCovidStatus = createAsyncThunk('user/push', async(params) => {
-  const { email, status } = params
-  console.log("? e, s", email, status)
-  let requestOptions
+export const updateCovidStatus = createAsyncThunk('user/push', async (params) => {
+  const { email, status } = params;
+  console.log('? e, s', email, status);
+  let requestOptions;
   let response;
   let url;
-  if (status == "positive") {
+  if (status == 'positive') {
     requestOptions = {
       method: 'POST',
       body: JSON.stringify({
@@ -124,7 +123,7 @@ export const updateCovidStatus = createAsyncThunk('user/push', async(params) => 
     requestOptions = {
       method: 'POST',
       body: JSON.stringify({
-        email: email,
+        email,
         query: {
           health_status: status
         }
@@ -132,10 +131,10 @@ export const updateCovidStatus = createAsyncThunk('user/push', async(params) => 
     }
     url = domain + 'users/profile'
   }
-  
+
   response = await fetch(url, requestOptions);
-  return status
-})
+  return status;
+});
 
 // Events
 export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) => {
@@ -147,10 +146,10 @@ export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) 
   return response.json()
 })
 
-export const createEvent = createAsyncThunk('event/createEvent', async(params) => {
+export const createEvent = createAsyncThunk('event/createEvent', async (params) => {
   const requestOptions = {
     method: 'POST',
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   };
   const response = await fetch(domain + 'events', requestOptions)
   return response.json()
@@ -163,12 +162,12 @@ export const fetchEvent = createAsyncThunk('event/fetchEvent', async(event_id) =
 })
 
 // update event participants[]
-export const updateEventParticipants = createAsyncThunk('event/updateEventParticipants', async(params) => {
-  const {event_id, participants} = params
+export const updateEventParticipants = createAsyncThunk('event/updateEventParticipants', async (params) => {
+  const { event_id, participants } = params;
   const requestOptions = {
     method: 'PATCH',
     body: JSON.stringify({
-      event_id: event_id,
+      event_id,
       query: {
         participants: participants,
       }
@@ -179,12 +178,12 @@ export const updateEventParticipants = createAsyncThunk('event/updateEventPartic
 })
 
 // update event active status
-export const updateEventActive = createAsyncThunk('event/updateEventActive', async(params) => {
-  const {event_id, active} = params
+export const updateEventActive = createAsyncThunk('event/updateEventActive', async (params) => {
+  const { event_id, active } = params;
   const requestOptions = {
     method: 'PATCH',
     body: JSON.stringify({
-      event_id: event_id,
+      event_id,
       query: {
         active: active
       }
@@ -195,7 +194,7 @@ export const updateEventActive = createAsyncThunk('event/updateEventActive', asy
   return params
 })
 
-export const cancelEvent = createAsyncThunk('event/cancelEvent', async(eventId) => {
+export const cancelEvent = createAsyncThunk('event/cancelEvent', async (eventId) => {
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
