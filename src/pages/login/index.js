@@ -17,8 +17,8 @@ import { fetchUser } from '../../services/api';
 
 function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('ziawang1@qq.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
   // login function
   const handleLogin = () => {
