@@ -49,7 +49,7 @@ function ChatList({ navigation }) {
             item.active == 'started' && (item.preview != ''
               ? (
                 <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
-                  <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type} />
+                  <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={item.preview} theme={item.settings.type} />
                 </TouchableOpacity>
               )
               : (
@@ -68,7 +68,7 @@ function ChatList({ navigation }) {
             item.active == 'pending' && (item.preview != ''
               ? (
                 <TouchableOpacity onPress={() => handleChat(item)} style={styles.button} key={item._id}>
-                  <ChatRoom id={item._id} eventName={item.name} num={item.participants.length} image={item.preview} theme={item.settings.type} />
+                  <ChatRoom id={item._id} eventName={item.name} num={item.participants} image={item.preview} theme={item.settings.type} />
                 </TouchableOpacity>
               )
               : (

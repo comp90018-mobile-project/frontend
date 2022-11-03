@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createEvent } from '../../../../services/api';
 import { uploadImage } from '../../../../utils/upload';
 import styles from './eventPageStyles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 function EventPage({ route, navigation }) {
   const dispatch = useDispatch();
@@ -162,6 +163,9 @@ function EventPage({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.root}>
+      <TouchableOpacity style={{ alignSelf: 'flex-start', left: 10 }} onPress={() => navigation.goBack()}>
+        <FontAwesome name="chevron-left" size={25} color="#fff" />
+      </TouchableOpacity>
       {/* Inputs */}
       <ScrollView style={{ width: '100%', paddingTop: 20, height: '95%' }}>
         <View style={styles.columnCentre}>

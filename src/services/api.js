@@ -66,8 +66,11 @@ export const updateUserAvatar = createAsyncThunk('user/updateUserAvatr', async (
       }
     })
   }
+  // console.log("email: " + email + "avatar: " + avatar)
   const response = await fetch(domain + 'users/profile', requestOptions);
-  return response.json()
+  const data = await response.json();
+  console.log(data)
+  return data;
 })
 
 // when cancel or quit event

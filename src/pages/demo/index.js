@@ -13,16 +13,16 @@ function RtkQueryPage({ navigation }) {
   const dispatch = useDispatch();
   const auth = getAuth(firebaseConfig);
   // auto login
-  const autoLogin = () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        dispatch(fetchUser(user.email));
-        navigation.replace('Map');
-      } else {
-        navigation.replace('Login');
-      }
-    });
-  };
+  // const autoLogin = () => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       dispatch(fetchUser(user.email));
+  //       navigation.replace('Map');
+  //     } else {
+  //       navigation.replace('Login');
+  //     }
+  //   });
+  // };
 
   return (
     <View style={styles.containter}>
@@ -30,7 +30,7 @@ function RtkQueryPage({ navigation }) {
       <Image style={{}} source={require('../../../assets/titleIMG.png')} />
 
       <View style={{ marginTop: 100, width: '100%', alignItems: 'center' }}>
-        <TouchableOpacity style={styles.loginButton} onPress={autoLogin}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => {navigation.replace('Login')}}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
 

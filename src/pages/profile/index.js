@@ -39,6 +39,7 @@ function Profile({ navigation }) {
   const notificationListener = useRef();
   const responseListener = useRef();
   const dispatch = useDispatch();
+
   // handle event history
   const eventHistory = [];
   if (user.eventhistory.length != 0) {
@@ -65,13 +66,14 @@ function Profile({ navigation }) {
     if (Device.isDevice) {
       registerForPushNotificationsAsync().then(
         (token) => {
+          console.log("token is: ", token);
           if (email) {
             dispatch(updateUserPushToken({ email, token }));
           }
         },
       );
     }
-    // This listener is fired whenever a notification is received while the app is foregrounded
+      
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
     });
@@ -119,7 +121,8 @@ function Profile({ navigation }) {
               if (!result.cancelled) {
                 uploadImage(result.uri).then((url) => {
                   setAvatar(url);
-                  dispatch(updateUserAvatar(user.email, url));
+                  // dispatch(updateUserAvatar(user.email, url));
+                  dispatch(updateUserAvatar({email: user.email, avatar: url}))
                 });
               }
             },
@@ -143,7 +146,7 @@ function Profile({ navigation }) {
               if (!result.cancelled) {
                 uploadImage(result.uri).then((url) => {
                   setAvatar(url);
-                  dispatch(updateUserAvatar(user.email, url));
+                  dispatch(updateUserAvatar({email: user.email, avatar: url}));
                 });
               }
             },
@@ -285,7 +288,7 @@ function Profile({ navigation }) {
             alignSelf: 'flex-start', fontSize: 20, marginLeft: 10, textDecorationLine: 'underline',
           }}
           >
-            Event History
+            Host Event History
           </Text>
 
           <ScrollView style={{ width: '100%', height: 350, marginVertical: 10 }}>
