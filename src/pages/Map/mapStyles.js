@@ -10,7 +10,7 @@ export default StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
-    position: 'relative'
+    position: 'relative',
   },
   callout: {
     backgroundColor: '#323C47',
@@ -48,26 +48,26 @@ export default StyleSheet.create({
     fontSize: 40,
     fontWeight: 'bold',
     marginRight: 10,
-    color: '#fff'
+    color: '#fff',
   },
   regionFire: {
     height: 40,
     width: 30,
-    resizeMode:'stretch'
+    resizeMode: 'stretch',
   },
   searchBar: {
     width: '98%',
     marginTop: 10,
     borderRadius: 15,
   },
-  
+
   infoDisplay: {
     width: '95%',
     position: 'absolute',
     top: 60,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   directionIcon: {
     color: '#94E858',
@@ -75,29 +75,6 @@ export default StyleSheet.create({
   },
   directionIcon1: {
     color: '#e6b400',
-    left: 15
-  }
-  // regionCard: {
-  //   position: 'absolute',
-  //   bottom: 660,
-  //   width: '100%',
-  //   height: 80,
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   left: 20,
-  // },
-  // regionText: {
-  //   fontSize: 40,
-  //   fontWeight: 'bold',
-  //   textDecorationLine: 'underline',
-  //   marginLeft: 5,
-  //   top: 15,
-  //   textAlign: 'left',
-  // },
-  // regionFire: {
-  //   height: 30,
-  //   width: 30,
-  //   top: 25,
-  //   left: 10,
-  // },
+    left: 15,
+  },
 });

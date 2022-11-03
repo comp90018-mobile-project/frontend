@@ -1,88 +1,88 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import firebaseConfig from '../../authBase';
 import {
-  getAuth,
+  getAuth
 } from 'firebase/auth';
-import { async } from '@firebase/util';
+import firebaseConfig from '../../authBase';
 
 const auth = getAuth(firebaseConfig);
+const domain = "http://13.238.153.25:8000/api/v1/";
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (email) => {
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile?email=' +
+  const response = await fetch(domain + 'users/profile?email=' +
   email);
   return response.json()
 })
 
-export const createUser = createAsyncThunk('user/createUser', async(params) => {
-  const {username, password, email} = params;
+export const createUser = createAsyncThunk('user/createUser', async (params) => {
+  const { username, password, email } = params;
   const requestOptions = {
     method: 'POST',
-    body: JSON.stringify({ username: username, password: password, email: email})
+    body: JSON.stringify({ username, password, email }),
   };
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users', requestOptions)
+  const response = await fetch(domain + 'users', requestOptions)
   return response.json()
 })
 
-export const updateUserHost = createAsyncThunk('user/updateUserHost', async(params) => {
+export const updateUserHost = createAsyncThunk('user/updateUserHost', async (params) => {
   // hostevent: new events hosted by user
-  const {email, hostevent} = params
+  const { email, hostevent } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_hosted: hostevent
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  const response = await fetch(domain + 'users/profile', requestOptions);
   return hostevent
 })
 
-export const updateUserParticipate = createAsyncThunk('user/updateUserParticipate', async(params) => {
-  //participant: new event participated by user
-  const {email, participantevent} = params
+export const updateUserParticipate = createAsyncThunk('user/updateUserParticipate', async (params) => {
+  // participant: new event participated by user
+  const { email, participantevent } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_participated: participantevent
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  const response = await fetch(domain + 'users/profile', requestOptions);
   return response.json()
 })
 
-export const updateUserAvatar= createAsyncThunk('user/updateUserAvatr', async(params) => {
-  const {email, avatar} = params
+export const updateUserAvatar = createAsyncThunk('user/updateUserAvatr', async (params) => {
+  const { email, avatar } = params;
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         avatar: avatar
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  const response = await fetch(domain + 'users/profile', requestOptions);
   return response.json()
 })
 
 // when cancel or quit event
-export const updateUserQuitEvent = createAsyncThunk('user/updateUserEvent', async(email) => {
+export const updateUserQuitEvent = createAsyncThunk('user/updateUserEvent', async (email) => {
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         event_hosted: [],
         event_participated: []
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  const response = await fetch(domain + 'users/profile', requestOptions);
   return response.json()
 })
 
@@ -95,46 +95,46 @@ export const updateUserPushToken = createAsyncThunk('user/updateToken', async(pa
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
-      email: email,
+      email,
       query: {
         push_token: token
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/profile', requestOptions);
+  const response = await fetch(domain + 'users/profile', requestOptions);
   return token
 })
 
-export const updateCovidStatus = createAsyncThunk('user/push', async(params) => {
-  const { email, status } = params
-  console.log("? e, s", email, status)
-  let requestOptions
+export const updateCovidStatus = createAsyncThunk('user/push', async (params) => {
+  const { email, status } = params;
+  console.log('? e, s', email, status);
+  let requestOptions;
   let response;
   let url;
-  if (status == "positive") {
+  if (status == 'positive') {
     requestOptions = {
       method: 'POST',
       body: JSON.stringify({
         email: email,
       })
     }
-    url = 'http://52.62.135.159:8000/api/v1/users/push'
+    url = domain + 'users/push'
   } else {
     requestOptions = {
       method: 'POST',
       body: JSON.stringify({
-        email: email,
+        email,
         query: {
           health_status: status
         }
       })
     }
-    url = 'http://52.62.135.159:8000/api/v1/users/profile'
+    url = domain + 'users/profile'
   }
-  
+
   response = await fetch(url, requestOptions);
-  return status
-})
+  return status;
+});
 
 // Events
 export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) => {
@@ -142,71 +142,71 @@ export const fetchEvents = createAsyncThunk('event/fetchEvents', async (params) 
     method: 'GET',
     // body: JSON.stringify({})
   };
-  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  const response = await fetch(domain + 'events', requestOptions)
   return response.json()
 })
 
-export const createEvent = createAsyncThunk('event/createEvent', async(params) => {
+export const createEvent = createAsyncThunk('event/createEvent', async (params) => {
   const requestOptions = {
     method: 'POST',
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   };
-  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  const response = await fetch(domain + 'events', requestOptions)
   return response.json()
 })
 
 // fetch single event
 export const fetchEvent = createAsyncThunk('event/fetchEvent', async(event_id) => {
-  const response = await fetch('http://52.62.135.159:8000/api/v1/events?event_id=' + event_id);
+  const response = await fetch(domain + 'events?event_id=' + event_id);
   return response.json()
 })
 
 // update event participants[]
-export const updateEventParticipants = createAsyncThunk('event/updateEventParticipants', async(params) => {
-  const {event_id, participants} = params
+export const updateEventParticipants = createAsyncThunk('event/updateEventParticipants', async (params) => {
+  const { event_id, participants } = params;
   const requestOptions = {
     method: 'PATCH',
     body: JSON.stringify({
-      event_id: event_id,
+      event_id,
       query: {
         participants: participants,
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  const response = await fetch(domain + 'events', requestOptions)
   return params
 })
 
 // update event active status
-export const updateEventActive = createAsyncThunk('event/updateEventActive', async(params) => {
-  const {event_id, active} = params
+export const updateEventActive = createAsyncThunk('event/updateEventActive', async (params) => {
+  const { event_id, active } = params;
   const requestOptions = {
     method: 'PATCH',
     body: JSON.stringify({
-      event_id: event_id,
+      event_id,
       query: {
         active: active
       }
     })
   }
-  const response = await fetch('http://52.62.135.159:8000/api/v1/events', requestOptions)
+  const response = await fetch(domain + 'events', requestOptions)
   // return response.json()
   return params
 })
 
-export const cancelEvent = createAsyncThunk('event/cancelEvent', async(eventId) => {
+export const cancelEvent = createAsyncThunk('event/cancelEvent', async (eventId) => {
   const requestOptions = {
     method: 'POST',
     body: JSON.stringify({
       event_id: eventId
     })
   }
-  await fetch('http://52.62.135.159:8000/api/v1/events/delete', requestOptions)
+  await fetch(domain + 'events/delete', requestOptions)
   return eventId
 })
 
 export const getUsersAvatar = async(emailString) => {
-  const response = await fetch('http://52.62.135.159:8000/api/v1/users/avatars?email=' +
+  const response = await fetch(domain + 'users/avatars?email=' +
   emailString);
   return response.json()
 }

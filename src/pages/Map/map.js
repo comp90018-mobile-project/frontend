@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
-import { async } from '@firebase/util';
 import * as Location from 'expo-location';
 import { useCallback, useEffect, useState } from 'react';
-import { Image, SafeAreaView, Text, View } from 'react-native';
+import {
+  Image, SafeAreaView, Text, View
+} from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import openMap from 'react-native-open-maps';
 import { Button, Dialog, Searchbar } from 'react-native-paper';
@@ -12,34 +13,26 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import Navigator from '../../components/navigator/navigator';
-import { fetchEvents, fetchEvent } from '../../services/api';
+import { fetchEvent, fetchEvents } from '../../services/api';
 import EventCard from './components/eventCard/eventCard';
 import styles from './mapStyles';
 
 function Map({ navigation }) {
   const dispatch = useDispatch();
-  const event = useSelector((state) => state.event)
+  const event = useSelector((state) => state.event);
   const { events } = useSelector((state) => state.event);
-  const user  = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
   const [initialRegion, setInitialRegion] = useState();
   const [selectedEvent, setSelectedEvent] = useState();
   const [eventCard, setEventCard] = useState(false);
   const [region, setRegion] = useState();
   const [dialog, setDialog] = useState(false);
   const [pressCoordinate, setPressCoordinate] = useState();
-  const {eventDisplay} = useSelector((state)=>state.event)
-
-  const eventFunc = useCallback(() => {dispatch(fetchEvents());}, [event])
-  useEffect(eventFunc, [])
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     console.log("Requesting backend events")
-  //     dispatch(fetchEvents());
-  //   }, 5000)
-  //   return () => {clearInterval(intervalId)}
-  // }, [])
-
+  const { eventDisplay } = useSelector((state) => state.event);
+  // fetch events data
+  const eventFunc = useCallback(() => { dispatch(fetchEvents()); }, [event]);
+  useEffect(eventFunc, []);
+  // get user location
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -76,17 +69,16 @@ function Map({ navigation }) {
   const handleDialogClose = () => {
     setDialog(false);
   };
-
+  // search function
   const handleSearch = (text) => {
     const filteredEvents = events.filter((event) => event.name.includes(text) && (event.active == 'started' || event.active == 'pending'));
-    // eslint-disable-next-line no-unused-expressions
     (text.length && filteredEvents.length) ? handleEventCard(filteredEvents.shift()) : handleEventCardClose();
   };
 
   const handleCreateEventDialog = () => {
     handleDialogOpen();
   };
-
+  // navigate to create event page
   const handleCreateEvent = () => {
     handleDialogClose();
     navigation.navigate('EventPage', { lat: pressCoordinate.latitude, lon: pressCoordinate.longitude });
@@ -105,54 +97,72 @@ function Map({ navigation }) {
         }}
       >
         {events.map((item) => (
-          item.active != 'ended' &&
+          item.active != 'ended'
+          && (
           <Marker key={item._id} coordinate={{ latitude: item.latitude, longitude: item.longitude }}>
             {
               item.preview != '' ? (
                 item.active === 'started' ? (
                   <Image
-                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#248A59'}}
-                  source={{uri: item.preview}}/>
-                ):(
+                    style={{
+                      width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#248A59',
+                    }}
+                    source={{ uri: item.preview }}
+                  />
+                ) : (
                   <Image
-                  style={{width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#e6b400'}}
-                  source={{uri: item.preview}}/>
+                    style={{
+                      width: 35, height: 35, borderRadius: 20, resizeMode: 'contain', borderWidth: 1, borderColor: '#e6b400',
+                    }}
+                    source={{ uri: item.preview }}
+                  />
                 )
               ) : (
                 item.active === 'started' ? (
-                  <FontAwesome name='group' size={30} color='#248A59' />
-                ):(
-                  <FontAwesome name='group' size={30} color='#e6b400' />
+                  <FontAwesome name="group" size={30} color="#248A59" />
+                ) : (
+                  <FontAwesome name="group" size={30} color="#e6b400" />
                 )
               )
 
             }
             <Callout tooltip="true">
-              {console.log('item', item)}
               <View style={styles.callout}>
-                <FontAwesome name="group" size={25} color={item.active == 'pending'? '#e6b400':"#248A59"} onPress={async() => {
-                  await dispatch(fetchEvent(item._id));
-                  navigation.navigate('EventDisplay', eventDisplay);
-                }}/>
-                <Text style={item.active == 'pending'? styles.calloutTextPending : styles.calloutText}>
+                <FontAwesome
+                  name="group"
+                  size={25}
+                  color={item.active == 'pending' ? '#e6b400' : '#248A59'}
+                  onPress={async () => {
+                    await dispatch(fetchEvent(item._id));
+                    navigation.navigate('EventDisplay', eventDisplay);
+                  }}
+                />
+                <Text style={item.active == 'pending' ? styles.calloutTextPending : styles.calloutText}>
                   {item.participants.length}
                   /
-                  {item.settings.max_participant} 
+                  {item.settings.max_participant}
                 </Text>
-                <Entypo name="direction" size={25} style={item.active == 'pending'? styles.directionIcon1 : styles.directionIcon} onPress={() => { 
-                  // concatenate latitude and longitude with comma as a string
-                  const latlon = item.latitude + ',' + item.longitude;
-                  openMap({provider: 'google', query: latlon})}}/>
+                <Entypo
+                  name="direction"
+                  size={25}
+                  style={item.active == 'pending' ? styles.directionIcon1 : styles.directionIcon}
+                  onPress={() => {
+                    // concatenate latitude and longitude with comma as a string
+                    const latlon = `${item.latitude},${item.longitude}`;
+                    openMap({ provider: 'google', query: latlon });
+                  }}
+                />
               </View>
             </Callout>
           </Marker>
+          )
         ))}
       </MapView>
 
       <View style={styles.infoDisplay}>
         <View style={styles.regionCard}>
-          
-          <Text style={styles.regionText}>{region ? region : 'Welcome'}</Text>
+
+          <Text style={styles.regionText}>{region || 'Welcome'}</Text>
           <Image
             style={styles.regionFire}
             source={require('../../../assets/fire.png')}

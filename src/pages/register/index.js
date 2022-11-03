@@ -13,7 +13,6 @@ import {
 import { useDispatch } from 'react-redux';
 import firebaseConfig from '../../../authBase';
 import { createUser } from '../../services/api';
-import { setUsername, setEmail } from '../../slices/user';
 
 function SignUpScreen({ navigation }) {
   const [username, setUserName] = useState('');
@@ -21,13 +20,12 @@ function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
   const dispatch = useDispatch();
-
+  // sign up function
   const handleSignUp = () => {
-    
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
-        const params = { username: username, email: user.email, password: password };
+        const params = { username, email: user.email, password };
         dispatch(createUser(params));
         navigation.replace('Map');
         console.log('Registered with:', user.email);
@@ -102,11 +100,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 56,
     color: '#198F94',
-    marginBottom: 20
+    marginBottom: 20,
   },
   inputContainer: {
     width: '70%',
-    marginBottom: 20
+    marginBottom: 20,
   },
   inputText: {
     color: '#fff',
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   buttonContainer: {
     width: '100%',
@@ -133,11 +131,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30
+    marginBottom: 30,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
   },
 });

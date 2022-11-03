@@ -16,18 +16,18 @@ import firebaseConfig from '../../../authBase';
 import { fetchUser } from '../../services/api';
 
 function LoginScreen({ navigation }) {
-  const dispatch = useDispatch()
-  const [email, setEmail] = useState('ziawang1@qq.com');
-  const [password, setPassword] = useState('123456');
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const auth = getAuth(firebaseConfig);
-
+  // login function
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const { user } = userCredentials;
         navigation.replace('Map');
         console.log('Logged in with:', user.email);
-        dispatch(fetchUser(user.email))
+        dispatch(fetchUser(user.email));
       })
       .catch((error) => alert(error.message));
   };
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 56,
     color: '#E04D3D',
-    marginBottom: 20
+    marginBottom: 20,
   },
   inputContainer: {
     width: '70%',
-    marginBottom: 20
+    marginBottom: 20,
   },
   inputText: {
     color: '#fff',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 30,
   },
   buttonContainer: {
     width: '100%',
@@ -121,11 +121,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30
+    marginBottom: 30,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 20
+    fontSize: 20,
   },
 });

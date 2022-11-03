@@ -11,23 +11,15 @@ import {
   cancelEvent, getUsersAvatar, updateEventActive, updateEventParticipants, updateUserParticipate, updateUserQuitEvent
 } from '../../../../services/api';
 
-export default function EventDisplay({ route, navigation }) {
+export default function EventDisplay2({ route, navigation }) {
   const dispatch = useDispatch();
   // get current user info
   const currentUser = useSelector((state) => state.user);
   // get the event to display
-  const { eventDisplay } = useSelector((state) => state.event);
-  const [event, setEvent] = useState(eventDisplay);
-  const [avatars, setAvatars] = useState([]);
 
-  useEffect(() => {
-    const fetch = async () => {
-      const { participants } = event;
-      const { data } = await getUsersAvatar(participants.join(','));
-      setAvatars(data);
-    };
-    fetch();
-  }, [event]);
+  const { event } = route.params;
+
+  console.log('event is: ', event);
   // alter dialogs
   const [quitDialog, setQuitDialog] = useState(false);
   const [joinDialog, setJoinDialog] = useState(false);
@@ -46,7 +38,16 @@ export default function EventDisplay({ route, navigation }) {
       longitudeDelta: 0.005,
     },
   );
+  const [avatars, setAvatars] = useState([]);
 
+  useEffect(() => {
+    const fetch = async () => {
+      const { participants } = event;
+      const { data } = await getUsersAvatar(participants.join(','));
+      setAvatars(data);
+    };
+    fetch();
+  }, [event]);
   const checkUser = () => {
     if (event.organiser === currentUser.email) {
       return 'host';
@@ -447,7 +448,7 @@ export default function EventDisplay({ route, navigation }) {
           <Button onPress={() => { setUnableJoinDialog(!unableJoinDialog); navigation.navigate('Map'); }}>Back to Map</Button>
         </Dialog.Actions>
       </Dialog>
-
+      
     </SafeAreaView>
   );
 }
