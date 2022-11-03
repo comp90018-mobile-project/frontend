@@ -31,6 +31,8 @@ export default function EventDisplay({ route, navigation }) {
   // alter dialogs
   const [quitDialog, setQuitDialog] = useState(false);
   const [joinDialog, setJoinDialog] = useState(false);
+  const [repeatJoinDialog, setRepeatJoinDialog] = useState(false);
+  const [unableJoinDialog, setUnableJoinDialog] = useState(false);
   const [startDialog, setStartDialog] = useState(false);
   const [endDialog, setEndDialog] = useState(false);
   const [peopleDialog, setPeopleDialog] = useState(false);
@@ -60,23 +62,29 @@ export default function EventDisplay({ route, navigation }) {
   };
 
   const handleJoinEvent = () => {
-    if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
-    // update event participants[]
-      dispatch(updateEventParticipants(
-        {
-          event_id: event._id,
-          participants: [...event.participants].concat(currentUser.email),
-        },
-      ));
-      // update user participate
-      dispatch(updateUserParticipate(
-        {
-          email: currentUser.email,
-          participantevent: [event._id],
-        },
-      ));
-      // show success join dialog
-      setJoinDialog(true);
+    if (currentUser.hostevent.length == 0 && currentUser.participantevent.length == 0) {
+      if (event.participants.length < event.settings.max_participant && event.active == 'pending') {
+        // update event participants[]
+          dispatch(updateEventParticipants(
+            {
+              event_id: event._id,
+              participants: [...event.participants].concat(currentUser.email),
+            },
+          ));
+          // update user participate
+          dispatch(updateUserParticipate(
+            {
+              email: currentUser.email,
+              participantevent: [event._id],
+            },
+          ));
+          // show success join dialog
+          setJoinDialog(true);
+        } else {
+          setUnableJoinDialog(true)
+        }
+    } else {
+      setRepeatJoinDialog(true)
     }
   };
 
@@ -108,7 +116,7 @@ export default function EventDisplay({ route, navigation }) {
       setPeopleDialog(true);
     }
   };
-  // todo
+
   const handleEndEvent = () => {
     dispatch(updateEventActive(
       {
@@ -118,7 +126,7 @@ export default function EventDisplay({ route, navigation }) {
     ));
     setEndDialog(true);
   };
-  // todo
+
   const handleCancelEvent = () => {
     dispatch(cancelEvent(event._id));
     setCancelDialog(true);
@@ -418,6 +426,25 @@ export default function EventDisplay({ route, navigation }) {
         <Dialog.Content><Text>Invite others or cancel the reset the event </Text></Dialog.Content>
         <Dialog.Actions>
           <Button onPress={() => { setPeopleDialog(!peopleDialog); }}>OK</Button>
+        </Dialog.Actions>
+      </Dialog>
+
+      {/* Repeat join or create event dialog */}
+      <Dialog visible={repeatJoinDialog} onDismiss={() => setRepeatJoinDialog(!repeatJoinDialog)} dismissable={false}>
+        <Dialog.Title>You have already joined or hosted an event :(</Dialog.Title>
+        <Dialog.Content><Text>Check My Event section in your profile</Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={() => { setRepeatJoinDialog(!repeatJoinDialog); navigation.navigate('Map'); }}>Back to Map</Button>
+          <Button onPress={() => { setRepeatJoinDialog(!repeatJoinDialog); navigation.navigate('Profile'); }}>Go to Profile</Button>
+        </Dialog.Actions>
+      </Dialog>
+
+      {/* Unable to join dialog */}
+      <Dialog visible={unableJoinDialog} onDismiss={() => setUnableJoinDialog(!unableJoinDialog)} dismissable={false}>
+        <Dialog.Title>Cannot join the event :(</Dialog.Title>
+        <Dialog.Content><Text>The event already started, please join a pending event on map</Text></Dialog.Content>
+        <Dialog.Actions>
+          <Button onPress={() => { setUnableJoinDialog(!unableJoinDialog); navigation.navigate('Map'); }}>Back to Map</Button>
         </Dialog.Actions>
       </Dialog>
 

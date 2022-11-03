@@ -122,30 +122,34 @@ function EventPage({ route, navigation }) {
 
   // handle create event method
   const handleCreateEvent = () => {
-    if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == ''
+    if (currentUser.hostevent.length == 0 && currentUser.participantevent.length == 0) {
+      if (eventName == '' || eventDuration == '' || eventMinParticipant == '' || eventMaxParticipant == '' || eventDescription == ''
         || eventStartTime == '' || eventStartTime > new Date() || parseInt(eventMinParticipant, 10) < parseInt(eventMaxParticipant, 10)) {
-      const addEvent = {
-        name: eventName,
-        organiser: currentUser.email,
-        preview,
-        longitude: lon,
-        latitude: lat,
-        participants: [currentUser.email],
-        settings: {
-          duration: eventDuration,
-          min_participant: eventMinParticipant,
-          max_participant: eventMaxParticipant,
-          type: eventType,
-          theme_color: '#FFF',
-          description: eventDescription,
-          start_time: eventStartTime,
-        },
-        images: [],
-      };
-      dispatch(createEvent(addEvent));
-      setSuccessCreateDialog(true);
+    const addEvent = {
+      name: eventName,
+      organiser: currentUser.email,
+      preview,
+      longitude: lon,
+      latitude: lat,
+      participants: [currentUser.email],
+      settings: {
+        duration: eventDuration,
+        min_participant: eventMinParticipant,
+        max_participant: eventMaxParticipant,
+        type: eventType,
+        theme_color: '#FFF',
+        description: eventDescription,
+        start_time: eventStartTime,
+      },
+      images: [],
+    };
+    dispatch(createEvent(addEvent));
+    setSuccessCreateDialog(true);
+      } else {
+        setInputDialog(true);
+      }
     } else {
-      setInputDialog(true);
+      setRepeatCreateDialog(true)
     }
   };
 
